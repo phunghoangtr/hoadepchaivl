@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>HUSI_Scoreboard_TKD_Final_AutoMatch_V2.1_Fixed</title>
+    <style>
+        /* GIỮ NGUYÊN TOÀN BỘ CSS GỐC CỦA MÀY */
+        :root {
+            --blue-main: #0055ff; --red-main: #ff1100; --gold: #ffcc00;
+            --bg-dark: #000; --panel-bg: #1a1a1a; --vn-red: #da251d;
+            --highlight-yellow: #ffff00;
+            --kyeshi-orange: #ff6600; 
+        }
+        body { background: var(--bg-dark); color: #fff; font-family: "Segoe UI", sans-serif; margin: 0; text-align: center; overflow-y: auto; }
+        #display-area { height: 95vh; display: flex; background: #000; position: relative; gap: 0; padding: 0; box-sizing: border-box; border: 10px solid #333; outline: 3px solid var(--gold); }
+        .judge-vertical { position: absolute; top: 180px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
+        #lights-blue { left: 15px; }
+        #lights-red { right: 15px; }
+        .j-box { width: 65px; height: 85px; border: 2px solid #333; border-radius: 8px; background: rgba(30,30,30,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.1s; opacity: 0.05; }
+        .j-box.active-b, .j-box.active-r { opacity: 1; border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.5); }
+        .j-id { font-size: 12px; font-weight: bold; color: #aaa; }
+        .active-b .j-id, .active-r .j-id { color: #333; }
+        .j-score { font-size: 40px; font-weight: 900; color: #fff; display: none; line-height: 1; }
+        .active-b .j-score, .active-r .j-score { display: block; }
+        .top-bar { position: absolute; top: 0; left: 0; width: 100%; height: 140px; display: flex; z-index: 20; }
+        .name-wrapper { flex: 1; height: 100%; display: flex; align-items: center; position: relative; overflow: hidden; }
+        .name-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 115px; box-sizing: border-box; overflow: hidden; }
+        .name-wrapper span { font-size: 55px; font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
+        .blue-side-name { background: linear-gradient(to right, #0033aa, var(--blue-main)); }
+        .red-side-name { background: linear-gradient(to left, #aa0000, var(--red-main)); }
+        .flag-vn { width: 130px; height: 85px; background-color: var(--vn-red); border: 3px solid #fff; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: absolute; top: 25px; }
+        .flag-vn::before { content: "★"; color: #ffff00; font-size: 65px; line-height: 1; margin-top: -3px; }
+        .blue-side-name .flag-vn { left: 10px; }
+        .red-side-name .flag-vn { right: 10px; }
+        .side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        .blue { background-color: var(--blue-main); }
+        .red { background-color: var(--red-main); }
+        .score-big { font-size: 25vw; font-weight: 900; line-height: 0.7; margin-top: -20px; z-index: 5; }
+        .win-tracker { position: absolute; top: 150px; display: flex; gap: 10px; z-index: 10; }
+        #tracker-blue { right: 20px; }
+        #tracker-red { left: 20px; }
+        .win-dot { width: 35px; height: 35px; border-radius: 50%; border: 3px solid #fff; background: rgba(255,255,255,0.1); }
+        .win-dot.active { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 15px var(--gold); }
+        .bottom-stats { position: absolute; bottom: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .gj-big { font-size: 37px; color: var(--gold); border: 3px solid var(--gold); padding: 5px 20px; border-radius: 10px; background: rgba(0,0,0,0.8); font-weight: 900; }
+        .stats-row { display: flex; gap: 8px; }
+        .stat-item { background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; border-bottom: 3px solid var(--gold); min-width: 70px; }
+        .stat-label { font-size: 10px; display: block; color: var(--gold); font-weight: bold; }
+        .stat-val { font-size: 20px; font-weight: 900; }
+        .center-column { width: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 50px; align-items: center; background: #000; z-index: 10; }
+        .time-txt { font-size: 120px; font-family: monospace; font-weight: 900; padding: 10px; border: 5px solid #fff; width: 93%; margin: 5px 0; transition: all 0.1s; }
+        .t-run { color: #fff; background: transparent; border-color: #fff; } 
+        .t-stop, .t-break { color: #000; background-color: var(--highlight-yellow); border-color: var(--highlight-yellow); }
+        #vTK { display: none; margin-top: 10px; border: 3px solid #fff; padding: 5px 20px; border-radius: 15px; background: rgba(0,0,0,0.9); }
+        .tk-label { font-size: 20px; color: #aaa; display: block; font-weight: bold; margin-bottom: -5px; }
+        .tk-time { font-size: 90px; color: #fff; font-family: monospace; font-weight: 900; line-height: 1; }
+        .btn-kyeshi { background: #fff; color: #000; padding: 12px 0; font-size: 18px; width: 100%; border-radius: 8px; border: 2px solid #fff; cursor: pointer; font-weight: bold; margin-top: 5px; }
+        .match-display { color: #fff; font-size: 50px; font-weight: 900; margin-top: 20px; display: flex; flex-direction: column; }
+        #vMT { font-size: 130px; line-height: 1.1; color: var(--gold); text-shadow: 0 0 20px rgba(255, 204, 0, 0.5); }
+        .round-box { font-size: 45px; font-weight: 900; color: #fff; margin-bottom: 20px; min-height: 70px; white-space: nowrap; width: 100%; text-align: center; }
+
+        #control-area { min-height: 35vh; background: var(--panel-bg); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding: 20px; border-top: 5px solid #444; }
+        .col { display: flex; flex-direction: column; gap: 8px; justify-content: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; }
+        .row { display: flex; gap: 5px; justify-content: center; align-items: center; flex-wrap: wrap; }
+        input { background: #000; color: #fff; border: 1px solid #555; text-align: center; font-size: 18px; padding: 8px; border-radius: 5px; }
+        button { cursor: pointer; border: none; border-radius: 8px; font-weight: bold; color: #fff; text-transform: uppercase; transition: 0.1s; }
+        .btn-m { background: #28a745; font-size: 35px; height: 100px; width: 100%; border: 4px solid #fff; }
+        .btn-m.stopped { background: #ff6600 !important; }
+        .btn-b { background: var(--blue-main); flex: 1; padding: 12px 0; }
+        .btn-r { background: var(--red-main); flex: 1; padding: 12px 0; }
+        .btn-s { background: #444; flex: 1; font-size: 13px; padding: 10px 0; }
+        .btn-st { background: #333; font-size: 11px; padding: 5px; border: 1px solid #666; flex: 1; }
+        .btn-sub { background: #222; border: 1px solid #555; font-size: 14px; padding: 5px 0; flex: 1; }
+        .btn-quick { background: #ffcc00; color: #000; flex: 1; padding: 8px 0; font-size: 14px; }
+        .btn-quick-minus { background: #555; color: #fff; flex: 1; padding: 8px 0; font-size: 14px; }
+        #manual-win-control { grid-column: span 3; background: #222; padding: 10px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; align-items: center; margin-bottom: -5px; }
+        .manual-btn-b { background: var(--blue-main); padding: 5px 15px; font-size: 16px; margin: 0 5px; }
+        .manual-btn-r { background: var(--red-main); padding: 5px 15px; font-size: 16px; margin: 0 5px; }
+        #match-list-footer { grid-column: span 3; background: #111; padding: 15px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; align-items: center;}
+        #matchListData { width: 100%; height: 100px; background: #000; color: #0f0; border: 1px solid #555; padding: 8px; font-family: monospace; resize: none; }
+        #settings-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; border: 2px solid var(--gold); padding: 20px; z-index: 1000; border-radius: 15px; }
+        .setting-row { margin: 10px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+        .btn-time-adj { background: #555; border: 1px solid #fff; padding: 10px; font-size: 16px; flex: 1; }
+    </style>
+</head>
+<body>
+
+<div id="settings-modal">
+    <div style="font-size: 20px; color: var(--gold); margin-bottom: 15px; font-weight: bold;">CÀI ĐẶT TRẬN ĐẤU</div>
+    <div class="setting-row">Thời gian hiệp: <div class="row"><input type="number" id="min" value="2" style="width:50px"> : <input type="number" id="sec" value="0" style="width:50px"></div></div>
+    <div class="setting-row">Thời gian nghỉ (s): <input type="number" id="iBreakSet" value="60" style="width:110px"></div>
+    <div class="setting-row">Số trận (Match): <input type="number" id="iMT" value="1" style="width:110px" oninput="up()"></div>
+    <div class="setting-row">Hiệp hiện tại: <input type="number" id="iRD" value="1" style="width:110px" oninput="up()"></div>
+    <div class="setting-row">Luật cách biệt 12đ: <input type="checkbox" id="pointGapActive" checked style="width:25px; height:25px;"></div>
+    <div class="setting-row">Số lỗi tối đa (Gam-jeom): <input type="number" id="iMaxGJ" value="5" style="width:110px"></div>
+    <button onclick="closeSettings()" style="background:var(--gold); color:#000; width:100%; padding:10px; margin-top:10px">LƯU & ĐÓNG</button>
+</div>
+
+<div id="display-area">
+    <div class="judge-vertical" id="lights-blue">
+        <div id="jb1" class="j-box"><span class="j-id">J1</span><span class="j-score" id="jb1v">0</span></div>
+        <div id="jb2" class="j-box"><span class="j-id">J2</span><span class="j-score" id="jb2v">0</span></div>
+        <div id="jb3" class="j-box"><span class="j-id">J3</span><span class="j-score" id="jb3v">0</span></div>
+    </div>
+    <div class="judge-vertical" id="lights-red">
+        <div id="jr1" class="j-box"><span class="j-id">J1</span><span class="j-score" id="jr1v">0</span></div>
+        <div id="jr2" class="j-box"><span class="j-id">J2</span><span class="j-score" id="jr2v">0</span></div>
+        <div id="jr3" class="j-box"><span class="j-id">J3</span><span class="j-score" id="jr3v">0</span></div>
+    </div>
+    <div class="top-bar">
+        <div class="name-wrapper blue-side-name"><div class="flag-vn"></div><div class="name-container"><span id="vNB">VÕ SĨ XANH</span></div></div>
+        <div class="name-wrapper red-side-name"><div class="name-container"><span id="vNR">VÕ SĨ ĐỎ</span></div><div class="flag-vn"></div></div>
+    </div>
+    <div class="side blue">
+        <div class="win-tracker" id="tracker-blue"><div id="bw1" class="win-dot"></div><div id="bw2" class="win-dot"></div></div>
+        <div class="score-big" id="vSB">0</div>
+        <div class="bottom-stats">
+            <div class="gj-big" id="vGB">GAM-JEOM: 0</div>
+            <div class="stats-row">
+                <div class="stat-item"><span class="stat-label">TECH</span><span class="stat-val" id="vBT">0</span></div>
+                <div class="stat-item"><span class="stat-label">HEAD</span><span class="stat-val" id="vBH">0</span></div>
+                <div class="stat-item"><span class="stat-label">ARMOR</span><span class="stat-val" id="vBA">0</span></div>
+                <div class="stat-item"><span class="stat-label">PUNCH</span><span class="stat-val" id="vBP">0</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="center-column">
+        <div class="round-box" id="vRD">ROUND 1</div>
+        <div id="vTD" class="time-txt t-stop">02:00</div>
+        <div id="vTK">
+            <span class="tk-label">KYE-SHI</span>
+            <span class="tk-time" id="vTK_Val">60</span>
+        </div>
+        <div class="match-display"><span>MATCH</span><span id="vMT">1</span></div>
+    </div>
+    <div class="side red">
+        <div class="win-tracker" id="tracker-red"><div id="rw1" class="win-dot"></div><div id="rw2" class="win-dot"></div></div>
+        <div class="score-big" id="vSR">0</div>
+        <div class="bottom-stats">
+            <div class="gj-big" id="vGR">GAM-JEOM: 0</div>
+            <div class="stats-row">
+                <div class="stat-item"><span class="stat-label">TECH</span><span class="stat-val" id="vRT">0</span></div>
+                <div class="stat-item"><span class="stat-label">HEAD</span><span class="stat-val" id="vRH">0</span></div>
+                <div class="stat-item"><span class="stat-label">ARMOR</span><span class="stat-val" id="vRA">0</span></div>
+                <div class="stat-item"><span class="stat-label">PUNCH</span><span class="stat-val" id="vRP">0</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="control-area">
+    <div class="col">
+        <input type="text" id="iB" value="VÕ SĨ XANH" oninput="up()">
+        <div class="row">
+            <button class="btn-quick" onclick="quick(4, 'b')">+4 (T+A)</button>
+            <button class="btn-quick" onclick="quick(6, 'b')">+6 (T+H)</button>
+        </div>
+        <div class="row">
+            <button class="btn-quick-minus" onclick="quick(-4, 'b')">-4 (T+A)</button>
+            <button class="btn-quick-minus" onclick="quick(-6, 'b')">-6 (T+H)</button>
+        </div>
+        <div class="row"><button class="btn-b" onclick="ch('sb',1)">+1</button><button class="btn-b" onclick="ch('sb',2)">+2</button><button class="btn-b" onclick="ch('sb',3)">+3</button></div>
+        <div class="row"><button class="btn-sub" onclick="ch('sb',-1)">-1</button><button class="btn-sub" onclick="ch('sb',-2)">-2</button><button class="btn-sub" onclick="ch('sb',-3)">-3</button></div>
+        <div class="row"><button class="btn-s" style="background:#664400; flex:3" onclick="l('b')">LỖI XANH [G]</button><button class="btn-s" style="background:#332200; flex:1" onclick="ul('b')">-G</button></div>
+        <div class="row">
+            <button class="btn-st" onclick="st('bt',1)">+TECH</button>
+            <button class="btn-st" style="background:#550000" onclick="st('bt',-1)">-TECH</button>
+            <button class="btn-st" onclick="st('bh',1)">+HEAD</button>
+            <button class="btn-st" onclick="st('ba',1)">+ARMOR</button>
+            <button class="btn-st" onclick="st('bp',1)">+PUNCH</button>
+        </div>
+    </div>
+
+    <div class="col">
+        <button id="pk" class="btn-m" onclick="runT()">BẮT ĐẦU [Space]</button>
+        <div class="row" style="background: rgba(0,0,0,0.3); padding: 5px; border-radius: 8px;">
+            <button class="btn-time-adj" onclick="adjT(1)">+1 GIÂY</button>
+            <button class="btn-time-adj" onclick="adjT(-1)">-1 GIÂY</button>
+        </div>
+        <div class="row">
+            <button class="btn-s" onclick="openSettings()" style="background:#555">⚙️ CÀI ĐẶT</button>
+            <button class="btn-s" onclick="mo()" style="background:#6200ea">MỞ DISPLAY</button>
+            <button class="btn-s" onclick="resetCurrentMatch()" style="background:#d32f2f">RESET [Esc]</button>
+        </div>
+        <button onclick="loadNextMatch()" style="background: #ffcc00; color: #000; padding: 15px 0; font-size: 18px; width: 100%; border-radius: 8px;">⚡ NẠP TRẬN TIẾP THEO</button>
+        <button class="btn-kyeshi" onclick="toggleKyeshi()">🚑 KYE-SHI (Y TẾ)</button>
+    </div>
+
+    <div class="col">
+        <input type="text" id="iR" value="VÕ SĨ ĐỎ" oninput="up()">
+        <div class="row">
+            <button class="btn-quick" onclick="quick(4, 'r')">+4 (T+A)</button>
+            <button class="btn-quick" onclick="quick(6, 'r')">+6 (T+H)</button>
+        </div>
+        <div class="row">
+            <button class="btn-quick-minus" onclick="quick(-4, 'r')">-4 (T+A)</button>
+            <button class="btn-quick-minus" onclick="quick(-6, 'r')">-6 (T+H)</button>
+        </div>
+        <div class="row"><button class="btn-r" onclick="ch('sr',1)">+1</button><button class="btn-r" onclick="ch('sr',2)">+2</button><button class="btn-r" onclick="ch('sr',3)">+3</button></div>
+        <div class="row"><button class="btn-sub" onclick="ch('sr',-1)">-1</button><button class="btn-sub" onclick="ch('sr',-2)">-2</button><button class="btn-sub" onclick="ch('sr',-3)">-3</button></div>
+        <div class="row"><button class="btn-s" style="background:#664400; flex:3" onclick="l('r')">LỖI ĐỎ [H]</button><button class="btn-s" style="background:#332200; flex:1" onclick="ul('r')">-G</button></div>
+        <div class="row">
+            <button class="btn-st" onclick="st('rt',1)">+TECH</button>
+            <button class="btn-st" style="background:#550000" onclick="st('rt',-1)">-TECH</button>
+            <button class="btn-st" onclick="st('rh',1)">+HEAD</button>
+            <button class="btn-st" onclick="st('ra',1)">+ARMOR</button>
+            <button class="btn-st" onclick="st('rp',1)">+PUNCH</button>
+        </div>
+    </div>
+
+    <div id="manual-win-control">
+        <div style="color: var(--gold); font-weight: bold; margin-bottom: 5px; font-size: 12px;">SỬA HIỆP THẮNG (WIN DOTS)</div>
+        <div class="row">
+            <button class="manual-btn-b" onclick="suaHiep('b', 1)">XANH +1 hiệp</button>
+            <button class="btn-s" style="padding: 5px 10px;" onclick="suaHiep('b', -1)">-1</button>
+            <div style="width: 20px;"></div>
+            <button class="manual-btn-r" onclick="suaHiep('r', 1)">ĐỎ +1 hiệp</button>
+            <button class="btn-s" style="padding: 5px 10px;" onclick="suaHiep('r', -1)">-1</button>
+        </div>
+    </div>
+
+    <div id="match-list-footer">
+        <textarea id="matchListData" placeholder="Số trận | Tên Xanh | Tên Đỏ">Số trận | Tên Xanh | Tên Đỏ</textarea>
+    </div>
+</div>
+
+<script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(t) {
+        if (audioCtx.state==='suspended') audioCtx.resume();
+        const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+        if(t==='beep'){o.type='sine'; o.frequency.setValueAtTime(880,audioCtx.currentTime); g.gain.setValueAtTime(0.1,audioCtx.currentTime); o.start(); o.stop(audioCtx.currentTime+0.1);}
+        else if(t==='buzzer'){o.type='sawtooth'; o.frequency.setValueAtTime(150,audioCtx.currentTime); g.gain.setValueAtTime(0.3,audioCtx.currentTime); o.start(); o.stop(audioCtx.currentTime+2);}
+    }
+
+    var sb=0, sr=0, gb=0, gr=0, wb=0, wr=0, running=false, isBreak=false, tm, vW;
+    var bt=0, bh=0, ba=0, bp=0, rt=0, rh=0, ra=0, rp=0;
+    var kyeshiTime = 60, kyeshiRunning = false, kyeshiTm;
+    const JUDGE_WINDOW = 1500;
+    let pendingVotes = [];
+
+    // HÀM QUAN TRỌNG NHẤT: LOGIC NHÂN ĐÔI KỂ CẢ BẤM SAU
+    function recordVote(judgeId, side, points, isTech = false) {
+        if (!running || isBreak) return;
+        const now = Date.now();
+        const lightId = side === 'sb' ? 'jb' + judgeId : 'jr' + judgeId;
+        const lightEl = document.getElementById(lightId);
+        const valEl = document.getElementById(lightId + 'v');
+        
+        let bgC = isTech ? "#6200ea" : (points === 1 ? "#fff" : points === 2 ? "#ffcc00" : "#ff1100");
+        lightEl.style.backgroundColor = bgC;
+        valEl.innerText = isTech ? "T" : points;
+        lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r');
+        
+        setTimeout(() => { 
+            lightEl.classList.remove('active-b', 'active-r'); 
+            lightEl.style.backgroundColor = ""; 
+        }, 1200);
+
+        pendingVotes.push({ judgeId, side, points, isTech, time: now });
+        pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
+        
+        const windowVotes = pendingVotes.filter(v => v.side === side);
+        const techJudges = [...new Set(windowVotes.filter(v => v.isTech).map(v => v.judgeId))];
+
+        [1, 2, 3].forEach(pts => {
+            const scoreJudges = [...new Set(windowVotes.filter(v => v.points === pts && !v.isTech).map(v => v.judgeId))];
+            
+            // Nếu đủ 2 Tech và 2 Điểm (Bất kể thứ tự bấm) -> Nhân đôi
+            if (scoreJudges.length >= 2 && techJudges.length >= 2) {
+                let multiplied = pts * 2;
+                if (side === 'sb') { 
+                    sb += multiplied; bt++;
+                    if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++;
+                } else { 
+                    sr += multiplied; rt++;
+                    if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++;
+                }
+                playSound('beep');
+                pendingVotes = pendingVotes.filter(v => !(v.side === side && (v.isTech || v.points === pts)));
+            } 
+            // Nếu chỉ đủ 2 Điểm thường -> Cộng điểm thường
+            else if (scoreJudges.length >= 2) {
+                if (side === 'sb') { 
+                    sb += pts; 
+                    if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++;
+                } else { 
+                    sr += pts; 
+                    if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++;
+                }
+                playSound('beep');
+                pendingVotes = pendingVotes.filter(v => !(v.side === side && v.points === pts && !v.isTech));
+            }
+        });
+        up();
+    }
+
+    function quick(val, side) {
+        playSound('beep');
+        if (side === 'b') {
+            if (val === 4) { bt++; ba++; sb += 4; }
+            else if (val === -4) { bt = Math.max(0, bt-1); ba = Math.max(0, ba-1); sb = Math.max(0, sb-4); }
+            else if (val === 6) { bt++; bh++; sb += 6; }
+            else if (val === -6) { bt = Math.max(0, bt-1); bh = Math.max(0, bh-1); sb = Math.max(0, sb-6); }
+        } else {
+            if (val === 4) { rt++; ra++; sr += 4; }
+            else if (val === -4) { rt = Math.max(0, rt-1); ra = Math.max(0, ra-1); sr = Math.max(0, sr-4); }
+            else if (val === 6) { rt++; rh++; sr += 6; }
+            else if (val === -6) { rt = Math.max(0, rt-1); rh = Math.max(0, rh-1); sr = Math.max(0, sr-6); }
+        }
+        up();
+    }
+
+    function adjustFontSize(element) {
+        if (!element) return;
+        const container = element.parentElement;
+        if (!container) return;
+        let fontSize = 55;
+        element.style.fontSize = fontSize + "px";
+        const maxW = container.clientWidth - 5;
+        while (element.scrollWidth > maxW && fontSize > 12) {
+            fontSize -= 2;
+            element.style.fontSize = fontSize + "px";
+        }
+    }
+
+    function getSetTime() { return (parseInt(document.getElementById('min').value)||0)*60 + (parseInt(document.getElementById('sec').value)||0); }
+    var time = getSetTime();
+    function adjT(val) { time = Math.max(0, time + val); up(); playSound('beep'); }
+    function openSettings() { document.getElementById('settings-modal').style.display='block'; }
+    function closeSettings() { document.getElementById('settings-modal').style.display='none'; if(!running&&!isBreak) time=getSetTime(); up(); }
+
+    function up() {
+        const uv=(id,v)=>{document.querySelectorAll('#'+id).forEach(e=>e.innerText=v);};
+        uv('vSB',sb); uv('vSR',sr); uv('vGB',"GAM-JEOM: "+gb); uv('vGR',"GAM-JEOM: "+gr);
+        uv('vBT',bt); uv('vBH',bh); uv('vBA',ba); uv('vBP',bp);
+        uv('vRT',rt); uv('vRH',rh); uv('vRA',ra); uv('vRP',rp);
+        uv('vMT',document.getElementById('iMT').value||1);
+        const nameB = document.getElementById('iB').value;
+        const nameR = document.getElementById('iR').value;
+        document.querySelectorAll('#vNB').forEach(e => { e.innerText = nameB; adjustFontSize(e); });
+        document.querySelectorAll('#vNR').forEach(e => { e.innerText = nameR; adjustFontSize(e); });
+        document.querySelectorAll('#vRD').forEach(e=> { e.innerText = isBreak ? "BREAK TIME" : "ROUND "+(document.getElementById('iRD').value||1); });
+        document.querySelectorAll('#bw1').forEach(e=>e.className=wb>=1?"win-dot active":"win-dot");
+        document.querySelectorAll('#bw2').forEach(e=>e.className=wb>=2?"win-dot active":"win-dot");
+        document.querySelectorAll('#rw1').forEach(e=>e.className=wr>=1?"win-dot active":"win-dot");
+        document.querySelectorAll('#rw2').forEach(e=>e.className=wr>=2?"win-dot active":"win-dot");
+        let m=Math.floor(time/60), s=time%60; let str=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+        document.querySelectorAll('#vTD').forEach(e=>{e.innerText=str; e.className="time-txt "+(isBreak?"t-break":(!running?"t-stop":"t-run"));});
+        const btnM = document.getElementById('pk');
+        if (running) { btnM.innerText = "DỪNG [Space]"; btnM.classList.remove('stopped'); } else { btnM.innerText = time === 0 ? "BẮT ĐẦU [Space]" : "TIẾP TỤC [Space]"; btnM.classList.add('stopped'); }
+        document.querySelectorAll('#vTK').forEach(e => { e.style.display = kyeshiRunning ? 'block' : 'none'; });
+        document.querySelectorAll('#vTK_Val').forEach(e => { e.innerText = kyeshiTime; });
+        if(vW && !vW.closed) { vW.document.body.innerHTML = document.getElementById('display-area').outerHTML; vW.document.querySelectorAll('#vNB, #vNR').forEach(e => adjustFontSize(e)); }
+        if(!isBreak && running) {
+            let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
+            if(document.getElementById('pointGapActive').checked && Math.abs(sb-sr)>=12) stopAndBuzzer("CÁCH BIỆT 12 ĐIỂM!");
+            if(gb>=maxG || gr>=maxG) stopAndBuzzer(gb>=maxG?"XANH "+maxG+" LỖI!":"ĐỎ "+maxG+" LỖI!");
+        }
+    }
+
+    function toggleKyeshi() {
+        if (kyeshiRunning) { clearInterval(kyeshiTm); kyeshiRunning = false; } else {
+            if (running) runT(); 
+            kyeshiRunning = true; kyeshiTime = 60;
+            kyeshiTm = setInterval(() => { if (kyeshiTime > 0) { kyeshiTime--; if (kyeshiTime <= 10) playSound('beep'); } else { clearInterval(kyeshiTm); kyeshiRunning = false; playSound('buzzer'); alert("HẾT GIỜ Y TẾ!"); } up(); }, 1000);
+        } up();
+    }
+
+    function stopAndBuzzer(msg){ clearInterval(tm); running=false; playSound('buzzer'); setTimeout(()=>{alert(msg); startBreak();},50); }
+    function resetCurrentMatch() { sb=0;sr=0;gb=0;gr=0;bt=0;bh=0;ba=0;bp=0;rt=0;rh=0;ra=0;rp=0;wb=0;wr=0; document.getElementById('iRD').value=1; isBreak=false; running=false; clearInterval(tm); clearInterval(kyeshiTm); kyeshiRunning=false; kyeshiTime=60; time=getSetTime(); up(); }
+    
+    function runT(){ 
+        if(kyeshiRunning) toggleKyeshi(); 
+        if(running){clearInterval(tm); running=false;} else {
+            running=true; 
+            tm=setInterval(()=>{ if(time>0){time--; up();} else { clearInterval(tm); running=false; playSound('buzzer'); if(!isBreak) setTimeout(startBreak,100); else { isBreak=false; time=getSetTime(); document.getElementById('iRD').value++; sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0; up(); } } }, 1000);
+        } up(); 
+    }
+
+    function startBreak() {
+        let winner = ""; let reason = ""; let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
+        if (gr >= maxG) { winner = "blue"; reason = "ĐỎ "+maxG+" LỖI - XANH THẮNG!"; }
+        else if (gb >= maxG) { winner = "red"; reason = "XANH "+maxG+" LỖI - ĐỎ THẮNG!"; }
+        else if (sb > sr) { winner = "blue"; reason = "XANH THẮNG ĐIỂM (" + sb + "-" + sr + ")"; }
+        else if (sr > sb) { winner = "red"; reason = "ĐỎ THẮNG ĐIỂM (" + sr + "-" + sb + ")"; }
+        else {
+            if (bt > rt) { winner = "blue"; reason = "HÒA (" + sb + "-" + sr + ") XANH HƠN TECH"; }
+            else if (rt > bt) { winner = "red"; reason = "HÒA (" + sr + "-" + sb + ") ĐỎ HƠN TECH"; }
+            else if (bh > rh) { winner = "blue"; reason = "HÒA (" + sb + "-" + sr + ") XANH HƠN HEAD"; }
+            else if (rh > bh) { winner = "red"; reason = "HÒA (" + sr + "-" + sb + ") ĐỎ HƠN HEAD"; }
+            else if (ba > ra) { winner = "blue"; reason = "HÒA (" + sb + "-" + sr + ") XANH HƠN ARMOR"; }
+            else if (ra > ba) { winner = "red"; reason = "HÒA (" + sr + "-" + sb + ") ĐỎ HƠN ARMOR"; }
+            else if (bp > rp) { winner = "blue"; reason = "HÒA (" + sb + "-" + sr + ") XANH HƠN PUNCH"; }
+            else if (rp > bp) { winner = "red"; reason = "HÒA (" + sr + "-" + sb + ") ĐỎ HƠN PUNCH"; }
+            else { if(confirm("HÒA TẤT CẢ CHỈ SỐ. XANH THẮNG?")) { winner = "blue"; reason = "HÒA - TRỌNG TÀI CHỌN XANH"; } else { winner = "red"; reason = "HÒA - TRỌNG TÀI CHỌN ĐỎ"; } }
+        }
+        alert("KẾT THÚC HIỆP: " + reason);
+        if (winner === "blue") wb++; else wr++;
+        up();
+        if (wb >= 2 || wr >= 2) { setTimeout(() => { alert(winner === "blue" ? "VÕ SĨ XANH THẮNG CHUNG CUỘC!" : "VÕ SĨ ĐỎ THẮNG CHUNG CUỘC!"); loadNextMatch(); }, 300); return; }
+        isBreak = true; time = parseInt(document.getElementById('iBreakSet').value) || 60; runT();
+    }
+
+    function loadNextMatch() { 
+        let tx=document.getElementById('matchListData'); let lines=tx.value.split('\n').filter(l=>l.trim()!=""); 
+        if(lines.length>0 && lines[0].includes('|')){ 
+            let p=lines[0].split('|'); document.getElementById('iMT').value=p[0].trim(); document.getElementById('iB').value=p[1].trim(); document.getElementById('iR').value=p[2].trim(); 
+            lines.shift(); tx.value=lines.join('\n'); 
+        } else { document.getElementById('iMT').value++; } 
+        resetCurrentMatch(); 
+    }
+
+    function ch(side, p){ 
+        playSound('beep'); 
+        if(side==='sb'){ 
+            sb=Math.max(0,sb+p); 
+            if(p===1) bp=Math.max(0,bp+1); else if(p===-1) bp=Math.max(0,bp-1); 
+            else if(p===2) ba=Math.max(0,ba+1); else if(p===-2) ba=Math.max(0,ba-1);
+            else if(p===3) bh=Math.max(0,bh+1); else if(p===-3) bh=Math.max(0,bh-1);
+        } else { 
+            sr=Math.max(0,sr+p); 
+            if(p===1) rp=Math.max(0,rp+1); else if(p===-1) rp=Math.max(0,rp-1);
+            else if(p===2) ra=Math.max(0,ra+1); else if(p===-2) ra=Math.max(0,ra-1);
+            else if(p===3) rh=Math.max(0,rh+1); else if(p===-3) rh=Math.max(0,rh-1);
+        } 
+        up(); 
+    }
+    
+    function st(type, val) {
+        playSound('beep');
+        if(type==='bt'){ bt=Math.max(0,bt+val); sb=Math.max(0,sb+(val*2)); }
+        else if(type==='rt'){ rt=Math.max(0,rt+val); sr=Math.max(0,sr+(val*2)); }
+        else if(type==='bh'){ bh=Math.max(0,bh+val); sb=Math.max(0,sb+(val*3)); }
+        else if(type==='rh'){ rh=Math.max(0,rh+val); sr=Math.max(0,sr+(val*3)); }
+        else if(type==='ba'){ ba=Math.max(0,ba+val); sb=Math.max(0,sb+(val*2)); }
+        else if(type==='ra'){ ra=Math.max(0,ra+val); sr=Math.max(0,sr+(val*2)); }
+        else if(type==='bp'){ bp=Math.max(0,bp+val); sb=Math.max(0,sb+val); }
+        else if(type==='rp'){ rp=Math.max(0,rp+val); sr=Math.max(0,sr+val); }
+        up();
+    }
+
+    function l(s){ if(isBreak)return; playSound('beep'); if(s=='b'){gb++; sr++;} else {gr++; sb++;} up(); }
+    function ul(s){ if(isBreak)return; playSound('beep'); if(s=='b'&&gb>0){gb--; sr--;} else if(s=='r'&&gr>0){gr--; sb--;} up(); }
+    function mo(){ vW=window.open("","_blank","width=1200,height=800"); vW.document.write('<html><head><style>'+document.getElementsByTagName('style')[0].innerHTML+' #control-area, #settings-modal{display:none}</style></head><body>'+document.getElementById('display-area').outerHTML+'<\/body></html>'); }
+    function suaHiep(ben, giatri) { if (ben === 'b') wb = Math.max(0, Math.min(2, wb + giatri)); else wr = Math.max(0, Math.min(2, wr + giatri)); playSound('beep'); up(); }
+
+    window.addEventListener('keydown', e => {
+        const key = e.key.toLowerCase();
+        if(e.code==='Space'){ e.preventDefault(); runT(); }
+        if(e.code==='Escape'){ if(confirm('Reset?')) resetCurrentMatch(); }
+        if(key==='1') recordVote(1,'sb',1); if(key==='2') recordVote(1,'sb',2); if(key==='3') recordVote(1,'sb',3);
+        if(key==='7') recordVote(1,'sr',1); if(key==='8') recordVote(1,'sr',2); if(key==='9') recordVote(1,'sr',3);
+        if(key==='q') recordVote(2,'sb',1); if(key==='w') recordVote(2,'sb',2); if(key==='e') recordVote(2,'sb',3);
+        if(key==='u') recordVote(2,'sr',1); if(key==='i') recordVote(2,'sr',2); if(key==='o') recordVote(2,'sr',3);
+        if(key==='a') recordVote(3,'sb',1); if(key==='s') recordVote(3,'sb',2); if(key==='d') recordVote(3,'sb',3);
+        if(key==='j') recordVote(3,'sr',1); if(key==='k') recordVote(3,'sr',2); if(key==='l') recordVote(3,'sr',3);
+        if(key==='z') recordVote(1,'sb', 0, true); if(key==='x') recordVote(2,'sb', 0, true); if(key==='c') recordVote(3,'sb', 0, true);
+        if(key==='n') recordVote(1,'sr', 0, true); if(key==='m') recordVote(2,'sr', 0, true); if(key===',') recordVote(3,'sr', 0, true);
+        if(key==='g') l('b'); if(key==='h') l('r');
+    });
+    up();
+</script>
+</body>
+</html>
