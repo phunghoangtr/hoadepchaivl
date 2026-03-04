@@ -13,20 +13,23 @@
         body { background: var(--bg-dark); color: #fff; font-family: "Segoe UI", sans-serif; margin: 0; text-align: center; overflow-y: auto; }
         #display-area { height: 95vh; display: flex; background: #000; position: relative; gap: 0; padding: 0; box-sizing: border-box; border: 10px solid #333; outline: 3px solid var(--gold); }
         
+        /* Đảo vị trí đèn trọng tài */
         .judge-vertical { position: absolute; top: 210px; display: flex; flex-direction: column; gap: 12px; z-index: 100; }
-        #lights-red { left: 20px; } 
-        #lights-blue { right: 20px; }
+        #lights-red { left: 20px; } /* Đỏ bên trái */
+        #lights-blue { right: 20px; } /* Xanh bên phải */
 
         .j-group { display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
         .j-label-small { font-size: 10px; color: #444; font-weight: bold; margin-bottom: 2px; }
         .j-box { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.1); transition: 0.1s; }
         .j-box.active-b, .j-box.active-r { background: #ffffff !important; color: #000 !important; box-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff; opacity: 1 !important; border-color: #fff !important; }
 
+        /* Đảo thanh tên */
         .top-bar { position: absolute; top: 0; left: 0; width: 100%; height: 140px; display: flex; z-index: 20; }
         .name-wrapper { flex: 1; height: 100%; display: flex; align-items: center; position: relative; overflow: hidden; }
         .name-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 115px; box-sizing: border-box; overflow: hidden; }
         .name-wrapper span { font-size: 55px; font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
         
+        /* Đảo Gradient màu tên */
         .red-side-name { background: linear-gradient(to right, #aa0000, var(--red-main)); }
         .blue-side-name { background: linear-gradient(to left, #0033aa, var(--blue-main)); }
         
@@ -40,6 +43,7 @@
         .red { background-color: var(--red-main); }
         .score-big { font-size: 25vw; font-weight: 900; line-height: 0.7; margin-top: -20px; z-index: 5; }
         
+        /* Đảo Win Tracker */
         .win-tracker { position: absolute; top: 155px; display: flex; gap: 10px; z-index: 10; }
         #tracker-red { right: 20px; }
         #tracker-blue { left: 20px; }
@@ -84,10 +88,17 @@
         .log-header { background: #222; padding: 5px 15px; font-size: 12px; color: var(--gold); font-weight: bold; border-bottom: 1px solid #444; display: flex; justify-content: space-between; }
         #point-log { height: 120px; overflow-y: auto; padding: 10px; text-align: left; font-family: monospace; font-size: 13px; color: #0f0; }
         .log-entry { border-bottom: 1px solid #111; padding: 3px 0; display: block; }
+        .log-success { color: #ffff00; font-weight: bold; text-shadow: 0 0 5px rgba(255,255,0,0.5); }
+        .log-blue { color: #5599ff; }
+        .log-red { color: #ff5555; }
         #manual-win-control { grid-column: span 3; background: #222; padding: 10px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; align-items: center; margin-bottom: -5px; }
+        .manual-btn-b { background: var(--blue-main); padding: 5px 15px; font-size: 16px; margin: 0 5px; }
+        .manual-btn-r { background: var(--red-main); padding: 5px 15px; font-size: 16px; margin: 0 5px; }
         #match-list-footer { grid-column: span 3; background: #111; padding: 15px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; align-items: center;}
+        #matchListData { width: 100%; height: 80px; background: #000; color: #0f0; border: 1px solid #555; padding: 8px; font-family: monospace; resize: none; }
         #settings-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; border: 2px solid var(--gold); padding: 20px; z-index: 1000; border-radius: 15px; }
         .setting-row { margin: 10px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+        .btn-time-adj { background: #555; border: 1px solid #fff; padding: 10px; font-size: 16px; flex: 1; }
     </style>
 </head>
 <body>
@@ -186,8 +197,8 @@
     <div class="col">
         <button id="pk" class="btn-m" onclick="runT()">BẮT ĐẦU [Space]</button>
         <div class="row" style="background: rgba(0,0,0,0.3); padding: 5px; border-radius: 8px;">
-            <button style="background: #555; border: 1px solid #fff; padding: 10px; font-size: 16px; flex: 1;" onclick="adjT(1)">+1 GIÂY</button>
-            <button style="background: #555; border: 1px solid #fff; padding: 10px; font-size: 16px; flex: 1;" onclick="adjT(-1)">-1 GIÂY</button>
+            <button class="btn-time-adj" onclick="adjT(1)">+1 GIÂY</button>
+            <button class="btn-time-adj" onclick="adjT(-1)">-1 GIÂY</button>
         </div>
         <div class="row">
             <button class="btn-s" onclick="openSettings()" style="background:#555">⚙️ CÀI ĐẶT</button>
@@ -223,10 +234,10 @@
     <div id="manual-win-control">
         <div style="color: var(--gold); font-weight: bold; margin-bottom: 5px; font-size: 12px;">SỬA HIỆP THẮNG (WIN DOTS)</div>
         <div class="row">
-            <button style="background: var(--red-main); padding: 5px 15px; font-size: 16px; margin: 0 5px;" onclick="suaHiep('r', 1)">ĐỎ +1 hiệp</button>
+            <button class="manual-btn-r" onclick="suaHiep('r', 1)">ĐỎ +1 hiệp</button>
             <button class="btn-s" style="padding: 5px 10px;" onclick="suaHiep('r', -1)">-1</button>
             <div style="width: 20px;"></div>
-            <button style="background: var(--blue-main); padding: 5px 15px; font-size: 16px; margin: 0 5px;" onclick="suaHiep('b', 1)">XANH +1 hiệp</button>
+            <button class="manual-btn-b" onclick="suaHiep('b', 1)">XANH +1 hiệp</button>
             <button class="btn-s" style="padding: 5px 10px;" onclick="suaHiep('b', -1)">-1</button>
         </div>
     </div>
@@ -240,7 +251,7 @@
     </div>
 
     <div id="match-list-footer">
-        <textarea id="matchListData" style="width: 100%; height: 80px; background: #000; color: #0f0; border: 1px solid #555; padding: 8px; font-family: monospace; resize: none;" placeholder="Số trận | Tên Xanh | Tên Đỏ">Số trận | Tên Xanh | Tên Đỏ</textarea>
+        <textarea id="matchListData" placeholder="Số trận | Tên Xanh | Tên Đỏ">Số trận | Tên Xanh | Tên Đỏ</textarea>
     </div>
 </div>
 
@@ -261,6 +272,7 @@
 
     function addLog(msg, colorClass = "") {
         const logBox = document.getElementById('point-log');
+        if(!logBox) return; 
         const now = new Date();
         const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
         let m = Math.floor(time / 60);
@@ -363,8 +375,8 @@
 
     function startBreak() {
         let winner = ""; let reason = ""; let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
-        if (gr >= maxG) { winner = "red"; reason = "ĐỎ "+maxG+" LỖI - XANH THẮNG!"; } 
-        else if (gb >= maxG) { winner = "blue"; reason = "XANH "+maxG+" LỖI - ĐỎ THẮNG!"; }
+        if (gr >= maxG) { winner = "blue"; reason = "ĐỎ "+maxG+" LỖI - XANH THẮNG!"; } 
+        else if (gb >= maxG) { winner = "red"; reason = "XANH "+maxG+" LỖI - ĐỎ THẮNG!"; }
         else if (sb > sr) { winner = "blue"; reason = "XANH THẮNG ĐIỂM (" + sb + "-" + sr + ")"; }
         else if (sr > sb) { winner = "red"; reason = "ĐỎ THẮNG ĐIỂM (" + sr + "-" + sb + ")"; }
         else {
@@ -397,7 +409,9 @@
     
     function up() { 
         const uv=(id,v)=>{document.querySelectorAll('#'+id).forEach(e=>e.innerText=v);}; 
-        uv('vSB',sb); uv('vSR',sr); uv('vGB',"GAM-JEOM: "+gb); uv('vGR',"GAM-JEOM: "+gr); 
+        uv('vSB',sb); uv('vSR',sr); uv('vGB',gb); uv('vGR',gr); // Đã khớp với id hiển thị
+        document.querySelectorAll('#vGB').forEach(e => e.innerText = "GAM-JEOM: " + gb);
+        document.querySelectorAll('#vGR').forEach(e => e.innerText = "GAM-JEOM: " + gr);
         uv('vBT',bt); uv('vBH',bh); uv('vBA',ba); uv('vBP',bp); 
         uv('vRT',rt); uv('vRH',rh); uv('vRA',ra); uv('vRP',rp); 
         uv('vMT',document.getElementById('iMT').value||1); 
@@ -413,16 +427,31 @@
         
         let m=Math.floor(time/60), s=Math.floor(time%60); 
         let str;
-        if (time > 5) { str = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s; } 
-        else if (time > 0) { str = time.toFixed(1); } 
-        else { str = "00:00"; }
+        // HIỂN THỊ ĐÚNG YÊU CẦU: Giữ 00:05 đến 5.0, từ 4.9 mới hiện số lẻ
+        if (time >= 5.0) { 
+            str = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
+        } 
+        else if (time > 0) { 
+            str = time.toFixed(1); 
+        } 
+        else { 
+            str = "00:00"; 
+        }
         
         document.querySelectorAll('#vTD').forEach(e=>{
             e.innerText = str; 
             e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
-            // Đã sửa đổi ở đây: Giữ nguyên màu trắng (#fff) và kích thước 120px cho 5 giây cuối
-            if (time <= 5 && time > 0 && running && !isBreak) { e.style.color = "#fff"; e.style.fontSize = "120px"; } 
-            else { e.style.color = ""; e.style.fontSize = "120px"; }
+            // CHỮ TO TRẮNG KHI DƯỚI 5 GIÂY (TỪ 4.9)
+            if (time < 5.0 && time > 0 && running && !isBreak) { 
+                e.style.color = "#ffffff"; 
+                e.style.fontSize = "150px"; 
+                e.style.borderColor = "#ffffff";
+            } 
+            else { 
+                e.style.color = ""; 
+                e.style.fontSize = "120px"; 
+                e.style.borderColor = "";
+            }
         }); 
 
         const btnM = document.getElementById('pk'); 
@@ -443,8 +472,15 @@
         else { 
             running=true; 
             tm=setInterval(()=>{ 
-                if(time>0){ time = parseFloat((time - 0.1).toFixed(1)); up(); } 
-                else { clearInterval(tm); running=false; time=0; playSound('buzzer'); if(!isBreak) setTimeout(startBreak,100); else { isBreak=false; time=getSetTime(); document.getElementById('iRD').value++; sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0; up(); } } 
+                if(time>0){ 
+                    time = parseFloat((time - 0.1).toFixed(1)); 
+                    up(); 
+                } 
+                else { 
+                    clearInterval(tm); running=false; time=0; playSound('buzzer'); 
+                    if(!isBreak) setTimeout(startBreak,100); 
+                    else { isBreak=false; time=getSetTime(); document.getElementById('iRD').value++; sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0; up(); } 
+                } 
             }, 100); 
         } up(); 
     }
@@ -475,5 +511,4 @@
     up();
 </script>
 </body>
-
 </html>
