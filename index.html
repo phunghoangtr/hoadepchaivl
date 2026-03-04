@@ -15,21 +15,19 @@
         
         /* Đảo vị trí đèn trọng tài */
         .judge-vertical { position: absolute; top: 210px; display: flex; flex-direction: column; gap: 12px; z-index: 100; }
-        #lights-red { left: 20px; } /* Đỏ bên trái */
-        #lights-blue { right: 20px; } /* Xanh bên phải */
+        #lights-red { left: 20px; } 
+        #lights-blue { right: 20px; } 
 
         .j-group { display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
         .j-label-small { font-size: 10px; color: #444; font-weight: bold; margin-bottom: 2px; }
         .j-box { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.1); transition: 0.1s; }
         .j-box.active-b, .j-box.active-r { background: #ffffff !important; color: #000 !important; box-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff; opacity: 1 !important; border-color: #fff !important; }
 
-        /* Đảo thanh tên */
         .top-bar { position: absolute; top: 0; left: 0; width: 100%; height: 140px; display: flex; z-index: 20; }
         .name-wrapper { flex: 1; height: 100%; display: flex; align-items: center; position: relative; overflow: hidden; }
         .name-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 115px; box-sizing: border-box; overflow: hidden; }
         .name-wrapper span { font-size: 55px; font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
         
-        /* Đảo Gradient màu tên */
         .red-side-name { background: linear-gradient(to right, #aa0000, var(--red-main)); }
         .blue-side-name { background: linear-gradient(to left, #0033aa, var(--blue-main)); }
         
@@ -43,7 +41,6 @@
         .red { background-color: var(--red-main); }
         .score-big { font-size: 25vw; font-weight: 900; line-height: 0.7; margin-top: -20px; z-index: 5; }
         
-        /* Đảo Win Tracker */
         .win-tracker { position: absolute; top: 155px; display: flex; gap: 10px; z-index: 10; }
         #tracker-red { right: 20px; }
         #tracker-blue { left: 20px; }
@@ -270,9 +267,9 @@
     const JUDGE_WINDOW = 1500;
     let pendingVotes = [];
 
+    // HÀM LOG GỐC CỦA BẠN
     function addLog(msg, colorClass = "") {
         const logBox = document.getElementById('point-log');
-        if(!logBox) return; 
         const now = new Date();
         const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
         let m = Math.floor(time / 60);
@@ -409,7 +406,7 @@
     
     function up() { 
         const uv=(id,v)=>{document.querySelectorAll('#'+id).forEach(e=>e.innerText=v);}; 
-        uv('vSB',sb); uv('vSR',sr); uv('vGB',gb); uv('vGR',gr); // Đã khớp với id hiển thị
+        uv('vSB',sb); uv('vSR',sr); 
         document.querySelectorAll('#vGB').forEach(e => e.innerText = "GAM-JEOM: " + gb);
         document.querySelectorAll('#vGR').forEach(e => e.innerText = "GAM-JEOM: " + gr);
         uv('vBT',bt); uv('vBH',bh); uv('vBA',ba); uv('vBP',bp); 
@@ -427,7 +424,7 @@
         
         let m=Math.floor(time/60), s=Math.floor(time%60); 
         let str;
-        // HIỂN THỊ ĐÚNG YÊU CẦU: Giữ 00:05 đến 5.0, từ 4.9 mới hiện số lẻ
+        // HIỂN THỊ ĐÚNG YÊU CẦU CỦA BẠN: BẮT ĐẦU TỪ 4.9 MỚI HIỆN SỐ LẺ VÀ TRẮNG TO
         if (time >= 5.0) { 
             str = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
         } 
@@ -441,7 +438,6 @@
         document.querySelectorAll('#vTD').forEach(e=>{
             e.innerText = str; 
             e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
-            // CHỮ TO TRẮNG KHI DƯỚI 5 GIÂY (TỪ 4.9)
             if (time < 5.0 && time > 0 && running && !isBreak) { 
                 e.style.color = "#ffffff"; 
                 e.style.fontSize = "150px"; 
