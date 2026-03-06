@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>PHTR_Scoreboard_TKD_International_Layout</title>
+    <title>HUSI_Scoreboard_TKD_International_Layout</title>
     <style>
         :root {
             --blue-main: #0055ff; --red-main: #ff1100; --gold: #ffcc00;
@@ -432,13 +432,16 @@
         document.querySelectorAll('#rw1').forEach(e=>e.className=wr>=1?"win-dot active":"win-dot"); 
         document.querySelectorAll('#rw2').forEach(e=>e.className=wr>=2?"win-dot active":"win-dot"); 
         
-        let m=Math.floor(time/60), s=Math.floor(time%60); 
+        let m = Math.floor(time / 60), s = Math.floor(time % 60); 
         let str;
-        if (time >= 5.0) { 
+
+        if (time >= 10.0) { 
+            // Hiển thị mm:ss khi >= 10 giây
             str = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
         } 
         else if (time > 0) { 
-            str = time.toFixed(1); 
+            // CHUYỂN ĐỔI: Hiển thị 2 chữ số thập phân khi < 10 giây (VD: 9.99)
+            str = time.toFixed(2); 
         } 
         else { 
             str = "00:00"; 
@@ -447,7 +450,7 @@
         document.querySelectorAll('#vTD').forEach(e=>{
             e.innerText = str; 
             e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
-            if (time < 5.0 && time > 0 && running && !isBreak) { 
+            if (time < 10.0 && time > 0 && running && !isBreak) { 
                 e.style.color = "#ffffff"; 
                 e.style.fontSize = "150px"; 
                 e.style.borderColor = "#ffffff";
@@ -477,8 +480,9 @@
         else { 
             running=true; 
             tm=setInterval(()=>{ 
-                if(time>0){ 
-                    time = parseFloat((time - 0.1).toFixed(1)); 
+                if(time > 0){ 
+                    // Trừ 0.01 giây mỗi lần lặp và làm tròn 2 chữ số
+                    time = parseFloat((time - 0.01).toFixed(2)); 
                     up(); 
                 } 
                 else { 
@@ -486,7 +490,7 @@
                     if(!isBreak) setTimeout(startBreak,100); 
                     else { isBreak=false; time=getSetTime(); document.getElementById('iRD').value++; sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0; up(); } 
                 } 
-            }, 100); 
+            }, 10); // Đổi từ 100 thành 10ms
         } up(); 
     }
 
