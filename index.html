@@ -13,7 +13,7 @@
         body { background: var(--bg-dark); color: #fff; font-family: "Segoe UI", sans-serif; margin: 0; text-align: center; overflow-y: auto; }
         #display-area { height: 95vh; display: flex; background: #000; position: relative; gap: 0; padding: 0; box-sizing: border-box; border: 10px solid #333; outline: 3px solid var(--gold); }
         
-        /* Đảo vị trí đèn trọng tài */
+        /* Cấu trúc Judge */
         .judge-vertical { position: absolute; top: 210px; display: flex; flex-direction: column; gap: 12px; z-index: 100; }
         #lights-red { left: 20px; } 
         #lights-blue { right: 20px; } 
@@ -23,8 +23,9 @@
         .j-box { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.1); transition: 0.1s; }
         .j-box.active-b, .j-box.active-r { background: #ffffff !important; color: #000 !important; box-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff; opacity: 1 !important; border-color: #fff !important; }
 
+        /* Top Bar & Flags */
         .top-bar { position: absolute; top: 0; left: 0; width: 100%; height: 140px; display: flex; z-index: 20; }
-        .name-wrapper { flex: 1; height: 100%; display: flex; align-items: center; position: relative; overflow: hidden; }
+        .name-wrapper { flex: 1; height: 100%; display: flex; align-items: center; position: relative; overflow: hidden; transition: background 0.3s; }
         .name-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 115px; box-sizing: border-box; overflow: hidden; }
         .name-wrapper span { font-size: 55px; font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
         
@@ -33,12 +34,16 @@
         
         .flag-vn { width: 130px; height: 85px; background-color: var(--vn-red); border: 3px solid #fff; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: absolute; top: 25px; }
         .flag-vn::before { content: "★"; color: #ffff00; font-size: 65px; line-height: 1; margin-top: -3px; }
-        .red-side-name .flag-vn { left: 10px; }
-        .blue-side-name .flag-vn { right: 10px; }
+        .red-side-name .flag-vn { left: 10px; right: auto; }
+        .blue-side-name .flag-vn { right: 10px; left: auto; }
 
-        .side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
-        .blue { background-color: var(--blue-main); }
-        .red { background-color: var(--red-main); }
+        /* Side & Swapping Logic */
+        .side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; transition: background 0.3s; }
+        .side.red { background-color: var(--red-main); }
+        .side.blue { background-color: var(--blue-main); }
+        .side.red.swapped-to-blue { background-color: var(--blue-main) !important; }
+        .side.blue.swapped-to-red { background-color: var(--red-main) !important; }
+
         .score-big { font-size: 25vw; font-weight: 900; line-height: 0.7; margin-top: -20px; z-index: 5; }
         
         .win-tracker { position: absolute; top: 155px; display: flex; gap: 10px; z-index: 10; }
@@ -66,6 +71,7 @@
         #vMT { font-size: 130px; line-height: 1.1; color: var(--gold); text-shadow: 0 0 20px rgba(255, 204, 0, 0.5); }
         .round-box { font-size: 45px; font-weight: 900; color: #fff; margin-bottom: 20px; min-height: 70px; white-space: nowrap; width: 100%; text-align: center; }
 
+        /* Control Panel */
         #control-area { min-height: 35vh; background: var(--panel-bg); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding: 20px; border-top: 5px solid #444; }
         .col { display: flex; flex-direction: column; gap: 8px; justify-content: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; }
         .row { display: flex; gap: 5px; justify-content: center; align-items: center; flex-wrap: wrap; }
@@ -93,7 +99,7 @@
         .manual-btn-r { background: var(--red-main); padding: 5px 15px; font-size: 16px; margin: 0 5px; }
         #match-list-footer { grid-column: span 3; background: #111; padding: 15px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; align-items: center;}
         #matchListData { width: 100%; height: 80px; background: #000; color: #0f0; border: 1px solid #555; padding: 8px; font-family: monospace; resize: none; }
-        #settings-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; border: 2px solid var(--gold); padding: 20px; z-index: 1000; border-radius: 15px; }
+        #settings-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; border: 2px solid var(--gold); padding: 20px; z-index: 1000; border-radius: 15px; width: 350px;}
         .setting-row { margin: 10px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
         .btn-time-adj { background: #555; border: 1px solid #fff; padding: 10px; font-size: 16px; flex: 1; }
     </style>
@@ -109,6 +115,11 @@
     <div class="setting-row">Luật cách biệt 12đ: <input type="checkbox" id="pointGapActive" checked style="width:25px; height:25px;"></div>
     <div class="setting-row">Chế độ 1 trọng tài: <input type="checkbox" id="singleJudgeMode" style="width:25px; height:25px;"></div>
     <div class="setting-row">Số lỗi tối đa (Gam-jeom): <input type="number" id="iMaxGJ" value="5" style="width:110px"></div>
+    
+    <div class="setting-row" style="border-top: 1px solid #444; padding-top: 10px; margin-top: 15px;">
+        <button onclick="fullSwap()" style="background:#ff00ff; color:#fff; width:100%; padding:12px; font-weight:bold; border-radius:8px; border:2px solid #fff;">🔄 ĐẢO BÊN VÕ SĨ & GIAO DIỆN</button>
+    </div>
+    
     <button onclick="closeSettings()" style="background:var(--gold); color:#000; width:100%; padding:10px; margin-top:10px">LƯU & ĐÓNG</button>
 </div>
 
@@ -169,7 +180,7 @@
 </div>
 
 <div id="control-area">
-    <div class="col">
+    <div class="col" id="col-left">
         <input type="text" id="iR" value="VÕ SĨ ĐỎ" oninput="up()">
         <div class="row">
             <button class="btn-quick" onclick="quick(4, 'r')">+4 (T+A)</button>
@@ -206,7 +217,7 @@
         <button class="btn-kyeshi" onclick="toggleKyeshi()">🚑 KYE-SHI (Y TẾ)</button>
     </div>
 
-    <div class="col">
+    <div class="col" id="col-right">
         <input type="text" id="iB" value="VÕ SĨ XANH" oninput="up()">
         <div class="row">
             <button class="btn-quick" onclick="quick(4, 'b')">+4 (T+A)</button>
@@ -267,7 +278,6 @@
     const JUDGE_WINDOW = 1500;
     let pendingVotes = [];
 
-    // HÀM LOG GỐC CỦA BẠN
     function addLog(msg, colorClass = "") {
         const logBox = document.getElementById('point-log');
         const now = new Date();
@@ -424,7 +434,6 @@
         
         let m=Math.floor(time/60), s=Math.floor(time%60); 
         let str;
-        // HIỂN THỊ ĐÚNG YÊU CẦU CỦA BẠN: BẮT ĐẦU TỪ 4.9 MỚI HIỆN SỐ LẺ VÀ TRẮNG TO
         if (time >= 5.0) { 
             str = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
         } 
@@ -488,6 +497,57 @@
     function mo(){ vW=window.open("","_blank","width=1200,height=800"); vW.document.write('<html><head><style>'+document.getElementsByTagName('style')[0].innerHTML+' #control-area, #settings-modal, #log-container{display:none}</style></head><body>'+document.getElementById('display-area').outerHTML+'<\/body></html>'); }
     function suaHiep(ben, giatri) { if (ben === 'b') wb = Math.max(0, Math.min(2, wb + giatri)); else wr = Math.max(0, Math.min(2, wr + giatri)); playSound('beep'); up(); }
 
+    function fullSwap() {
+        // 1. Đảo dữ liệu số (Điểm, Lỗi, Stats, Hiệp thắng)
+        [sb, sr] = [sr, sb];
+        [gb, gr] = [gr, gb];
+        [bt, rt] = [rt, bt];
+        [bh, rh] = [rh, bh];
+        [ba, ra] = [ra, ba];
+        [bp, rp] = [rp, bp];
+        [wb, wr] = [wr, wb];
+
+        // 2. Đảo tên trong ô Input
+        let iB = document.getElementById('iB');
+        let iR = document.getElementById('iR');
+        let tempName = iB.value;
+        iB.value = iR.value;
+        iR.value = tempName;
+
+        // 3. Đảo màu sắc vùng hiển thị điểm (Side)
+        document.querySelector('.side.red').classList.toggle('swapped-to-blue');
+        document.querySelector('.side.blue').classList.toggle('swapped-to-red');
+
+        // 4. Đảo màu sắc thanh tên (Top Bar) - CỜ ĐỨNG IM
+        const redWrapper = document.querySelector('.red-side-name');
+        const blueWrapper = document.querySelector('.blue-side-name');
+        
+        if (!redWrapper.dataset.isSwapped) {
+            redWrapper.style.background = "linear-gradient(to right, #0033aa, var(--blue-main))";
+            blueWrapper.style.background = "linear-gradient(to left, #aa0000, var(--red-main))";
+            redWrapper.dataset.isSwapped = "true";
+        } else {
+            redWrapper.style.background = "";
+            blueWrapper.style.background = "";
+            delete redWrapper.dataset.isSwapped;
+        }
+
+        // 5. Đảo màu sắc các nút bấm điều khiển (Đỏ <-> Xanh)
+        document.querySelectorAll('.btn-r, .btn-b').forEach(btn => {
+            if (btn.classList.contains('btn-r')) {
+                btn.classList.replace('btn-r', 'btn-b');
+                btn.style.backgroundColor = "var(--blue-main)";
+            } else {
+                btn.classList.replace('btn-b', 'btn-r');
+                btn.style.backgroundColor = "var(--red-main)";
+            }
+        });
+
+        addLog("🔄 ĐÃ ĐẢO BÊN VÕ SĨ & GIAO DIỆN (CỜ CỐ ĐỊNH)", 'log-success');
+        up(); 
+        playSound('beep');
+    }
+
     window.addEventListener('keydown', function(e) {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
         const key = e.key.toLowerCase();
@@ -508,3 +568,4 @@
 </script>
 </body>
 </html>
+
