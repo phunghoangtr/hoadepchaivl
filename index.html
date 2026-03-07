@@ -436,31 +436,34 @@
         let str;
 
         if (time >= 10.0) { 
-            // Hiển thị mm:ss khi >= 10 giây
-            str = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
+            // Hiển thị m:ss (Bỏ số 0 ở phút nếu m < 10)
+            str = m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
         } 
         else if (time > 0) { 
-            // CHUYỂN ĐỔI: Hiển thị 2 chữ số thập phân khi < 10 giây (VD: 9.99)
+            // Khi dưới 10 giây hiển thị số thập phân (VD: 9.99)
             str = time.toFixed(2); 
         } 
         else { 
-            str = "00:00"; 
+            str = "0:00"; 
         }
         
-        document.querySelectorAll('#vTD').forEach(e=>{
-            e.innerText = str; 
-            e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
-            if (time < 10.0 && time > 0 && running && !isBreak) { 
-                e.style.color = "#ffffff"; 
-                e.style.fontSize = "150px"; 
-                e.style.borderColor = "#ffffff";
-            } 
-            else { 
-                e.style.color = ""; 
-                e.style.fontSize = "120px"; 
-                e.style.borderColor = "";
-            }
-        }); 
+       document.querySelectorAll('#vTD').forEach(e=>{
+    e.innerText = str; 
+    e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
+    
+    // Luôn giữ cỡ chữ to nhất (150px) để bằng với lúc hiển thị số thập phân
+    e.style.fontSize = "150px"; 
+
+    // Các tùy chỉnh màu sắc giữ nguyên theo trạng thái
+    if (time < 10.0 && time > 0 && running && !isBreak) { 
+        e.style.color = "#ffffff"; 
+        e.style.borderColor = "#ffffff";
+    } 
+    else { 
+        e.style.color = ""; 
+        e.style.borderColor = "";
+    }
+});
 
         const btnM = document.getElementById('pk'); 
         if (running) { btnM.innerText = "DỪNG [Space]"; btnM.classList.remove('stopped'); } else { btnM.innerText = time === 0 ? "BẮT ĐẦU [Space]" : "TIẾP TỤC [Space]"; btnM.classList.add('stopped'); } 
@@ -572,5 +575,6 @@
 </script>
 </body>
 </html>
+
 
 
