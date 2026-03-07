@@ -60,7 +60,34 @@
         .stat-val { font-size: 20px; font-weight: 900; }
         
         .center-column { width: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 50px; align-items: center; background: #000; z-index: 10; }
-        .time-txt { font-size: 120px; font-family: monospace; font-weight: 900; padding: 10px; border: 5px solid #fff; width: 93%; margin: 5px 0; transition: all 0.1s; }
+        .time-txt { 
+    /* --- 1. FONT CHỮ (Theo ý mày) --- */
+    font-family: "Arial Unicode MS", "Arial", sans-serif; 
+    font-weight: 900; 
+    font-size: 160px;       /* ĐÚNG 160px mày đưa */
+    letter-spacing: 5px;    /* ĐÚNG 5px mày đưa */
+    font-variant-numeric: tabular-nums; 
+
+    /* --- 2. ĐỘ NGANG & DỌC CỦA KHUNG (Theo ý mày) --- */
+    width: 100%;             /* ĐÚNG 98% mày đưa */
+    height: 170px;          /* ĐÚNG 165px mày đưa */
+    line-height: 185px;     /* ĐÚNG 185px mày đưa để số hơi tụt xuống */
+
+    /* --- 3. NÚT VẶN LÊN XUỐNG THÊM VÀO --- */
+    /* Mày tăng số này lên (vd: 20px) thì số sẽ bay LÊN TRÊN */
+    padding-bottom: 10px;   
+
+    /* --- 4. VIỀN & KHOẢNG CÁCH (Theo ý mày) --- */
+    border: 5px solid #fff; /* ĐÚNG 5px mày đưa */
+    margin: 2px auto;       /* ĐÚNG 2px mày đưa */
+    
+    /* Các thuộc tính hỗ trợ */
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    box-sizing: border-box; /* Giữ khung cố định khi vặn padding */
+    transition: all 0.1s;
+}
         .t-run { color: #fff; background: transparent; border-color: #fff; } 
         .t-stop, .t-break { color: #000; background-color: var(--highlight-yellow); border-color: var(--highlight-yellow); }
         #vTK { display: none; margin-top: 10px; border: 3px solid #fff; padding: 5px 20px; border-radius: 15px; background: rgba(0,0,0,0.9); }
@@ -575,6 +602,7 @@
 </script>
 </body>
 </html>
+
 
 
 
