@@ -29,7 +29,7 @@
         .name-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 115px; box-sizing: border-box; overflow: hidden; }
         .name-wrapper span { font-size: 55px; font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
         
-        .red-side-name { background: linear-gradient(to right, #aa0000, var(--red-main)); }
+        .red-side-name { background: linear-gradient(to right, #aa3300, var(--red-main)); }
         .blue-side-name { background: linear-gradient(to left, #0033aa, var(--blue-main)); }
         
         .flag-vn { width: 130px; height: 85px; background-color: var(--vn-red); border: 3px solid #fff; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: absolute; top: 25px; }
@@ -44,7 +44,22 @@
         .side.red.swapped-to-blue { background-color: var(--blue-main) !important; }
         .side.blue.swapped-to-red { background-color: var(--red-main) !important; }
 
-        .score-big { font-size: 25vw; font-weight: 900; line-height: 0.7; margin-top: -20px; z-index: 5; }
+        .score-big { 
+    /* --- 1. SỬ DỤNG CÙNG FONT VỚI ĐỒNG HỒ --- */
+    font-family: "Arial Unicode MS", "Arial", sans-serif; 
+    font-weight: 900; 
+    font-variant-numeric: tabular-nums; 
+    
+    /* --- 2. KÍCH THƯỚC VÀ CĂN CHỈNH --- */
+    font-size: 25vw; 
+    line-height: 0.7; 
+    margin-top: -20px; 
+    z-index: 5; 
+    
+    /* Thêm thuộc tính này để các con số không bị nhảy lệch khi thay đổi */
+    display: inline-block;
+    text-align: center;
+}
         
         .win-tracker { position: absolute; top: 155px; display: flex; gap: 10px; z-index: 10; }
         #tracker-red { right: 20px; }
@@ -462,35 +477,55 @@
         let m = Math.floor(time / 60), s = Math.floor(time % 60); 
         let str;
 
-        if (time >= 10.0) { 
-            // Hiển thị m:ss (Bỏ số 0 ở phút nếu m < 10)
+        if (time === -99) { 
+            str = "PTG"; 
+        }
+        else if (time === -88) {
+            str = "PUN"; // Hiển thị khi thắng do đối thủ đủ 5 lỗi
+        }
+        else if (time >= 10.0) { 
             str = m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
         } 
         else if (time > 0) { 
-            // Khi dưới 10 giây hiển thị số thập phân (VD: 9.99)
             str = time.toFixed(2); 
         } 
         else { 
             str = "0:00"; 
         }
         
-       document.querySelectorAll('#vTD').forEach(e=>{
-    e.innerText = str; 
-    e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
-    
-    // Luôn giữ cỡ chữ to nhất (150px) để bằng với lúc hiển thị số thập phân
-    e.style.fontSize = "150px"; 
-
-    // Các tùy chỉnh màu sắc giữ nguyên theo trạng thái
-    if (time < 10.0 && time > 0 && running && !isBreak) { 
-        e.style.color = "#ffffff"; 
-        e.style.borderColor = "#ffffff";
-    } 
-    else { 
-        e.style.color = ""; 
-        e.style.borderColor = "";
-    }
-});
+        document.querySelectorAll('#vTD').forEach(e => {
+            e.innerText = str; 
+            e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
+            
+            // ĐOẠN MÀY CẦN: ÉP NỀN ĐEN CHỮ VÀNG CHO PUN VÀ PTG
+            if (str === "PTG" || str === "PUN") {
+                e.style.color = "var(--highlight-yellow)";      // Chữ vàng
+                e.style.borderColor = "var(--highlight-yellow)";// Viền vàng
+                e.style.backgroundColor = "#000";                // Nền đen tuyền
+            } else {
+                // Trả về mặc định để không lỗi giao diện lúc thi đấu bình thường
+                e.style.color = ""; 
+                e.style.borderColor = "";
+                e.style.backgroundColor = ""; 
+            }
+        });
+        
+        document.querySelectorAll('#vTD').forEach(e => {
+            e.innerText = str; 
+            e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
+            
+            if (str === "PTG" || str === "PUN") {
+                // Dùng setProperty với !important để ép nền đen bằng mọi giá
+                e.style.setProperty("color", "var(--highlight-yellow)", "important");
+                e.style.setProperty("background-color", "#000", "important");
+                e.style.setProperty("border-color", "var(--highlight-yellow)", "important");
+            } else {
+                // Trả về mặc định, xóa bỏ các thuộc tính inline đã set ở trên
+                e.style.removeProperty("color");
+                e.style.removeProperty("background-color");
+                e.style.removeProperty("border-color");
+            }
+        });
 
         const btnM = document.getElementById('pk'); 
         if (running) { btnM.innerText = "DỪNG [Space]"; btnM.classList.remove('stopped'); } else { btnM.innerText = time === 0 ? "BẮT ĐẦU [Space]" : "TIẾP TỤC [Space]"; btnM.classList.add('stopped'); } 
@@ -501,7 +536,22 @@
     }
 
     function toggleKyeshi() { if (kyeshiRunning) { clearInterval(kyeshiTm); kyeshiRunning = false; } else { if (running) runT(); kyeshiRunning = true; kyeshiTime = 60; addLog("🚑 BẮT ĐẦU Y TẾ (KYE-SHI)", 'log-red'); kyeshiTm = setInterval(() => { if (kyeshiTime > 0) { kyeshiTime--; if (kyeshiTime <= 10) playSound('beep'); } else { clearInterval(kyeshiTm); kyeshiRunning = false; playSound('buzzer'); alert("HẾT GIỜ Y TẾ!"); } up(); }, 1000); } up(); }
-    function stopAndBuzzer(msg){ clearInterval(tm); running=false; playSound('buzzer'); addLog(`DỪNG TRẬN: ${msg}`, 'log-red'); setTimeout(()=>{alert(msg); startBreak();},50); }
+    function stopAndBuzzer(msg){ 
+        clearInterval(tm); 
+        running = false; 
+        
+        if (msg.includes("12 ĐIỂM")) { 
+            time = -99; // Hiện PTG
+        } 
+        else if (msg.includes("LỖI")) { 
+            time = -88; // Hiện PUN khi đủ 5 lỗi (Gam-jeom)
+        }
+        
+        playSound('buzzer'); 
+        addLog(`DỪNG TRẬN: ${msg}`, 'log-red'); 
+        up(); 
+        setTimeout(() => { alert(msg); startBreak(); }, 50); 
+    }
     function resetCurrentMatch() { sb=0;sr=0;gb=0;gr=0;bt=0;bh=0;ba=0;bp=0;rt=0;rh=0;ra=0;rp=0;wb=0;wr=0; document.getElementById('iRD').value=1; isBreak=false; running=false; clearInterval(tm); clearInterval(kyeshiTm); kyeshiRunning=false; kyeshiTime=60; time=getSetTime(); document.getElementById('point-log').innerHTML=''; addLog("--- RESET TRẬN ĐẤU MỚI ---", 'log-success'); up(); }
     
     function runT(){ 
@@ -602,6 +652,7 @@
 </script>
 </body>
 </html>
+
 
 
 
