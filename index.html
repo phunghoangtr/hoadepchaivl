@@ -335,61 +335,71 @@
     }
 
     function recordVote(judgeId, side, points, isTech = false) {
-        if (!running || isBreak) return;
-        const now = Date.now();
-        const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
-        const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
-        const techTxt = isTech ? ' (TECH)' : '';
-        addLog(`J${judgeId} bấm ${sideTxt}: ${points > 0 ? points + 'đ' : ''}${techTxt}`, sideClass);
+    if (!running || isBreak) return;
+    const now = Date.now();
+    const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
+    const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
+    const techTxt = isTech ? ' (TECH)' : '';
+    addLog(`J${judgeId} bấm ${sideTxt}: ${points > 0 ? points + 'đ' : ''}${techTxt}`, sideClass);
 
-        if (!isTech && points > 0) {
-            const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
-            const lightEl = document.getElementById(lightId);
-            if (lightEl) {
-                lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r');
-                setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1200);
-            }
+    // Hiệu ứng đèn sáng
+    if (!isTech && points > 0) {
+        const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
+        const lightEl = document.getElementById(lightId);
+        if (lightEl) {
+            lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r');
+            setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1500);
         }
-
-        if (document.getElementById('singleJudgeMode').checked) {
-            if (points > 0) {
-                let pFinal = points;
-                const hasTech = pendingVotes.some(v => v.side === side && v.isTech && (now - v.time <= JUDGE_WINDOW));
-                if (hasTech) pFinal *= 2;
-                if (side === 'sb') { sb += pFinal; bt += pFinal; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
-                else { sr += pFinal; rt += pFinal; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
-                playSound('beep');
-                addLog(`>>> CỘNG ${pFinal}đ (1-Judge Mode) CHO ${sideTxt}`, 'log-success');
-                pendingVotes = pendingVotes.filter(v => !(v.side === side && v.isTech));
-            }
-        }
-
-        pendingVotes.push({ judgeId, side, points, isTech, time: now });
-        pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
-
-        if (!document.getElementById('singleJudgeMode').checked) {
-            const windowVotes = pendingVotes.filter(v => v.side === side);
-            const techJudges = [...new Set(windowVotes.filter(v => v.isTech).map(v => v.judgeId))];
-            [1, 2, 3].forEach(pts => {
-                const scoreJudges = [...new Set(windowVotes.filter(v => v.points === pts && !v.isTech).map(v => v.judgeId))];
-                if (scoreJudges.length >= 2 && techJudges.length >= 2) {
-                    let multiplied = pts * 2;
-                    if (side === 'sb') { sb += multiplied; bt += multiplied; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
-                    else { sr += multiplied; rt += multiplied; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
-                    playSound('beep');
-                    addLog(`>>> CỘNG ${multiplied}đ (TECH) CHO ${sideTxt}`, 'log-success');
-                    pendingVotes = pendingVotes.filter(v => !(v.side === side && (v.isTech || v.points === pts)));
-                } else if (scoreJudges.length >= 2) {
-                    if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
-                    else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
-                    playSound('beep');
-                    addLog(`>>> CỘNG ${pts}đ CHO ${sideTxt}`, 'log-success');
-                    pendingVotes = pendingVotes.filter(v => !(v.side === side && v.points === pts && !v.isTech));
-                }
-            });
-        }
-        up();
     }
+
+    pendingVotes.push({ judgeId, side, points, isTech, time: now });
+    pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
+
+    // --- LOGIC XỬ LÝ ĐIỂM (ĐÃ CẬP NHẬT NHÂN ĐÔI) ---
+    if (document.getElementById('singleJudgeMode').checked) {
+        // CHẾ ĐỘ 1 TRỌNG TÀI
+        if (points > 0) {
+            let pFinal = points;
+            // Kiểm tra xem có phím TECH nào vừa được bấm trong cửa sổ thời gian không
+            const hasTech = pendingVotes.some(v => v.side === side && v.isTech && (now - v.time <= JUDGE_WINDOW));
+            
+            if (hasTech) {
+                pFinal = points * 2; // Cập nhật: Nhân đôi điểm thay vì cộng 2
+                addLog(`>>> CỘNG ${pFinal}đ (TECH x2) CHO ${sideTxt}`, 'log-success');
+                // Xóa vote Tech sau khi đã dùng để tránh nhân đôi nhiều lần
+                pendingVotes = pendingVotes.filter(v => !(v.side === side && v.isTech));
+            } else {
+                addLog(`>>> CỘNG ${pFinal}đ CHO ${sideTxt}`, 'log-success');
+            }
+
+            if (side === 'sb') { sb += pFinal; if(hasTech) bt += pFinal; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
+            else { sr += pFinal; if(hasTech) rt += pFinal; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
+            playSound('beep');
+        }
+    } else {
+        // CHẾ ĐỘ 3 TRỌNG TÀI (ĐÃ CÓ TRONG FILE CŨ)
+        const windowVotes = pendingVotes.filter(v => v.side === side);
+        const techJudges = [...new Set(windowVotes.filter(v => v.isTech).map(v => v.judgeId))];
+        [1, 2, 3].forEach(pts => {
+            const scoreJudges = [...new Set(windowVotes.filter(v => v.points === pts && !v.isTech).map(v => v.judgeId))];
+            if (scoreJudges.length >= 2 && techJudges.length >= 2) {
+                let multiplied = pts * 2; // Đảm bảo nhân đôi
+                if (side === 'sb') { sb += multiplied; bt += multiplied; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
+                else { sr += multiplied; rt += multiplied; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
+                playSound('beep');
+                addLog(`>>> CỘNG ${multiplied}đ (TECH x2) CHO ${sideTxt}`, 'log-success');
+                pendingVotes = pendingVotes.filter(v => !(v.side === side && (v.isTech || v.points === pts)));
+            } else if (scoreJudges.length >= 2) {
+                if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
+                else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
+                playSound('beep');
+                addLog(`>>> CỘNG ${pts}đ CHO ${sideTxt}`, 'log-success');
+                pendingVotes = pendingVotes.filter(v => !(v.side === side && v.points === pts && !v.isTech));
+            }
+        });
+    }
+    up();
+}
 
     function quick(val, side) {
         playSound('beep');
@@ -422,10 +432,11 @@
         up();
     }
 
-    function startBreak() {
+function startBreak() {
+        // 1. Tính toán kết quả tạm thời để hiển thị cho trọng tài xem trước
         let winner = ""; let reason = ""; let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
-        if (gr >= maxG) { winner = "blue"; reason = "ĐỎ "+maxG+" LỖI - XANH THẮNG!"; } 
-        else if (gb >= maxG) { winner = "red"; reason = "XANH "+maxG+" LỖI - ĐỎ THẮNG!"; }
+        if (gr >= maxG) { winner = "blue"; reason = "ĐỎ " + maxG + " LỖI - XANH THẮNG!"; } 
+        else if (gb >= maxG) { winner = "red"; reason = "XANH " + maxG + " LỖI - ĐỎ THẮNG!"; }
         else if (sb > sr) { winner = "blue"; reason = "XANH THẮNG ĐIỂM (" + sb + "-" + sr + ")"; }
         else if (sr > sb) { winner = "red"; reason = "ĐỎ THẮNG ĐIỂM (" + sr + "-" + sb + ")"; }
         else {
@@ -435,18 +446,36 @@
             else if (rh > bh) { winner = "red"; reason = "HÒA (" + sr + "-" + sb + ") ĐỎ ƯU THẾ HEAD"; }
             else if (ba > ra) { winner = "blue"; reason = "HÒA (" + sb + "-" + sr + ") XANH ƯU THẾ ARMOR"; }
             else if (ra > ba) { winner = "red"; reason = "HÒA (" + sr + "-" + sb + ") ĐỎ ƯU THẾ ARMOR"; }
-            else { if(confirm("HÒA TẤT CẢ CHỈ SỐ. XANH THẮNG?")) { winner = "blue"; reason = "HÒA - TRỌNG TÀI CHỌN XANH"; } else { winner = "red"; reason = "HÒA - TRỌNG TÀI CHỌN ĐỎ"; } }
+            else { 
+                if(confirm("HÒA TẤT CẢ CHỈ SỐ. XANH THẮNG?")) { winner = "blue"; reason = "HÒA - TRỌNG TÀI CHỌN XANH"; } 
+                else { winner = "red"; reason = "HÒA - TRỌNG TÀI CHỌN ĐỎ"; } 
+            }
         }
-        addLog(`HẾT HIỆP: ${reason}`, 'log-success');
-        alert("KẾT THÚC HIỆP: " + reason);
-        if (winner === "blue") wb++; else wr++;
-        up();
-        if (wb >= 2 || wr >= 2) { 
-            addLog(`TRẬN ĐẤU KẾT THÚC: ${winner === "blue" ? 'XANH' : 'ĐỎ'} THẮNG CHUNG CUỘC`, 'log-success');
-            setTimeout(() => { alert(winner === "blue" ? "VÕ SĨ XANH THẮNG CHUNG CUỘC!" : "VÕ SĨ ĐỎ THẮNG CHUNG CUỘC!"); loadNextMatch(); }, 300); 
-            return; 
+
+        // 2. Bước xác nhận quan trọng
+        if (confirm("KẾT THÚC HIỆP: " + reason + "\n\nBấm OK để CHỐT KẾT QUẢ và qua hiệp mới.\nBấm CANCEL nếu có kiện tụng/cần sửa điểm.")) {
+            addLog(`CHỐT HIỆP: ${reason}`, 'log-success');
+            if (winner === "blue") wb++; else wr++;
+            up();
+
+            // Kiểm tra thắng chung cuộc
+            if (wb >= 2 || wr >= 2) { 
+                addLog(`TRẬN ĐẤU KẾT THÚC: ${winner === "blue" ? 'XANH' : 'ĐỎ'} THẮNG CHUNG CUỘC`, 'log-success');
+                setTimeout(() => { alert(winner === "blue" ? "VÕ SĨ XANH THẮNG CHUNG CUỘC!" : "VÕ SĨ ĐỎ THẮNG CHUNG CUỘC!"); loadNextMatch(); }, 300); 
+                return; 
+            }
+
+            // Chuyển sang thời gian nghỉ
+            isBreak = true; 
+            time = parseInt(document.getElementById('iBreakSet').value) || 60; 
+            runT();
+        } else {
+            // Nếu bấm Cancel, giữ nguyên trạng thái để trọng tài sửa điểm thủ công
+            addLog("TẠM DỪNG CHỐT HIỆP ĐỂ KIỂM TRA ĐIỂM/KIỆN TỤNG", 'log-red');
+            running = false;
+            time = 0;
+            up();
         }
-        isBreak = true; time = parseInt(document.getElementById('iBreakSet').value) || 60; runT();
     }
 
     function adjustFontSize(element) { if (!element) return; const container = element.parentElement; if (!container) return; let fontSize = 55; element.style.fontSize = fontSize + "px"; const maxW = container.clientWidth - 5; while (element.scrollWidth > maxW && fontSize > 12) { fontSize -= 2; element.style.fontSize = fontSize + "px"; } }
@@ -633,25 +662,36 @@
     }
 
     window.addEventListener('keydown', function(e) {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
-        const key = e.key.toLowerCase();
-        if (e.code === 'Space') { e.preventDefault(); runT(); }
-        if (e.code === 'Escape') { if(confirm('Reset?')) resetCurrentMatch(); }
-        if(key==='1') recordVote(1,'sb',1); if(key==='2') recordVote(1,'sb',2); if(key==='3') recordVote(1,'sb',3);
-        if(key==='q') recordVote(2,'sb',1); if(key==='w') recordVote(2,'sb',2); if(key==='e') recordVote(2,'sb',3);
-        if(key==='a') recordVote(3,'sb',1); if(key==='s') recordVote(3,'sb',2); if(key==='d') recordVote(3,'sb',3);
-        if(key==='7') recordVote(1,'sr',1); if(key==='8') recordVote(1,'sr',2); if(key==='9') recordVote(1,'sr',3);
-        if(key==='u') recordVote(2,'sr',1); if(key==='i') recordVote(2,'sr',2); if(key==='o') recordVote(2,'sr',3);
-        if(key==='j') recordVote(3,'sr',1); if(key==='k') recordVote(3,'sr',2); if(key==='l') recordVote(3,'sr',3);
-        if(key==='z') recordVote(1,'sb', 0, true); if(key==='x') recordVote(2,'sb', 0, true); if(key==='c') recordVote(3,'sb', 0, true);
-        if(key==='n') recordVote(1,'sr', 0, true); if(key==='m') recordVote(2,'sr', 0, true); if(key===',') recordVote(3,'sr', 0, true);
-        if(key==='g') l('b'); if(key==='h') l('r');
-    }, true);
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
+    const key = e.key.toLowerCase(); 
+
+    if (e.code === 'Space') { e.preventDefault(); runT(); }
+    if (e.code === 'Escape') { if(confirm('Reset?')) resetCurrentMatch(); }
+
+    // PHÍM ĐIỂM
+    if(key === '1') recordVote(1,'sb',1); if(key === '2') recordVote(1,'sb',2); if(key === '3') recordVote(1,'sb',3);
+    if(key === 'q') recordVote(2,'sb',1); if(key === 'w') recordVote(2,'sb',2); if(key === 'e') recordVote(2,'sb',3);
+    if(key === 'a') recordVote(3,'sb',1); if(key === 's') recordVote(3,'sb',2); if(key === 'd') recordVote(3,'sb',3);
+    if(key === '7') recordVote(1,'sr',1); if(key === '8') recordVote(1,'sr',2); if(key === '9') recordVote(1,'sr',3);
+    if(key === 'u') recordVote(2,'sr',1); if(key === 'i') recordVote(2,'sr',2); if(key === 'o') recordVote(2,'sr',3);
+    if(key === 'j') recordVote(3,'sr',1); if(key === 'k') recordVote(3,'sr',2); if(key === 'l') recordVote(3,'sr',3);
+
+    // PHÍM TECH (Z, X, C - N, M, ,)
+    if(key === 'z') recordVote(1,'sb', 0, true);
+    if(key === 'x') recordVote(2,'sb', 0, true);
+    if(key === 'c') recordVote(3,'sb', 0, true);
+    if(key === 'n') recordVote(1,'sr', 0, true);
+    if(key === 'm') recordVote(2,'sr', 0, true);
+    if(key === ',') recordVote(3,'sr', 0, true);
+
+    if(key === 'g') l('b'); if(key === 'h') l('r');
+}, true);
 
     up();
 </script>
 </body>
 </html>
+
 
 
 
