@@ -13,7 +13,6 @@
         body { background: var(--bg-dark); color: #fff; font-family: "Segoe UI", sans-serif; margin: 0; text-align: center; overflow-y: auto; }
         #display-area { height: 95vh; display: flex; background: #000; position: relative; gap: 0; padding: 0; box-sizing: border-box; border: 10px solid #333; outline: 3px solid var(--gold); }
         
-        /* Cấu trúc Judge */
         .judge-vertical { position: absolute; top: 210px; display: flex; flex-direction: column; gap: 12px; z-index: 100; }
         #lights-red { left: 20px; } 
         #lights-blue { right: 20px; } 
@@ -23,7 +22,6 @@
         .j-box { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.1); transition: 0.1s; }
         .j-box.active-b, .j-box.active-r { background: #ffffff !important; color: #000 !important; box-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff; opacity: 1 !important; border-color: #fff !important; }
 
-        /* Top Bar & Flags */
         .top-bar { position: absolute; top: 0; left: 0; width: 100%; height: 140px; display: flex; z-index: 20; }
         .name-wrapper { flex: 1; height: 100%; display: flex; align-items: center; position: relative; overflow: hidden; transition: background 0.3s; }
         .name-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 115px; box-sizing: border-box; overflow: hidden; }
@@ -37,29 +35,13 @@
         .red-side-name .flag-vn { left: 10px; right: auto; }
         .blue-side-name .flag-vn { right: 10px; left: auto; }
 
-        /* Side & Swapping Logic */
         .side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; transition: background 0.3s; }
         .side.red { background-color: var(--red-main); }
         .side.blue { background-color: var(--blue-main); }
         .side.red.swapped-to-blue { background-color: var(--blue-main) !important; }
         .side.blue.swapped-to-red { background-color: var(--red-main) !important; }
 
-        .score-big { 
-    /* --- 1. SỬ DỤNG CÙNG FONT VỚI ĐỒNG HỒ --- */
-    font-family: "Arial Unicode MS", "Arial", sans-serif; 
-    font-weight: 900; 
-    font-variant-numeric: tabular-nums; 
-    
-    /* --- 2. KÍCH THƯỚC VÀ CĂN CHỈNH --- */
-    font-size: 25vw; 
-    line-height: 0.7; 
-    margin-top: -20px; 
-    z-index: 5; 
-    
-    /* Thêm thuộc tính này để các con số không bị nhảy lệch khi thay đổi */
-    display: inline-block;
-    text-align: center;
-}
+        .score-big { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 900; font-variant-numeric: tabular-nums; font-size: 25vw; line-height: 0.7; margin-top: -20px; z-index: 5; display: inline-block; text-align: center; }
         
         .win-tracker { position: absolute; top: 155px; display: flex; gap: 10px; z-index: 10; }
         #tracker-red { right: 20px; }
@@ -75,34 +57,7 @@
         .stat-val { font-size: 20px; font-weight: 900; }
         
         .center-column { width: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 50px; align-items: center; background: #000; z-index: 10; }
-        .time-txt { 
-    /* --- 1. FONT CHỮ (Theo ý mày) --- */
-    font-family: "Arial Unicode MS", "Arial", sans-serif; 
-    font-weight: 900; 
-    font-size: 160px;       /* ĐÚNG 160px mày đưa */
-    letter-spacing: 5px;    /* ĐÚNG 5px mày đưa */
-    font-variant-numeric: tabular-nums; 
-
-    /* --- 2. ĐỘ NGANG & DỌC CỦA KHUNG (Theo ý mày) --- */
-    width: 100%;             /* ĐÚNG 98% mày đưa */
-    height: 170px;          /* ĐÚNG 165px mày đưa */
-    line-height: 185px;     /* ĐÚNG 185px mày đưa để số hơi tụt xuống */
-
-    /* --- 3. NÚT VẶN LÊN XUỐNG THÊM VÀO --- */
-    /* Mày tăng số này lên (vd: 20px) thì số sẽ bay LÊN TRÊN */
-    padding-bottom: 10px;   
-
-    /* --- 4. VIỀN & KHOẢNG CÁCH (Theo ý mày) --- */
-    border: 5px solid #fff; /* ĐÚNG 5px mày đưa */
-    margin: 2px auto;       /* ĐÚNG 2px mày đưa */
-    
-    /* Các thuộc tính hỗ trợ */
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    box-sizing: border-box; /* Giữ khung cố định khi vặn padding */
-    transition: all 0.1s;
-}
+        .time-txt { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 900; font-size: 160px; letter-spacing: 5px; font-variant-numeric: tabular-nums; width: 100%; height: 170px; line-height: 185px; padding-bottom: 10px; border: 5px solid #fff; margin: 2px auto; display: flex; align-items: center; justify-content: center; box-sizing: border-box; transition: all 0.1s; }
         .t-run { color: #fff; background: transparent; border-color: #fff; } 
         .t-stop, .t-break { color: #000; background-color: var(--highlight-yellow); border-color: var(--highlight-yellow); }
         #vTK { display: none; margin-top: 10px; border: 3px solid #fff; padding: 5px 20px; border-radius: 15px; background: rgba(0,0,0,0.9); }
@@ -113,7 +68,6 @@
         #vMT { font-size: 130px; line-height: 1.1; color: var(--gold); text-shadow: 0 0 20px rgba(255, 204, 0, 0.5); }
         .round-box { font-size: 45px; font-weight: 900; color: #fff; margin-bottom: 20px; min-height: 70px; white-space: nowrap; width: 100%; text-align: center; }
 
-        /* Control Panel */
         #control-area { min-height: 35vh; background: var(--panel-bg); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding: 20px; border-top: 5px solid #444; }
         .col { display: flex; flex-direction: column; gap: 8px; justify-content: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; }
         .row { display: flex; gap: 5px; justify-content: center; align-items: center; flex-wrap: wrap; }
@@ -245,6 +199,15 @@
     </div>
 
     <div class="col">
+        <div class="row" style="background: #333; padding: 10px; border-radius: 8px; margin-bottom: 5px; border: 1px solid var(--gold); display: flex; align-items: center;">
+            <button class="btn-s" onclick="prevRound()" style="flex:1; font-size: 25px; background: #444;"> ◀ </button>
+            <div style="flex:2; text-align: center;">
+                <span style="font-size: 10px; color: var(--gold); font-weight: bold; display: block;">XEM LẠI HIỆP</span>
+                <span id="viewingRoundText" style="font-size: 16px; font-weight: 900; color: #fff;">HIỆN TẠI</span>
+            </div>
+            <button class="btn-s" onclick="nextRound()" style="flex:1; font-size: 25px; background: #444;"> ▶ </button>
+        </div>
+
         <button id="pk" class="btn-m" onclick="runT()">BẮT ĐẦU [Space]</button>
         <div class="row" style="background: rgba(0,0,0,0.3); padding: 5px; border-radius: 8px;">
             <button class="btn-time-adj" onclick="adjT(1)">+1 GIÂY</button>
@@ -319,6 +282,7 @@
     var kyeshiTime = 60, kyeshiRunning = false, kyeshiTm;
     const JUDGE_WINDOW = 1500;
     let pendingVotes = [];
+    var roundHistory = {}; 
 
     function addLog(msg, colorClass = "") {
         const logBox = document.getElementById('point-log');
@@ -335,71 +299,63 @@
     }
 
     function recordVote(judgeId, side, points, isTech = false) {
-    if (!running || isBreak) return;
-    const now = Date.now();
-    const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
-    const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
-    const techTxt = isTech ? ' (TECH)' : '';
-    addLog(`J${judgeId} bấm ${sideTxt}: ${points > 0 ? points + 'đ' : ''}${techTxt}`, sideClass);
+        if (!running || isBreak) return;
+        const now = Date.now();
+        const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
+        const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
+        const techTxt = isTech ? ' (TECH)' : '';
+        addLog(`J${judgeId} bấm ${sideTxt}: ${points > 0 ? points + 'đ' : ''}${techTxt}`, sideClass);
 
-    // Hiệu ứng đèn sáng
-    if (!isTech && points > 0) {
-        const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
-        const lightEl = document.getElementById(lightId);
-        if (lightEl) {
-            lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r');
-            setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1500);
-        }
-    }
-
-    pendingVotes.push({ judgeId, side, points, isTech, time: now });
-    pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
-
-    // --- LOGIC XỬ LÝ ĐIỂM (ĐÃ CẬP NHẬT NHÂN ĐÔI) ---
-    if (document.getElementById('singleJudgeMode').checked) {
-        // CHẾ ĐỘ 1 TRỌNG TÀI
-        if (points > 0) {
-            let pFinal = points;
-            // Kiểm tra xem có phím TECH nào vừa được bấm trong cửa sổ thời gian không
-            const hasTech = pendingVotes.some(v => v.side === side && v.isTech && (now - v.time <= JUDGE_WINDOW));
-            
-            if (hasTech) {
-                pFinal = points * 2; // Cập nhật: Nhân đôi điểm thay vì cộng 2
-                addLog(`>>> CỘNG ${pFinal}đ (TECH x2) CHO ${sideTxt}`, 'log-success');
-                // Xóa vote Tech sau khi đã dùng để tránh nhân đôi nhiều lần
-                pendingVotes = pendingVotes.filter(v => !(v.side === side && v.isTech));
-            } else {
-                addLog(`>>> CỘNG ${pFinal}đ CHO ${sideTxt}`, 'log-success');
+        if (!isTech && points > 0) {
+            const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
+            const lightEl = document.getElementById(lightId);
+            if (lightEl) {
+                lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r');
+                setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1500);
             }
-
-            if (side === 'sb') { sb += pFinal; if(hasTech) bt += pFinal; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
-            else { sr += pFinal; if(hasTech) rt += pFinal; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
-            playSound('beep');
         }
-    } else {
-        // CHẾ ĐỘ 3 TRỌNG TÀI (ĐÃ CÓ TRONG FILE CŨ)
-        const windowVotes = pendingVotes.filter(v => v.side === side);
-        const techJudges = [...new Set(windowVotes.filter(v => v.isTech).map(v => v.judgeId))];
-        [1, 2, 3].forEach(pts => {
-            const scoreJudges = [...new Set(windowVotes.filter(v => v.points === pts && !v.isTech).map(v => v.judgeId))];
-            if (scoreJudges.length >= 2 && techJudges.length >= 2) {
-                let multiplied = pts * 2; // Đảm bảo nhân đôi
-                if (side === 'sb') { sb += multiplied; bt += multiplied; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
-                else { sr += multiplied; rt += multiplied; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
+
+        pendingVotes.push({ judgeId, side, points, isTech, time: now });
+        pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
+
+        if (document.getElementById('singleJudgeMode').checked) {
+            if (points > 0) {
+                let pFinal = points;
+                const hasTech = pendingVotes.some(v => v.side === side && v.isTech && (now - v.time <= JUDGE_WINDOW));
+                if (hasTech) {
+                    pFinal = points * 2;
+                    addLog(`>>> CỘNG ${pFinal}đ (TECH x2) CHO ${sideTxt}`, 'log-success');
+                    pendingVotes = pendingVotes.filter(v => !(v.side === side && v.isTech));
+                } else {
+                    addLog(`>>> CỘNG ${pFinal}đ CHO ${sideTxt}`, 'log-success');
+                }
+                if (side === 'sb') { sb += pFinal; if(hasTech) bt += pFinal; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
+                else { sr += pFinal; if(hasTech) rt += pFinal; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
                 playSound('beep');
-                addLog(`>>> CỘNG ${multiplied}đ (TECH x2) CHO ${sideTxt}`, 'log-success');
-                pendingVotes = pendingVotes.filter(v => !(v.side === side && (v.isTech || v.points === pts)));
-            } else if (scoreJudges.length >= 2) {
-                if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
-                else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
-                playSound('beep');
-                addLog(`>>> CỘNG ${pts}đ CHO ${sideTxt}`, 'log-success');
-                pendingVotes = pendingVotes.filter(v => !(v.side === side && v.points === pts && !v.isTech));
             }
-        });
+        } else {
+            const windowVotes = pendingVotes.filter(v => v.side === side);
+            const techJudges = [...new Set(windowVotes.filter(v => v.isTech).map(v => v.judgeId))];
+            [1, 2, 3].forEach(pts => {
+                const scoreJudges = [...new Set(windowVotes.filter(v => v.points === pts && !v.isTech).map(v => v.judgeId))];
+                if (scoreJudges.length >= 2 && techJudges.length >= 2) {
+                    let multiplied = pts * 2;
+                    if (side === 'sb') { sb += multiplied; bt += multiplied; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
+                    else { sr += multiplied; rt += multiplied; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
+                    playSound('beep');
+                    addLog(`>>> CỘNG ${multiplied}đ (TECH x2) CHO ${sideTxt}`, 'log-success');
+                    pendingVotes = pendingVotes.filter(v => !(v.side === side && (v.isTech || v.points === pts)));
+                } else if (scoreJudges.length >= 2) {
+                    if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
+                    else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
+                    playSound('beep');
+                    addLog(`>>> CỘNG ${pts}đ CHO ${sideTxt}`, 'log-success');
+                    pendingVotes = pendingVotes.filter(v => !(v.side === side && v.points === pts && !v.isTech));
+                }
+            });
+        }
+        up();
     }
-    up();
-}
 
     function quick(val, side) {
         playSound('beep');
@@ -414,7 +370,7 @@
             if (val === 4) { rt += 4; ra++; sr += 4; }
             else if (val === -4) { rt = Math.max(0, rt-4); ra = Math.max(0, ra-1); sr = Math.max(0, sr-4); }
             else if (val === 6) { rt += 6; rh++; sr += 6; }
-            else if (val === -6) { rt = Math.max(0, rt-6); rh = Math.max(0, rh-1); sr = Math.max(0, sr-6); }
+            else if (val === -6) { rt = Math.max(0, rh-6); rh = Math.max(0, rh-1); sr = Math.max(0, sr-6); }
         }
         up();
     }
@@ -432,48 +388,109 @@
         up();
     }
 
-function startBreak() {
-        // 1. Tính toán kết quả tạm thời để hiển thị cho trọng tài xem trước
+    // --- LOGIC YÊU CẦU: LƯU & HIỂN THỊ LỊCH SỬ HIỆP ---
+    function saveCurrentRoundData() {
+        let rd = document.getElementById('iRD').value || 1;
+        roundHistory[rd] = {
+            sb: sb, sr: sr, gb: gb, gr: gr,
+            bt: bt, bh: bh, ba: ba, bp: bp,
+            rt: rt, rh: rh, ra: ra, rp: rp,
+            savedTime: time // Lưu lại thời gian kết thúc hiệp
+        };
+    }
+
+    function displayPastRound(rd) {
+        if (!roundHistory[rd]) return;
+        let data = roundHistory[rd];
+        sb = data.sb; sr = data.sr; gb = data.gb; gr = data.gr;
+        bt = data.bt; bh = data.bh; ba = data.ba; bp = data.bp;
+        rt = data.rt; rh = data.rh; ra = data.ra; rp = data.rp;
+        time = data.savedTime; // Nạp lại thời gian hiệp cũ
+        
+        document.getElementById('viewingRoundText').innerText = "XEM LẠI HIỆP " + rd;
+        document.getElementById('iRD').value = rd;
+        if(running) { clearInterval(tm); running = false; }
+        up();
+    }
+
+    function prevRound() {
+        let currentRD = parseInt(document.getElementById('iRD').value) || 1;
+        if (currentRD > 1) {
+            // Nếu đang xem hiệp hiện tại, lưu lại trước khi lùi
+            if (!roundHistory[currentRD] && !isBreak) saveCurrentRoundData();
+            displayPastRound(currentRD - 1);
+        }
+    }
+
+    function nextRound() {
+        let currentRD = parseInt(document.getElementById('iRD').value) || 1;
+        // Nếu có hiệp sau trong lịch sử thì cho xem
+        if (roundHistory[currentRD + 1]) {
+            displayPastRound(currentRD + 1);
+        } 
+        // Logic Yêu cầu: Đang Breaktime -> Nhấn Next -> Reset bắt đầu hiệp mới
+        else if (isBreak) {
+            if (confirm("BẮT ĐẦU HIỆP MỚI? (Xóa sạch điểm số hiệp cũ)")) {
+                isBreak = false;
+                running = false;
+                clearInterval(tm);
+                
+                let nextRD = currentRD + 1;
+                document.getElementById('iRD').value = nextRD;
+                
+                // RESET DỮ LIỆU HIỆP MỚI
+                sb=0; sr=0; gb=0; gr=0; 
+                bt=0; bh=0; ba=0; bp=0; 
+                rt=0; rh=0; ra=0; rp=0;
+                
+                time = getSetTime();
+                document.getElementById('viewingRoundText').innerText = "HIỆN TẠI";
+                addLog(`--- BẮT ĐẦU HIỆP ${nextRD} ---`, 'log-success');
+                up();
+            }
+        } else {
+            document.getElementById('viewingRoundText').innerText = "HIỆN TẠI";
+            up();
+        }
+    }
+
+    function startBreak() {
+        let backupTime = time; 
+        running = false;
+        clearInterval(tm);
+
         let winner = ""; let reason = ""; let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
         if (gr >= maxG) { winner = "blue"; reason = "ĐỎ " + maxG + " LỖI - XANH THẮNG!"; } 
         else if (gb >= maxG) { winner = "red"; reason = "XANH " + maxG + " LỖI - ĐỎ THẮNG!"; }
         else if (sb > sr) { winner = "blue"; reason = "XANH THẮNG ĐIỂM (" + sb + "-" + sr + ")"; }
         else if (sr > sb) { winner = "red"; reason = "ĐỎ THẮNG ĐIỂM (" + sr + "-" + sb + ")"; }
         else {
-            if (bt > rt) { winner = "blue"; reason = "HÒA (" + sb + "-" + sr + ") XANH ƯU THẾ TECH"; }
-            else if (rt > bt) { winner = "red"; reason = "HÒA (" + sr + "-" + sb + ") ĐỎ ƯU THẾ TECH"; }
-            else if (bh > rh) { winner = "blue"; reason = "HÒA (" + sb + "-" + sr + ") XANH ƯU THẾ HEAD"; }
-            else if (rh > bh) { winner = "red"; reason = "HÒA (" + sr + "-" + sb + ") ĐỎ ƯU THẾ HEAD"; }
-            else if (ba > ra) { winner = "blue"; reason = "HÒA (" + sb + "-" + sr + ") XANH ƯU THẾ ARMOR"; }
-            else if (ra > ba) { winner = "red"; reason = "HÒA (" + sr + "-" + sb + ") ĐỎ ƯU THẾ ARMOR"; }
+            if (bt > rt) { winner = "blue"; reason = "HÒA - XANH ƯU THẾ TECH"; }
+            else if (rt > bt) { winner = "red"; reason = "HÒA - ĐỎ ƯU THẾ TECH"; }
             else { 
                 if(confirm("HÒA TẤT CẢ CHỈ SỐ. XANH THẮNG?")) { winner = "blue"; reason = "HÒA - TRỌNG TÀI CHỌN XANH"; } 
                 else { winner = "red"; reason = "HÒA - TRỌNG TÀI CHỌN ĐỎ"; } 
             }
         }
 
-        // 2. Bước xác nhận quan trọng
-        if (confirm("KẾT THÚC HIỆP: " + reason + "\n\nBấm OK để CHỐT KẾT QUẢ và qua hiệp mới.\nBấm CANCEL nếu có kiện tụng/cần sửa điểm.")) {
+        if (confirm("KẾT THÚC HIỆP: " + reason + "\n\nBấm OK để CHỐT KẾT QUẢ & NGHỈ.\nBấm CANCEL để SỬA ĐIỂM & ĐÁNH TIẾP.")) {
+            saveCurrentRoundData(); // LƯU LỊCH SỬ KHI CHỐT HIỆP
             addLog(`CHỐT HIỆP: ${reason}`, 'log-success');
             if (winner === "blue") wb++; else wr++;
             up();
 
-            // Kiểm tra thắng chung cuộc
             if (wb >= 2 || wr >= 2) { 
-                addLog(`TRẬN ĐẤU KẾT THÚC: ${winner === "blue" ? 'XANH' : 'ĐỎ'} THẮNG CHUNG CUỘC`, 'log-success');
-                setTimeout(() => { alert(winner === "blue" ? "VÕ SĨ XANH THẮNG CHUNG CUỘC!" : "VÕ SĨ ĐỎ THẮNG CHUNG CUỘC!"); loadNextMatch(); }, 300); 
+                setTimeout(() => { alert("TRẬN ĐẤU KẾT THÚC!"); loadNextMatch(); }, 300); 
                 return; 
             }
 
-            // Chuyển sang thời gian nghỉ
             isBreak = true; 
             time = parseInt(document.getElementById('iBreakSet').value) || 60; 
-            runT();
+            runT(); // Chạy Breaktime
         } else {
-            // Nếu bấm Cancel, giữ nguyên trạng thái để trọng tài sửa điểm thủ công
-            addLog("TẠM DỪNG CHỐT HIỆP ĐỂ KIỂM TRA ĐIỂM/KIỆN TỤNG", 'log-red');
+            time = backupTime; 
             running = false;
-            time = 0;
+            addLog(`HỦY CHỐT HIỆP - TIẾP TỤC: ${time}s`, 'log-red');
             up();
         }
     }
@@ -505,51 +522,20 @@ function startBreak() {
         
         let m = Math.floor(time / 60), s = Math.floor(time % 60); 
         let str;
-
-        if (time === -99) { 
-            str = "PTG"; 
-        }
-        else if (time === -88) {
-            str = "PUN"; // Hiển thị khi thắng do đối thủ đủ 5 lỗi
-        }
-        else if (time >= 10.0) { 
-            str = m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
-        } 
-        else if (time > 0) { 
-            str = time.toFixed(2); 
-        } 
-        else { 
-            str = "0:00"; 
-        }
+        if (time === -99) str = "PTG"; 
+        else if (time === -88) str = "PUN";
+        else if (time >= 10.0) str = m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
+        else if (time > 0) str = time.toFixed(2); 
+        else str = "0:00"; 
         
         document.querySelectorAll('#vTD').forEach(e => {
             e.innerText = str; 
             e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
-            
-            // ĐOẠN MÀY CẦN: ÉP NỀN ĐEN CHỮ VÀNG CHO PUN VÀ PTG
             if (str === "PTG" || str === "PUN") {
-                e.style.color = "var(--highlight-yellow)";      // Chữ vàng
-                e.style.borderColor = "var(--highlight-yellow)";// Viền vàng
-                e.style.backgroundColor = "#000";                // Nền đen tuyền
-            } else {
-                // Trả về mặc định để không lỗi giao diện lúc thi đấu bình thường
-                e.style.color = ""; 
-                e.style.borderColor = "";
-                e.style.backgroundColor = ""; 
-            }
-        });
-        
-        document.querySelectorAll('#vTD').forEach(e => {
-            e.innerText = str; 
-            e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
-            
-            if (str === "PTG" || str === "PUN") {
-                // Dùng setProperty với !important để ép nền đen bằng mọi giá
                 e.style.setProperty("color", "var(--highlight-yellow)", "important");
                 e.style.setProperty("background-color", "#000", "important");
                 e.style.setProperty("border-color", "var(--highlight-yellow)", "important");
             } else {
-                // Trả về mặc định, xóa bỏ các thuộc tính inline đã set ở trên
                 e.style.removeProperty("color");
                 e.style.removeProperty("background-color");
                 e.style.removeProperty("border-color");
@@ -568,39 +554,33 @@ function startBreak() {
     function stopAndBuzzer(msg){ 
         clearInterval(tm); 
         running = false; 
-        
-        if (msg.includes("12 ĐIỂM")) { 
-            time = -99; // Hiện PTG
-        } 
-        else if (msg.includes("LỖI")) { 
-            time = -88; // Hiện PUN khi đủ 5 lỗi (Gam-jeom)
-        }
-        
+        let originalTime = time; 
+        if (msg.includes("12 ĐIỂM")) { time = -99; } 
+        else if (msg.includes("LỖI")) { time = -88; }
         playSound('buzzer'); 
         addLog(`DỪNG TRẬN: ${msg}`, 'log-red'); 
         up(); 
-        setTimeout(() => { alert(msg); startBreak(); }, 50); 
+        setTimeout(() => { if(!confirm(msg + "\n\nXác nhận kết thúc trận đấu? (Bấm Cancel để quay lại đánh tiếp)")) { time = originalTime; up(); } else { startBreak(); } }, 50); 
     }
-    function resetCurrentMatch() { sb=0;sr=0;gb=0;gr=0;bt=0;bh=0;ba=0;bp=0;rt=0;rh=0;ra=0;rp=0;wb=0;wr=0; document.getElementById('iRD').value=1; isBreak=false; running=false; clearInterval(tm); clearInterval(kyeshiTm); kyeshiRunning=false; kyeshiTime=60; time=getSetTime(); document.getElementById('point-log').innerHTML=''; addLog("--- RESET TRẬN ĐẤU MỚI ---", 'log-success'); up(); }
+    function resetCurrentMatch() { sb=0;sr=0;gb=0;gr=0;bt=0;bh=0;ba=0;bp=0;rt=0;rh=0;ra=0;rp=0;wb=0;wr=0; roundHistory={}; document.getElementById('iRD').value=1; isBreak=false; running=false; clearInterval(tm); clearInterval(kyeshiTm); kyeshiRunning=false; kyeshiTime=60; time=getSetTime(); document.getElementById('point-log').innerHTML=''; addLog("--- RESET TRẬN ĐẤU MỚI ---", 'log-success'); up(); }
     
     function runT(){ 
         if(kyeshiRunning) toggleKyeshi(); 
-        if(running){ clearInterval(tm); running=false; } 
+        if(running){ clearInterval(tm); running = false; } 
         else { 
-            running=true; 
-            tm=setInterval(()=>{ 
-                if(time > 0){ 
-                    // Trừ 0.01 giây mỗi lần lặp và làm tròn 2 chữ số
-                    time = parseFloat((time - 0.01).toFixed(2)); 
-                    up(); 
-                } 
+            if (time <= 0 && (time === -99 || time === -88)) return;
+            document.getElementById('viewingRoundText').innerText = "HIỆN TẠI"; // Trở về hiện tại khi chạy
+            running = true; 
+            tm = setInterval(() => { 
+                if(time > 0.01){ time = parseFloat((time - 0.01).toFixed(2)); up(); } 
                 else { 
-                    clearInterval(tm); running=false; time=0; playSound('buzzer'); 
-                    if(!isBreak) setTimeout(startBreak,100); 
-                    else { isBreak=false; time=getSetTime(); document.getElementById('iRD').value++; sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0; up(); } 
+                    clearInterval(tm); running = false; time = 0; playSound('buzzer'); up();
+                    if(!isBreak) setTimeout(startBreak, 100); 
+                    else { nextRound(); } // Tự động xử lý khi hết Breaktime
                 } 
-            }, 10); // Đổi từ 100 thành 10ms
-        } up(); 
+            }, 10); 
+        } 
+        up(); 
     }
 
     function loadNextMatch() { let tx=document.getElementById('matchListData'); let lines=tx.value.split('\n').filter(l=>l.trim()!=""); if(lines.length>0 && lines[0].includes('|')){ let p=lines[0].split('|'); document.getElementById('iMT').value=p[0].trim(); document.getElementById('iB').value=p[1].trim(); document.getElementById('iR').value=p[2].trim(); lines.shift(); tx.value=lines.join('\n'); } else { document.getElementById('iMT').value++; } resetCurrentMatch(); }
@@ -611,86 +591,37 @@ function startBreak() {
     function suaHiep(ben, giatri) { if (ben === 'b') wb = Math.max(0, Math.min(2, wb + giatri)); else wr = Math.max(0, Math.min(2, wr + giatri)); playSound('beep'); up(); }
 
     function fullSwap() {
-        // 1. Đảo dữ liệu số (Điểm, Lỗi, Stats, Hiệp thắng)
-        [sb, sr] = [sr, sb];
-        [gb, gr] = [gr, gb];
-        [bt, rt] = [rt, bt];
-        [bh, rh] = [rh, bh];
-        [ba, ra] = [ra, ba];
-        [bp, rp] = [rp, bp];
-        [wb, wr] = [wr, wb];
-
-        // 2. Đảo tên trong ô Input
-        let iB = document.getElementById('iB');
-        let iR = document.getElementById('iR');
-        let tempName = iB.value;
-        iB.value = iR.value;
-        iR.value = tempName;
-
-        // 3. Đảo màu sắc vùng hiển thị điểm (Side)
-        document.querySelector('.side.red').classList.toggle('swapped-to-blue');
-        document.querySelector('.side.blue').classList.toggle('swapped-to-red');
-
-        // 4. Đảo màu sắc thanh tên (Top Bar) - CỜ ĐỨNG IM
-        const redWrapper = document.querySelector('.red-side-name');
-        const blueWrapper = document.querySelector('.blue-side-name');
-        
-        if (!redWrapper.dataset.isSwapped) {
-            redWrapper.style.background = "linear-gradient(to right, #0033aa, var(--blue-main))";
-            blueWrapper.style.background = "linear-gradient(to left, #aa0000, var(--red-main))";
-            redWrapper.dataset.isSwapped = "true";
-        } else {
-            redWrapper.style.background = "";
-            blueWrapper.style.background = "";
-            delete redWrapper.dataset.isSwapped;
-        }
-
-        // 5. Đảo màu sắc các nút bấm điều khiển (Đỏ <-> Xanh)
-        document.querySelectorAll('.btn-r, .btn-b').forEach(btn => {
-            if (btn.classList.contains('btn-r')) {
-                btn.classList.replace('btn-r', 'btn-b');
-                btn.style.backgroundColor = "var(--blue-main)";
-            } else {
-                btn.classList.replace('btn-b', 'btn-r');
-                btn.style.backgroundColor = "var(--red-main)";
-            }
-        });
-
-        addLog("🔄 ĐÃ ĐẢO BÊN VÕ SĨ & GIAO DIỆN (CỜ CỐ ĐỊNH)", 'log-success');
-        up(); 
-        playSound('beep');
+        [sb, sr] = [sr, sb]; [gb, gr] = [gr, gb]; [bt, rt] = [rt, bt]; [bh, rh] = [rh, bh]; [ba, ra] = [ra, ba]; [bp, rp] = [rp, bp]; [wb, wr] = [wr, wb];
+        let iB = document.getElementById('iB'); let iR = document.getElementById('iR'); let tempName = iB.value; iB.value = iR.value; iR.value = tempName;
+        document.querySelector('.side.red').classList.toggle('swapped-to-blue'); document.querySelector('.side.blue').classList.toggle('swapped-to-red');
+        const redWrapper = document.querySelector('.red-side-name'); const blueWrapper = document.querySelector('.blue-side-name');
+        if (!redWrapper.dataset.isSwapped) { redWrapper.style.background = "linear-gradient(to right, #0033aa, var(--blue-main))"; blueWrapper.style.background = "linear-gradient(to left, #aa0000, var(--red-main))"; redWrapper.dataset.isSwapped = "true"; } 
+        else { redWrapper.style.background = ""; blueWrapper.style.background = ""; delete redWrapper.dataset.isSwapped; }
+        document.querySelectorAll('.btn-r, .btn-b').forEach(btn => { if (btn.classList.contains('btn-r')) { btn.classList.replace('btn-r', 'btn-b'); btn.style.backgroundColor = "var(--blue-main)"; } else { btn.classList.replace('btn-b', 'btn-r'); btn.style.backgroundColor = "var(--red-main)"; } });
+        addLog("🔄 ĐÃ ĐẢO BÊN VÕ SĨ & GIAO DIỆN (CỜ CỐ ĐỊNH)", 'log-success'); up(); playSound('beep');
     }
 
     window.addEventListener('keydown', function(e) {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
-    const key = e.key.toLowerCase(); 
-
-    if (e.code === 'Space') { e.preventDefault(); runT(); }
-    if (e.code === 'Escape') { if(confirm('Reset?')) resetCurrentMatch(); }
-
-    // PHÍM ĐIỂM
-    if(key === '1') recordVote(1,'sb',1); if(key === '2') recordVote(1,'sb',2); if(key === '3') recordVote(1,'sb',3);
-    if(key === 'q') recordVote(2,'sb',1); if(key === 'w') recordVote(2,'sb',2); if(key === 'e') recordVote(2,'sb',3);
-    if(key === 'a') recordVote(3,'sb',1); if(key === 's') recordVote(3,'sb',2); if(key === 'd') recordVote(3,'sb',3);
-    if(key === '7') recordVote(1,'sr',1); if(key === '8') recordVote(1,'sr',2); if(key === '9') recordVote(1,'sr',3);
-    if(key === 'u') recordVote(2,'sr',1); if(key === 'i') recordVote(2,'sr',2); if(key === 'o') recordVote(2,'sr',3);
-    if(key === 'j') recordVote(3,'sr',1); if(key === 'k') recordVote(3,'sr',2); if(key === 'l') recordVote(3,'sr',3);
-
-    // PHÍM TECH (Z, X, C - N, M, ,)
-    if(key === 'z') recordVote(1,'sb', 0, true);
-    if(key === 'x') recordVote(2,'sb', 0, true);
-    if(key === 'c') recordVote(3,'sb', 0, true);
-    if(key === 'n') recordVote(1,'sr', 0, true);
-    if(key === 'm') recordVote(2,'sr', 0, true);
-    if(key === ',') recordVote(3,'sr', 0, true);
-
-    if(key === 'g') l('b'); if(key === 'h') l('r');
-}, true);
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
+        const key = e.key.toLowerCase(); 
+        if (e.code === 'Space') { e.preventDefault(); runT(); }
+        if (e.code === 'Escape') { if(confirm('Reset?')) resetCurrentMatch(); }
+        if(key === '1') recordVote(1,'sb',1); if(key === '2') recordVote(1,'sb',2); if(key === '3') recordVote(1,'sb',3);
+        if(key === 'q') recordVote(2,'sb',1); if(key === 'w') recordVote(2,'sb',2); if(key === 'e') recordVote(2,'sb',3);
+        if(key === 'a') recordVote(3,'sb',1); if(key === 's') recordVote(3,'sb',2); if(key === 'd') recordVote(3,'sb',3);
+        if(key === '7') recordVote(1,'sr',1); if(key === '8') recordVote(1,'sr',2); if(key === '9') recordVote(1,'sr',3);
+        if(key === 'u') recordVote(2,'sr',1); if(key === 'i') recordVote(2,'sr',2); if(key === 'o') recordVote(2,'sr',3);
+        if(key === 'j') recordVote(3,'sr',1); if(key === 'k') recordVote(3,'sr',2); if(key === 'l') recordVote(3,'sr',3);
+        if(key === 'z') recordVote(1,'sb', 0, true); if(key === 'x') recordVote(2,'sb', 0, true); if(key === 'c') recordVote(3,'sb', 0, true);
+        if(key === 'n') recordVote(1,'sr', 0, true); if(key === 'm') recordVote(2,'sr', 0, true); if(key === ',') recordVote(3,'sr', 0, true);
+        if(key === 'g') l('b'); if(key === 'h') l('r');
+    }, true);
 
     up();
 </script>
 </body>
 </html>
+
 
 
 
