@@ -338,63 +338,82 @@
     }
 
     function recordVote(judgeId, side, points, isTech = false) {
-        if (!running || isBreak) return;
-        const now = Date.now();
-        const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
-        const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
-        const techTxt = isTech ? ' (TECH)' : '';
-        addLog(`J${judgeId} bấm ${sideTxt}: ${points > 0 ? points + 'đ' : ''}${techTxt}`, sideClass);
-
-        if (!isTech && points > 0) {
-            const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
-            const lightEl = document.getElementById(lightId);
-            if (lightEl) {
-                lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r');
-                setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1500);
-            }
+    if (!running || isBreak) return;
+    const now = Date.now();
+    const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
+    const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
+    
+    // 1. Log và hiển thị đèn (Giữ nguyên)
+    if (isTech) {
+        addLog(`J${judgeId} bấm TECH cho ${sideTxt}`, sideClass);
+    } else if (points > 0) {
+        addLog(`J${judgeId} bấm ${sideTxt}: ${points}đ`, sideClass);
+        const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
+        const lightEl = document.getElementById(lightId);
+        if (lightEl) {
+            lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r');
+            setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1500);
         }
+    }
 
-        pendingVotes.push({ judgeId, side, points, isTech, time: now });
-        pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
+    // 2. Lưu vào danh sách chờ
+    pendingVotes.push({ judgeId, side, points, isTech, time: now, processedScore: false, processedTech: false });
+    pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
 
-        if (document.getElementById('singleJudgeMode').checked) {
-            if (points > 0) {
-                let pFinal = points;
-                const hasTech = pendingVotes.some(v => v.side === side && v.isTech && (now - v.time <= JUDGE_WINDOW));
-                if (hasTech) {
-                    pFinal = points * 2;
-                    addLog(`>>> CỘNG ${pFinal}đ (TECH x2) CHO ${sideTxt}`, 'log-success');
-                    pendingVotes = pendingVotes.filter(v => !(v.side === side && v.isTech));
-                } else {
-                    addLog(`>>> CỘNG ${pFinal}đ CHO ${sideTxt}`, 'log-success');
-                }
-                if (side === 'sb') { sb += pFinal; if(hasTech) bt += pFinal; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
-                else { sr += pFinal; if(hasTech) rt += pFinal; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
+    if (document.getElementById('singleJudgeMode').checked) {
+        // --- CHẾ ĐỘ 1 TRỌNG TÀI ---
+        let lastVote = pendingVotes[pendingVotes.length - 1];
+        if (lastVote.isTech) {
+            // Tìm điểm 2 hoặc 3 vừa bấm trong 1.5s chưa được nhân đôi
+            let prevPoint = pendingVotes.findLast(v => v.side === side && v.points >= 2 && !v.isMultiplied);
+            if (prevPoint) {
+                let extra = prevPoint.points; 
+                // Cộng thêm 1 lần điểm gốc nữa để tổng thành x2 (Giống file gốc)
+                if (side === 'sb') { sb += extra; bt += (extra * 2); } 
+                else { sr += extra; rt += (extra * 2); }
+                prevPoint.isMultiplied = true;
+                addLog(`>>> CẬP NHẬT TECH (x2): +${extra}đ CHO ${sideTxt}`, 'log-success');
                 playSound('beep');
             }
-        } else {
-            const windowVotes = pendingVotes.filter(v => v.side === side);
-            const techJudges = [...new Set(windowVotes.filter(v => v.isTech).map(v => v.judgeId))];
-            [1, 2, 3].forEach(pts => {
-                const scoreJudges = [...new Set(windowVotes.filter(v => v.points === pts && !v.isTech).map(v => v.judgeId))];
-                if (scoreJudges.length >= 2 && techJudges.length >= 2) {
-                    let multiplied = pts * 2;
-                    if (side === 'sb') { sb += multiplied; bt += multiplied; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
-                    else { sr += multiplied; rt += multiplied; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
-                    playSound('beep');
-                    addLog(`>>> CỘNG ${multiplied}đ (TECH x2) CHO ${sideTxt}`, 'log-success');
-                    pendingVotes = pendingVotes.filter(v => !(v.side === side && (v.isTech || v.points === pts)));
-                } else if (scoreJudges.length >= 2) {
-                    if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
-                    else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
-                    playSound('beep');
-                    addLog(`>>> CỘNG ${pts}đ CHO ${sideTxt}`, 'log-success');
-                    pendingVotes = pendingVotes.filter(v => !(v.side === side && v.points === pts && !v.isTech));
-                }
-            });
+        } else if (points > 0) {
+            if (side === 'sb') { sb += points; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
+            else { sr += points; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
+            addLog(`>>> CỘNG ${points}đ CHO ${sideTxt}`, 'log-success');
+            playSound('beep');
         }
-        up();
+    } else {
+        // --- CHẾ ĐỘ 3 TRỌNG TÀI ---
+        // Xử lý điểm đa số (2/3)
+        [1, 2, 3].forEach(pts => {
+            const scoreJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.points === pts && !v.processedScore).map(v => v.judgeId))];
+            if (scoreJudges.length >= 2) {
+                pendingVotes.filter(v => v.side === side && v.points === pts).forEach(v => v.processedScore = true);
+                if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
+                else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
+                addLog(`>>> ĐIỂM ĐA SỐ: +${pts}đ CHO ${sideTxt}`, 'log-success');
+                playSound('beep');
+            }
+        });
+
+        // Xử lý Tech đa số (Bấm sau vẫn được x2)
+        const techJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.isTech && !v.processedTech).map(v => v.judgeId))];
+        if (techJudges.length >= 2) {
+            let confirmedPts = 0;
+            if (pendingVotes.some(v => v.side === side && v.points === 3 && v.processedScore)) confirmedPts = 3;
+            else if (pendingVotes.some(v => v.side === side && v.points === 2 && v.processedScore)) confirmedPts = 2;
+
+            if (confirmedPts > 0) {
+                pendingVotes.filter(v => v.side === side && v.isTech).forEach(v => v.processedTech = true);
+                // Nhân đôi: cộng thêm 1 lần điểm gốc và cộng toàn bộ x2 vào ô TECH (Y hệt file gốc)
+                if (side === 'sb') { sb += confirmedPts; bt += (confirmedPts * 2); } 
+                else { sr += confirmedPts; rt += (confirmedPts * 2); }
+                addLog(`>>> TECH ĐA SỐ (x2): +${confirmedPts}đ CHO ${sideTxt}`, 'log-success');
+                playSound('beep');
+            }
+        }
     }
+    up();
+}
 
     function quick(val, side) {
         playSound('beep');
@@ -730,7 +749,6 @@ function fullSwap() {
 </script>
 </body>
 </html>
-
 
 
 
