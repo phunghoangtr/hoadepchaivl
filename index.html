@@ -28,8 +28,17 @@
         .name-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 115px; box-sizing: border-box; overflow: hidden; }
         .name-wrapper span { font-size: 55px; font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
         
-        .red-side-name { background: linear-gradient(to right, #aa3300, var(--red-main)); }
-        .blue-side-name { background: linear-gradient(to left, #0033aa, var(--blue-main)); }
+        /* Màu cũ: #aa3300 -> Đỏ đậm hơn: #800000 (Maroon) */
+.red-side-name { 
+    background: linear-gradient(to right, #800000, #cc0000); 
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+}
+
+/* Màu cũ: #0033aa -> Xanh đậm hơn: #000080 (Navy) */
+.blue-side-name { 
+    background: linear-gradient(to left, #000080, #0044cc); 
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+}
         
         .flag-vn { width: 130px; height: 85px; background-color: var(--vn-red); border: 3px solid #fff; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: absolute; top: 25px; }
         .flag-vn::before { content: "★"; color: #ffff00; font-size: 65px; line-height: 1; margin-top: -3px; }
@@ -161,8 +170,8 @@
     </div>
 
     <div class="top-bar">
-        <div class="name-wrapper red-side-name"><div class="flag-vn"></div><div class="name-container"><span id="vNR">VÕ SĨ ĐỎ</span></div></div>
-        <div class="name-wrapper blue-side-name"><div class="name-container"><span id="vNB">VÕ SĨ XANH</span></div><div class="flag-vn"></div></div>
+        <div class="name-wrapper red-side-name"><div class="flag-vn"></div><div class="name-container"><span id="vNR">VĐV ĐỎ</span></div></div>
+        <div class="name-wrapper blue-side-name"><div class="name-container"><span id="vNB">VĐV XANH</span></div><div class="flag-vn"></div></div>
     </div>
 
     <div class="side red">
@@ -216,7 +225,7 @@
 
 <div id="control-area">
     <div class="col" id="col-left">
-        <input type="text" id="iR" value="VÕ SĨ ĐỎ" oninput="up()">
+        <input type="text" id="iR" value="VĐV ĐỎ" oninput="up()">
         <div class="row">
             <button class="btn-quick" onclick="quick(4, 'r')">+4 (T+A)</button>
             <button class="btn-quick" onclick="quick(6, 'r')">+6 (T+H)</button>
@@ -262,7 +271,7 @@
     </div>
 
     <div class="col" id="col-right">
-        <input type="text" id="iB" value="VÕ SĨ XANH" oninput="up()">
+        <input type="text" id="iB" value="VĐV XANH" oninput="up()">
         <div class="row">
             <button class="btn-quick" onclick="quick(4, 'b')">+4 (T+A)</button>
             <button class="btn-quick" onclick="quick(6, 'b')">+6 (T+H)</button>
@@ -303,7 +312,7 @@
     </div>
 
     <div id="match-list-footer">
-        <textarea id="matchListData" placeholder="Số trận | Tên Xanh | Tên Đỏ">Số trận | Tên Xanh | Tên Đỏ</textarea>
+        <textarea id="matchListData" placeholder="Số trận | VĐV Xanh | VĐV Đỏ">Số trận | VĐV Xanh | VĐV Đỏ</textarea>
     </div>
 </div>
 
@@ -698,11 +707,12 @@ function fullSwap() {
     const redNameBar = document.querySelector('.red-side-name');
     const blueNameBar = document.querySelector('.blue-side-name');
 
-    if (!redNameBar.dataset.isSwapped) {
-        // Đảo màu: Đỏ thành Xanh, Xanh thành Đỏ
-        redNameBar.style.background = "linear-gradient(to right, #0033aa, var(--blue-main))";
-        blueNameBar.style.background = "linear-gradient(to left, #aa0000, var(--red-main))";
-        redNameBar.dataset.isSwapped = "true";
+if (!redNameBar.dataset.isSwapped) {
+    // Đảo màu mới (Đậm)
+    redNameBar.style.background = "linear-gradient(to right, #000080, #0044cc)";
+    blueNameBar.style.background = "linear-gradient(to left, #800000, #cc0000)";
+    redNameBar.dataset.isSwapped = "true";
+	
     } else {
         // Trả về mặc định
         redNameBar.style.background = ""; 
