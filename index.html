@@ -26,7 +26,7 @@
         .top-bar { position: absolute; top: 0; left: 0; width: 100%; height: 140px; display: flex; z-index: 20; }
         .name-wrapper { flex: 1; height: 100%; display: flex; align-items: center; position: relative; overflow: hidden; transition: background 0.3s; }
         .name-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 115px; box-sizing: border-box; overflow: hidden; }
-        .name-wrapper span { font-size: 40px; font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
+        .name-wrapper span { font-size: 55px; font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
         
         /* Màu cũ: #aa3300 -> Đỏ đậm hơn: #800000 (Maroon) */
 .red-side-name { 
@@ -325,15 +325,14 @@
         else if(t==='buzzer'){o.type='sawtooth'; o.frequency.setValueAtTime(150,audioCtx.currentTime); g.gain.setValueAtTime(0.3,audioCtx.currentTime); o.start(); o.stop(audioCtx.currentTime+2);}
     }
 
-    /* --- TÌM ĐOÀN CODE TỪ DÒNG 266 ĐẾN HẾT VÀ DÁN ĐÈ ĐOÀN NÀY VÀO --- */
-
+    // --- KHAI BÁO BIẾN (DÁN ĐÈ TỪ ĐÂY ĐẾN HẾT FILE) ---
     var sb=0, sr=0, gb=0, gr=0, wb=0, wr=0, running=false, isBreak=false, tm, vW;
     var bt=0, bh=0, ba=0, bp=0, rt=0, rh=0, ra=0, rp=0;
     var kyeshiTime = 60, kyeshiRunning = false, kyeshiTm;
     const JUDGE_WINDOW = 1500;
     let pendingVotes = [];
     var roundHistory = {}; 
-    let isLock = false; // CHỐT CHẶN ĐỂ KHÔNG BỊ LẶP LẠI XÁC NHẬN
+    let isLock = false; // CHỐT CHẶN CHỐNG LẶP XÁC NHẬN
 
     function addLog(msg, colorClass = "") {
         const logBox = document.getElementById('point-log');
@@ -350,73 +349,73 @@
     }
 
     function recordVote(judgeId, side, points, isTech = false) {
-    if (!running || isBreak) return;
-    const now = Date.now();
-    const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
-    const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
-    
-    if (isTech) {
-        addLog(`J${judgeId} bấm TECH for ${sideTxt}`, sideClass);
-    } else if (points > 0) {
-        addLog(`J${judgeId} bấm ${sideTxt}: ${points}đ`, sideClass);
-        const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
-        const lightEl = document.getElementById(lightId);
-        if (lightEl) {
-            lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r');
-            setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1500);
-        }
-    }
-
-    pendingVotes.push({ judgeId, side, points, isTech, time: now, processedScore: false, processedTech: false });
-    pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
-
-    if (document.getElementById('singleJudgeMode').checked) {
-        let lastVote = pendingVotes[pendingVotes.length - 1];
-        if (lastVote.isTech) {
-            let prevPoint = pendingVotes.findLast(v => v.side === side && v.points >= 2 && !v.isMultiplied);
-            if (prevPoint) {
-                let extra = prevPoint.points; 
-                if (side === 'sb') { sb += extra; bt += (extra * 2); } 
-                else { sr += extra; rt += (extra * 2); }
-                prevPoint.isMultiplied = true;
-                addLog(`>>> CẬP NHẬT TECH (x2): +${extra}đ CHO ${sideTxt}`, 'log-success');
-                playSound('beep');
-            }
+        if (!running || isBreak || isLock) return;
+        const now = Date.now();
+        const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
+        const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
+        
+        if (isTech) {
+            addLog(`J${judgeId} bấm TECH cho ${sideTxt}`, sideClass);
         } else if (points > 0) {
-            if (side === 'sb') { sb += points; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
-            else { sr += points; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
-            addLog(`>>> CỘNG ${points}đ CHO ${sideTxt}`, 'log-success');
-            playSound('beep');
-        }
-    } else {
-        [1, 2, 3].forEach(pts => {
-            const scoreJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.points === pts && !v.processedScore).map(v => v.judgeId))];
-            if (scoreJudges.length >= 2) {
-                pendingVotes.filter(v => v.side === side && v.points === pts).forEach(v => v.processedScore = true);
-                if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
-                else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
-                addLog(`>>> ĐIỂM ĐA SỐ: +${pts}đ CHO ${sideTxt}`, 'log-success');
-                playSound('beep');
-            }
-        });
-
-        const techJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.isTech && !v.processedTech).map(v => v.judgeId))];
-        if (techJudges.length >= 2) {
-            let confirmedPts = 0;
-            if (pendingVotes.some(v => v.side === side && v.points === 3 && v.processedScore)) confirmedPts = 3;
-            else if (pendingVotes.some(v => v.side === side && v.points === 2 && v.processedScore)) confirmedPts = 2;
-
-            if (confirmedPts > 0) {
-                pendingVotes.filter(v => v.side === side && v.isTech).forEach(v => v.processedTech = true);
-                if (side === 'sb') { sb += confirmedPts; bt += (confirmedPts * 2); } 
-                else { sr += confirmedPts; rt += (confirmedPts * 2); }
-                addLog(`>>> TECH ĐA SỐ (x2): +${confirmedPts}đ CHO ${sideTxt}`, 'log-success');
-                playSound('beep');
+            addLog(`J${judgeId} bấm ${sideTxt}: ${points}đ`, sideClass);
+            const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
+            const lightEl = document.getElementById(lightId);
+            if (lightEl) {
+                lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r');
+                setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1500);
             }
         }
+
+        pendingVotes.push({ judgeId, side, points, isTech, time: now, processedScore: false, processedTech: false });
+        pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
+
+        if (document.getElementById('singleJudgeMode').checked) {
+            let lastVote = pendingVotes[pendingVotes.length - 1];
+            if (lastVote.isTech) {
+                let prevPoint = pendingVotes.findLast(v => v.side === side && v.points >= 2 && !v.isMultiplied);
+                if (prevPoint) {
+                    let extra = prevPoint.points; 
+                    if (side === 'sb') { sb += extra; bt += (extra * 2); } 
+                    else { sr += extra; rt += (extra * 2); }
+                    prevPoint.isMultiplied = true;
+                    addLog(`>>> CẬP NHẬT TECH (x2): +${extra}đ CHO ${sideTxt}`, 'log-success');
+                    playSound('beep');
+                }
+            } else if (points > 0) {
+                if (side === 'sb') { sb += points; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
+                else { sr += points; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
+                addLog(`>>> CỘNG ${points}đ CHO ${sideTxt}`, 'log-success');
+                playSound('beep');
+            }
+        } else {
+            [1, 2, 3].forEach(pts => {
+                const scoreJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.points === pts && !v.processedScore).map(v => v.judgeId))];
+                if (scoreJudges.length >= 2) {
+                    pendingVotes.filter(v => v.side === side && v.points === pts).forEach(v => v.processedScore = true);
+                    if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
+                    else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
+                    addLog(`>>> ĐIỂM ĐA SỐ: +${pts}đ CHO ${sideTxt}`, 'log-success');
+                    playSound('beep');
+                }
+            });
+
+            const techJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.isTech && !v.processedTech).map(v => v.judgeId))];
+            if (techJudges.length >= 2) {
+                let confirmedPts = 0;
+                if (pendingVotes.some(v => v.side === side && v.points === 3 && v.processedScore)) confirmedPts = 3;
+                else if (pendingVotes.some(v => v.side === side && v.points === 2 && v.processedScore)) confirmedPts = 2;
+
+                if (confirmedPts > 0) {
+                    pendingVotes.filter(v => v.side === side && v.isTech).forEach(v => v.processedTech = true);
+                    if (side === 'sb') { sb += confirmedPts; bt += (confirmedPts * 2); } 
+                    else { sr += confirmedPts; rt += (confirmedPts * 2); }
+                    addLog(`>>> TECH ĐA SỐ (x2): +${confirmedPts}đ CHO ${sideTxt}`, 'log-success');
+                    playSound('beep');
+                }
+            }
+        }
+        up();
     }
-    up();
-}
 
     function quick(val, side) {
         playSound('beep');
@@ -488,7 +487,7 @@
         else {
             isBreak = false;
             running = false;
-            isLock = false; // Mở khóa cho hiệp mới
+            isLock = false; 
             clearInterval(tm);
             let nextRD = currentRD + 1;
             document.getElementById('iRD').value = nextRD;
@@ -507,8 +506,9 @@
         running = false;
         clearInterval(tm);
         let winner = ""; let reason = ""; let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
-        if (gr >= maxG) { winner = "blue"; reason = "ĐỎ " + maxG + " LỖI - XANH THẮNG!"; } 
-        else if (gb >= maxG) { winner = "red"; reason = "XANH " + maxG + " LỖI - ĐỎ THẮNG!"; }
+        
+        if (gr >= maxG) { winner = "blue"; reason = "ĐỎ 5 LỖI - XANH THẮNG!"; } 
+        else if (gb >= maxG) { winner = "red"; reason = "XANH 5 LỖI - ĐỎ THẮNG!"; }
         else if (sb > sr) { winner = "blue"; reason = "XANH THẮNG ĐIỂM (" + sb + "-" + sr + ")"; }
         else if (sr > sb) { winner = "red"; reason = "ĐỎ THẮNG ĐIỂM (" + sr + "-" + sb + ")"; }
         else {
@@ -525,8 +525,8 @@
             addLog(`CHỐT HIỆP: ${reason}`, 'log-success');
             if (winner === "blue") wb++; else wr++;
             
-            // QUAN TRỌNG: RESET NGAY TẠI ĐÂY ĐỂ TRÁNH QUÉT LẶP
-            sb=0; sr=0; gb=0; gr=0; bt=0; rt=0;
+            // RESET NGAY ĐỂ TRÁNH LẶP
+            sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0;
             up();
 
             if (wb >= 2 || wr >= 2) { 
@@ -535,7 +535,7 @@
             }
             isBreak = true; 
             time = parseInt(document.getElementById('iBreakSet').value) || 60; 
-            isLock = false; // Mở khóa sau khi đã sạch lỗi
+            isLock = false; 
             runT(); 
         } else {
             time = backupTime; 
@@ -546,7 +546,7 @@
         }
     }
 
-    function adjustFontSize(element) { if (!element) return; const container = element.parentElement; if (!container) return; let fontSize = 40; element.style.fontSize = fontSize + "px"; const maxW = container.clientWidth - 5; while (element.scrollWidth > maxW && fontSize > 12) { fontSize -= 2; element.style.fontSize = fontSize + "px"; } }
+    function adjustFontSize(element) { if (!element) return; const container = element.parentElement; if (!container) return; let fontSize = 55; element.style.fontSize = fontSize + "px"; const maxW = container.clientWidth - 5; while (element.scrollWidth > maxW && fontSize > 12) { fontSize -= 2; element.style.fontSize = fontSize + "px"; } }
     function getSetTime() { return (parseInt(document.getElementById('min').value)||0)*60 + (parseInt(document.getElementById('sec').value)||0); }
     var time = getSetTime();
     function adjT(val) { time = Math.max(0, parseFloat((time + val).toFixed(1))); up(); playSound('beep'); }
@@ -609,18 +609,19 @@
         document.querySelectorAll('#vTK_Val').forEach(e => { e.innerText = kyeshiTime; }); 
         if(vW && !vW.closed) { vW.document.body.innerHTML = document.getElementById('display-area').outerHTML; vW.document.querySelectorAll('#vNB, #vNR').forEach(e => adjustFontSize(e)); } 
         
-        // LOGIC KIỂM TRA LỖI - ĐÃ THÊM CHỐT ISLOCK
+        // KIỂM TRA ĐIỀU KIỆN DỪNG
         if(!isBreak && running && !isLock) { 
             let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5; 
             if(document.getElementById('pointGapActive').checked && Math.abs(sb-sr)>=12) stopAndBuzzer("CÁCH BIỆT 12 ĐIỂM!"); 
-            if(gb>=maxG || gr>=maxG) stopAndBuzzer(gb>=maxG?"XANH "+maxG+" LỖI!":"ĐỎ "+maxG+" LỖI!"); 
+            if(gb>=maxG || gr>=maxG) stopAndBuzzer(gb>=maxG?"XANH 5 LỖI!":"ĐỎ 5 LỖI!"); 
         } 
     }
 
     function toggleKyeshi() { if (kyeshiRunning) { clearInterval(kyeshiTm); kyeshiRunning = false; } else { if (running) runT(); kyeshiRunning = true; kyeshiTime = 60; addLog("🚑 BẮT ĐẦU Y TẾ (KYE-SHI)", 'log-red'); kyeshiTm = setInterval(() => { if (kyeshiTime > 0) { kyeshiTime--; if (kyeshiTime <= 10) playSound('beep'); } else { clearInterval(kyeshiTm); kyeshiRunning = false; playSound('buzzer'); alert("HẾT GIỜ Y TẾ!"); } up(); }, 1000); } up(); }
     
     function stopAndBuzzer(msg){ 
-        if (isLock) return; // Nếu đang xử lý rồi thì bỏ qua
+        if (isLock) return;
+        isLock = true;
         clearInterval(tm); 
         running = false; 
         let originalTime = time; 
@@ -636,13 +637,23 @@
                 isLock = false;
                 up(); 
             } else { 
-                isLock = true; // Khóa lại ngay sau khi xác nhận
                 startBreak(true); 
             } 
-        }, 50); 
+        }, 100); 
     }
 
-    function resetCurrentMatch() { sb=0;sr=0;gb=0;gr=0;bt=0;bh=0;ba=0;bp=0;rt=0;rh=0;ra=0;rp=0;wb=0;wr=0; isLock=false; roundHistory={}; document.getElementById('iRD').value=1; isBreak=false; running=false; clearInterval(tm); clearInterval(kyeshiTm); kyeshiRunning=false; kyeshiTime=60; time=getSetTime(); document.getElementById('point-log').innerHTML=''; addLog("--- RESET TRẬN ĐẤU MỚI ---", 'log-success'); up(); }
+    function resetCurrentMatch() { 
+        sb=0;sr=0;gb=0;gr=0;bt=0;bh=0;ba=0;bp=0;rt=0;rh=0;ra=0;rp=0;wb=0;wr=0; 
+        isLock=false; 
+        roundHistory={}; 
+        document.getElementById('iRD').value=1; 
+        isBreak=false; running=false; 
+        clearInterval(tm); clearInterval(kyeshiTm); kyeshiRunning=false; kyeshiTime=60; 
+        time=getSetTime(); 
+        document.getElementById('point-log').innerHTML=''; 
+        addLog("--- RESET TRẬN ĐẤU MỚI ---", 'log-success'); 
+        up(); 
+    }
     
     function runT(){ 
         if(kyeshiRunning) toggleKyeshi(); 
@@ -669,36 +680,36 @@
         if(isBreak || isLock) return; 
         playSound('beep'); 
         let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
-        if(s == 'b'){ gb++; sr++; addLog("LỖI (GAM-JEOM) CHO XANH", 'log-blue'); if(gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH " + maxG + " LỖI!"), 50); return; } } 
-        else { gr++; sb++; addLog("LỖI (GAM-JEOM) CHO ĐỎ", 'log-red'); if(gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ " + maxG + " LỖI!"), 50); return; } } 
+        if(s == 'b'){ gb++; sr++; addLog("LỖI (GAM-JEOM) CHO XANH", 'log-blue'); if(gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH 5 LỖI!"), 50); return; } } 
+        else { gr++; sb++; addLog("LỖI (GAM-JEOM) CHO ĐỎ", 'log-red'); if(gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ 5 LỖI!"), 50); return; } } 
         up(); 
     }
     function ul(s){ if(isBreak)return; playSound('beep'); if(s=='b'&&gb>0){gb--; sr--;} else if(s=='r'&&gr>0){gr--; sb--;} up(); }
     function mo(){ vW=window.open("","_blank","width=1200,height=800"); vW.document.write('<html><head><style>'+document.getElementsByTagName('style')[0].innerHTML+' #control-area, #settings-modal, #log-container{display:none}</style></head><body>'+document.getElementById('display-area').outerHTML+'<\/body></html>'); }
     function suaHiep(ben, giatri) { if (ben === 'b') wb = Math.max(0, Math.min(2, wb + giatri)); else wr = Math.max(0, Math.min(2, wr + giatri)); playSound('beep'); up(); }
 
-function fullSwap() {
-    [sb, sr] = [sr, sb]; [gb, gr] = [gr, gb]; [bt, rt] = [rt, bt]; 
-    [bh, rh] = [rh, bh]; [ba, ra] = [ra, ba]; [bp, rp] = [rp, bp]; [wb, wr] = [wr, wb];
-    for (let rd in roundHistory) {
-        let d = roundHistory[rd];
-        [d.sb, d.sr] = [d.sr, d.sb]; [d.gb, d.gr] = [d.gr, d.gb];
-        [d.bt, d.rt] = [d.rt, d.bt]; [d.bh, d.rh] = [d.rh, d.bh];
-        [d.ba, d.ra] = [d.ra, d.ba]; [d.bp, d.rp] = [d.rp, d.bp];
+    function fullSwap() {
+        [sb, sr] = [sr, sb]; [gb, gr] = [gr, gb]; [bt, rt] = [rt, bt]; 
+        [bh, rh] = [rh, bh]; [ba, ra] = [ra, ba]; [bp, rp] = [rp, bp]; [wb, wr] = [wr, wb];
+        for (let rd in roundHistory) {
+            let d = roundHistory[rd];
+            [d.sb, d.sr] = [d.sr, d.sb]; [d.gb, d.gr] = [d.gr, d.gb];
+            [d.bt, d.rt] = [d.rt, d.bt]; [d.bh, d.rh] = [d.rh, d.bh];
+            [d.ba, d.ra] = [d.ra, d.ba]; [d.bp, d.rp] = [d.rp, d.bp];
+        }
+        let iB = document.getElementById('iB'); let iR = document.getElementById('iR'); let tempN = iB.value; iB.value = iR.value; iR.value = tempN;
+        const redNameBar = document.querySelector('.red-side-name'); const blueNameBar = document.querySelector('.blue-side-name');
+        if (!redNameBar.dataset.isSwapped) {
+            redNameBar.style.background = "linear-gradient(to right, #000080, #0044cc)"; blueNameBar.style.background = "linear-gradient(to left, #800000, #cc0000)"; redNameBar.dataset.isSwapped = "true";
+        } else { redNameBar.style.background = ""; blueNameBar.style.background = ""; delete redNameBar.dataset.isSwapped; }
+        document.querySelector('.side.red').classList.toggle('swapped-to-blue'); document.querySelector('.side.blue').classList.toggle('swapped-to-red');
+        document.querySelectorAll('.btn-r, .btn-b').forEach(btn => {
+            if (btn.classList.contains('btn-r')) { btn.classList.replace('btn-r', 'btn-b'); btn.style.backgroundColor = "var(--blue-main)"; } 
+            else { btn.classList.replace('btn-b', 'btn-r'); btn.style.backgroundColor = "var(--red-main)"; }
+        });
+        addLog("🔄 ĐÃ ĐẢO TOÀN BỘ", "log-success");
+        up();
     }
-    let iB = document.getElementById('iB'); let iR = document.getElementById('iR'); let tempN = iB.value; iB.value = iR.value; iR.value = tempN;
-    const redNameBar = document.querySelector('.red-side-name'); const blueNameBar = document.querySelector('.blue-side-name');
-    if (!redNameBar.dataset.isSwapped) {
-        redNameBar.style.background = "linear-gradient(to right, #000080, #0044cc)"; blueNameBar.style.background = "linear-gradient(to left, #800000, #cc0000)"; redNameBar.dataset.isSwapped = "true";
-    } else { redNameBar.style.background = ""; blueNameBar.style.background = ""; delete redNameBar.dataset.isSwapped; }
-    document.querySelector('.side.red').classList.toggle('swapped-to-blue'); document.querySelector('.side.blue').classList.toggle('swapped-to-red');
-    document.querySelectorAll('.btn-r, .btn-b').forEach(btn => {
-        if (btn.classList.contains('btn-r')) { btn.classList.replace('btn-r', 'btn-b'); btn.style.backgroundColor = "var(--blue-main)"; } 
-        else { btn.classList.replace('btn-b', 'btn-r'); btn.style.backgroundColor = "var(--red-main)"; }
-    });
-    addLog("🔄 ĐÃ ĐẢO TOÀN BỘ: TÊN, MÀU THANH & ĐIỂM SỐ", "log-success");
-    up();
-}
 
     window.addEventListener('keydown', function(e) {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
