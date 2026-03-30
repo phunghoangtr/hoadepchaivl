@@ -13,7 +13,6 @@
         body { background: var(--bg-dark); color: #fff; font-family: "Segoe UI", sans-serif; margin: 0; text-align: center; overflow-y: auto; }
         #display-area { height: 95vh; display: flex; background: #000; position: relative; gap: 0; padding: 0; box-sizing: border-box; border: 10px solid #333; outline: 3px solid var(--gold); }
         
-        /* 1. ĐÃ HẠ ĐÈN HIỆU XUỐNG THEO YÊU CẦU (Top 260px) */
         .judge-vertical { position: absolute; top: 260px; display: flex; flex-direction: column; gap: 12px; z-index: 100; }
         #lights-red { left: 20px; } 
         #lights-blue { right: 20px; } 
@@ -28,22 +27,13 @@
         .name-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 115px; box-sizing: border-box; overflow: hidden; }
         .name-wrapper span { font-size: 55px; font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
         
-        /* Màu cũ: #aa3300 -> Đỏ đậm hơn: #800000 (Maroon) */
-.red-side-name { 
-    background: linear-gradient(to right, #800000, #cc0000); 
-    border-bottom: 2px solid rgba(255,255,255,0.2);
-}
-
-/* Màu cũ: #0033aa -> Xanh đậm hơn: #000080 (Navy) */
-.blue-side-name { 
-    background: linear-gradient(to left, #000080, #0044cc); 
-    border-bottom: 2px solid rgba(255,255,255,0.2);
-}
+        .red-side-name { background: linear-gradient(to right, #800000, #cc0000); border-bottom: 2px solid rgba(255,255,255,0.2); }
+        .blue-side-name { background: linear-gradient(to left, #000080, #0044cc); border-bottom: 2px solid rgba(255,255,255,0.2); }
         
         .flag-vn { width: 130px; height: 85px; background-color: var(--vn-red); border: 3px solid #fff; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: absolute; top: 25px; }
         .flag-vn::before { content: "★"; color: #ffff00; font-size: 65px; line-height: 1; margin-top: -3px; }
-        .red-side-name .flag-vn { left: 10px; right: auto; }
-        .blue-side-name .flag-vn { right: 10px; left: auto; }
+        .red-side-name .flag-vn { left: 10px; }
+        .blue-side-name .flag-vn { right: 10px; }
 
         .side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; transition: background 0.3s; }
         .side.red { background-color: var(--red-main); }
@@ -66,33 +56,15 @@
         .stat-label { font-size: 10px; display: block; color: var(--gold); font-weight: bold; }
         .stat-val { font-size: 20px; font-weight: 900; }
 
-        /* THÊM CSS CHO BẢNG ĐIỂM CHI TIẾT KHI NGHỈ (BREAK TIME) */
         .break-stats-overlay { position: absolute; top: 160px; font-size: 40px; font-weight: 900; display: none; flex-direction: column; gap: 5px; z-index: 15; opacity: 0.9; }
-        .red .break-stats-overlay { 
-    left: 10px; /* Đẩy sát lề trái */
-    text-align: left; 
-}
-.blue .break-stats-overlay { 
-    right: 10px; /* Đẩy sát lề phải */
-    text-align: right; 
-}
-.br-row { 
-    display: flex; 
-    gap: 15px; 
-    /* Bỏ min-width để không bị đẩy vào trong */
-    justify-content: flex-end; 
-}
-.red .br-row { justify-content: flex-start; }
+        .red .break-stats-overlay { left: 10px; text-align: left; }
+        .blue .break-stats-overlay { right: 10px; text-align: right; }
+        .br-row { display: flex; gap: 15px; justify-content: flex-end; }
+        .red .br-row { justify-content: flex-start; }
 
-        /* KHI IS-BREAK-ACTIVE: Ẩn đèn và các chỉ số để nhìn cho thoáng */
-.is-break-active .break-stats-overlay { display: flex; }
-.is-break-active .score-big { font-size: 28vw !important; margin-top: 50px !important; }
-
-/* Ẩn đèn hiệu và các ô chỉ số phụ khi nghỉ */
-.is-break-active .judge-vertical, 
-.is-break-active .bottom-stats { 
-    display: none !important; 
-}
+        .is-break-active .break-stats-overlay { display: flex; }
+        .is-break-active .score-big { font-size: 28vw !important; margin-top: 50px !important; }
+        .is-break-active .judge-vertical, .is-break-active .bottom-stats { display: none !important; }
         
         .center-column { width: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 50px; align-items: center; background: #000; z-index: 10; }
         .time-txt { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 900; font-size: 160px; letter-spacing: 5px; font-variant-numeric: tabular-nums; width: 100%; height: 170px; line-height: 185px; padding-bottom: 10px; border: 5px solid #fff; margin: 2px auto; display: flex; align-items: center; justify-content: center; box-sizing: border-box; transition: all 0.1s; }
@@ -129,8 +101,6 @@
         .log-blue { color: #5599ff; }
         .log-red { color: #ff5555; }
         #manual-win-control { grid-column: span 3; background: #222; padding: 10px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; align-items: center; margin-bottom: -5px; }
-        .manual-btn-b { background: var(--blue-main); padding: 5px 15px; font-size: 16px; margin: 0 5px; }
-        .manual-btn-r { background: var(--red-main); padding: 5px 15px; font-size: 16px; margin: 0 5px; }
         #match-list-footer { grid-column: span 3; background: #111; padding: 15px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; align-items: center;}
         #matchListData { width: 100%; height: 80px; background: #000; color: #0f0; border: 1px solid #555; padding: 8px; font-family: monospace; resize: none; }
         #settings-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; border: 2px solid var(--gold); padding: 20px; z-index: 1000; border-radius: 15px; width: 350px;}
@@ -153,7 +123,6 @@
     <div class="setting-row" style="border-top: 1px solid #444; padding-top: 10px; margin-top: 15px;">
         <button onclick="fullSwap()" style="background:#ff00ff; color:#fff; width:100%; padding:12px; font-weight:bold; border-radius:8px; border:2px solid #fff;">🔄 ĐẢO BÊN VÕ SĨ & GIAO DIỆN</button>
     </div>
-    
     <button onclick="closeSettings()" style="background:var(--gold); color:#000; width:100%; padding:10px; margin-top:10px">LƯU & ĐÓNG</button>
 </div>
 
@@ -255,7 +224,6 @@
             </div>
             <button class="btn-s" onclick="nextRound()" style="flex:1; font-size: 25px; background: #444;"> ▶ </button>
         </div>
-
         <button id="pk" class="btn-m" onclick="runT()">BẮT ĐẦU [Space]</button>
         <div class="row" style="background: rgba(0,0,0,0.3); padding: 5px; border-radius: 8px;">
             <button class="btn-time-adj" onclick="adjT(1)">+1 GIÂY</button>
@@ -295,10 +263,10 @@
     <div id="manual-win-control">
         <div style="color: var(--gold); font-weight: bold; margin-bottom: 5px; font-size: 12px;">SỬA HIỆP THẮNG (WIN DOTS)</div>
         <div class="row">
-            <button class="manual-btn-r" onclick="suaHiep('r', 1)">ĐỎ +1 hiệp</button>
+            <button class="btn-r" style="padding: 5px 15px; flex:none;" onclick="suaHiep('r', 1)">ĐỎ +1 hiệp</button>
             <button class="btn-s" style="padding: 5px 10px;" onclick="suaHiep('r', -1)">-1</button>
             <div style="width: 20px;"></div>
-            <button class="manual-btn-b" onclick="suaHiep('b', 1)">XANH +1 hiệp</button>
+            <button class="btn-b" style="padding: 5px 15px; flex:none;" onclick="suaHiep('b', 1)">XANH +1 hiệp</button>
             <button class="btn-s" style="padding: 5px 10px;" onclick="suaHiep('b', -1)">-1</button>
         </div>
     </div>
@@ -310,7 +278,6 @@
         </div>
         <div id="point-log"></div>
     </div>
-
     <div id="match-list-footer">
         <textarea id="matchListData" placeholder="Số trận | VĐV Xanh | VĐV Đỏ">Số trận | VĐV Xanh | VĐV Đỏ</textarea>
     </div>
@@ -325,25 +292,22 @@
         else if(t==='buzzer'){o.type='sawtooth'; o.frequency.setValueAtTime(150,audioCtx.currentTime); g.gain.setValueAtTime(0.3,audioCtx.currentTime); o.start(); o.stop(audioCtx.currentTime+2);}
     }
 
-    // --- KHAI BÁO BIẾN (DÁN ĐÈ TỪ ĐÂY ĐẾN HẾT FILE) ---
     var sb=0, sr=0, gb=0, gr=0, wb=0, wr=0, running=false, isBreak=false, tm, vW;
     var bt=0, bh=0, ba=0, bp=0, rt=0, rh=0, ra=0, rp=0;
     var kyeshiTime = 60, kyeshiRunning = false, kyeshiTm;
     const JUDGE_WINDOW = 1500;
     let pendingVotes = [];
     var roundHistory = {}; 
-    let isLock = false; // CHỐT CHẶN CHỐNG LẶP XÁC NHẬN
+    let isLock = false; 
 
     function addLog(msg, colorClass = "") {
         const logBox = document.getElementById('point-log');
         const now = new Date();
         const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
-        let m = Math.floor(time / 60);
-        let s = Math.floor(time % 60);
+        let m = Math.floor(time / 60), s = Math.floor(time % 60);
         let matchTimeStr = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
         let roundStr = isBreak ? "BRK" : "RD" + (document.getElementById('iRD').value || 1);
-        const entry = document.createElement('div');
-        entry.className = 'log-entry ' + colorClass;
+        const entry = document.createElement('div'); entry.className = 'log-entry ' + colorClass;
         entry.innerHTML = `[${timeStr}] <span style="color:#ffcc00">[${roundStr} - ${matchTimeStr}]</span> ${msg}`;
         logBox.prepend(entry);
     }
@@ -354,16 +318,12 @@
         const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
         const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
         
-        if (isTech) {
-            addLog(`J${judgeId} bấm TECH cho ${sideTxt}`, sideClass);
-        } else if (points > 0) {
+        if (isTech) { addLog(`J${judgeId} bấm TECH cho ${sideTxt}`, sideClass); } 
+        else if (points > 0) {
             addLog(`J${judgeId} bấm ${sideTxt}: ${points}đ`, sideClass);
             const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
             const lightEl = document.getElementById(lightId);
-            if (lightEl) {
-                lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r');
-                setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1500);
-            }
+            if (lightEl) { lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r'); setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1500); }
         }
 
         pendingVotes.push({ judgeId, side, points, isTech, time: now, processedScore: false, processedTech: false });
@@ -375,17 +335,13 @@
                 let prevPoint = pendingVotes.findLast(v => v.side === side && v.points >= 2 && !v.isMultiplied);
                 if (prevPoint) {
                     let extra = prevPoint.points; 
-                    if (side === 'sb') { sb += extra; bt += (extra * 2); } 
-                    else { sr += extra; rt += (extra * 2); }
-                    prevPoint.isMultiplied = true;
-                    addLog(`>>> CẬP NHẬT TECH (x2): +${extra}đ CHO ${sideTxt}`, 'log-success');
-                    playSound('beep');
+                    if (side === 'sb') { sb += extra; bt += (extra * 2); } else { sr += extra; rt += (extra * 2); }
+                    prevPoint.isMultiplied = true; addLog(`>>> CẬP NHẬT TECH (x2): +${extra}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
                 }
             } else if (points > 0) {
                 if (side === 'sb') { sb += points; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
                 else { sr += points; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
-                addLog(`>>> CỘNG ${points}đ CHO ${sideTxt}`, 'log-success');
-                playSound('beep');
+                addLog(`>>> CỘNG ${points}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
             }
         } else {
             [1, 2, 3].forEach(pts => {
@@ -394,23 +350,18 @@
                     pendingVotes.filter(v => v.side === side && v.points === pts).forEach(v => v.processedScore = true);
                     if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
                     else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
-                    addLog(`>>> ĐIỂM ĐA SỐ: +${pts}đ CHO ${sideTxt}`, 'log-success');
-                    playSound('beep');
+                    addLog(`>>> ĐIỂM ĐA SỐ: +${pts}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
                 }
             });
-
             const techJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.isTech && !v.processedTech).map(v => v.judgeId))];
             if (techJudges.length >= 2) {
                 let confirmedPts = 0;
                 if (pendingVotes.some(v => v.side === side && v.points === 3 && v.processedScore)) confirmedPts = 3;
                 else if (pendingVotes.some(v => v.side === side && v.points === 2 && v.processedScore)) confirmedPts = 2;
-
                 if (confirmedPts > 0) {
                     pendingVotes.filter(v => v.side === side && v.isTech).forEach(v => v.processedTech = true);
-                    if (side === 'sb') { sb += confirmedPts; bt += (confirmedPts * 2); } 
-                    else { sr += confirmedPts; rt += (confirmedPts * 2); }
-                    addLog(`>>> TECH ĐA SỐ (x2): +${confirmedPts}đ CHO ${sideTxt}`, 'log-success');
-                    playSound('beep');
+                    if (side === 'sb') { sb += confirmedPts; bt += (confirmedPts * 2); } else { sr += confirmedPts; rt += (confirmedPts * 2); }
+                    addLog(`>>> TECH ĐA SỐ (x2): +${confirmedPts}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
                 }
             }
         }
@@ -418,115 +369,87 @@
     }
 
     function quick(val, side) {
-        playSound('beep');
-        const sideTxt = side === 'b' ? 'XANH' : 'ĐỎ';
+        playSound('beep'); const sideTxt = side === 'b' ? 'XANH' : 'ĐỎ';
         addLog(`Thư ký cộng nhanh ${val}đ cho ${sideTxt}`, 'log-success');
         if (side === 'b') {
-            if (val === 4) { bt += 4; ba++; sb += 4; }
-            else if (val === -4) { bt = Math.max(0, bt-4); ba = Math.max(0, ba-1); sb = Math.max(0, sb-4); }
-            else if (val === 6) { bt += 6; bh++; sb += 6; }
-            else if (val === -6) { bt = Math.max(0, bt-6); bh = Math.max(0, bh-1); sb = Math.max(0, sb-6); }
+            if (val === 4) { bt += 4; ba++; sb += 4; } else if (val === -4) { bt = Math.max(0, bt-4); ba = Math.max(0, ba-1); sb = Math.max(0, sb-4); }
+            else if (val === 6) { bt += 6; bh++; sb += 6; } else if (val === -6) { bt = Math.max(0, bt-6); bh = Math.max(0, bh-1); sb = Math.max(0, sb-6); }
         } else {
-            if (val === 4) { rt += 4; ra++; sr += 4; }
-            else if (val === -4) { rt = Math.max(0, rt-4); ra = Math.max(0, ra-1); sr = Math.max(0, sr-4); }
-            else if (val === 6) { rt += 6; rh++; sr += 6; }
-            else if (val === -6) { rt = Math.max(0, rh-6); rh = Math.max(0, rh-1); sr = Math.max(0, sr-6); }
+            if (val === 4) { rt += 4; ra++; sr += 4; } else if (val === -4) { rt = Math.max(0, rt-4); ra = Math.max(0, ra-1); sr = Math.max(0, sr-4); }
+            else if (val === 6) { rt += 6; rh++; sr += 6; } else if (val === -6) { rt = Math.max(0, rh-6); rh = Math.max(0, rh-1); sr = Math.max(0, sr-6); }
         }
         up();
     }
 
     function st(type, val) {
         playSound('beep');
-        if(type==='bt'){ bt=Math.max(0,bt+(val*2)); sb=Math.max(0,sb+(val*2)); }
-        else if(type==='rt'){ rt=Math.max(0,rt+(val*2)); sr=Math.max(0,sr+(val*2)); }
-        else if(type==='bh'){ bh=Math.max(0,bh+val); sb=Math.max(0,sb+(val*3)); }
-        else if(type==='rh'){ rh=Math.max(0,rh+val); sr=Math.max(0,sr+(val*3)); }
-        else if(type==='ba'){ ba=Math.max(0,ba+val); sb=Math.max(0,sb+(val*2)); }
-        else if(type==='ra'){ ra=Math.max(0,ra+val); sr=Math.max(0,sr+(val*2)); }
-        else if(type==='bp'){ bp=Math.max(0,bp+val); sb=Math.max(0,sb+val); }
-        else if(type==='rp'){ rp=Math.max(0,rp+val); sr=Math.max(0,sr+val); }
+        if(type==='bt'){ bt=Math.max(0,bt+(val*2)); sb=Math.max(0,sb+(val*2)); } else if(type==='rt'){ rt=Math.max(0,rt+(val*2)); sr=Math.max(0,sr+(val*2)); }
+        else if(type==='bh'){ bh=Math.max(0,bh+val); sb=Math.max(0,sb+(val*3)); } else if(type==='rh'){ rh=Math.max(0,rh+val); sr=Math.max(0,sr+(val*3)); }
+        else if(type==='ba'){ ba=Math.max(0,ba+val); sb=Math.max(0,sb+(val*2)); } else if(type==='ra'){ ra=Math.max(0,ra+val); sr=Math.max(0,sr+(val*2)); }
+        else if(type==='bp'){ bp=Math.max(0,bp+val); sb=Math.max(0,sb+val); } else if(type==='rp'){ rp=Math.max(0,rp+val); sr=Math.max(0,sr+val); }
         up();
     }
 
     function saveCurrentRoundData() {
         let rd = document.getElementById('iRD').value || 1;
-        roundHistory[rd] = {
-            sb: sb, sr: sr, gb: gb, gr: gr,
-            bt: bt, bh: bh, ba: ba, bp: bp,
-            rt: rt, rh: rh, ra: ra, rp: rp,
-            savedTime: time 
-        };
+        roundHistory[rd] = { sb, sr, gb, gr, bt, bh, ba, bp, rt, rh, ra, rp, savedTime: time };
     }
 
     function displayPastRound(rd) {
         if (!roundHistory[rd]) return;
         let data = roundHistory[rd];
-        sb = data.sb; sr = data.sr; gb = data.gb; gr = data.gr;
-        bt = data.bt; bh = data.bh; ba = data.ba; bp = data.bp;
-        rt = data.rt; rh = data.rh; ra = data.ra; rp = data.rp;
-        time = data.savedTime; 
+        sb = data.sb; sr = data.sr; gb = data.gb; gr = data.gr; bt = data.bt; bh = data.bh; ba = data.ba; bp = data.bp; rt = data.rt; rh = data.rh; ra = data.ra; rp = data.rp; time = data.savedTime; 
         document.getElementById('viewingRoundText').innerText = "XEM LẠI HIỆP " + rd;
         document.getElementById('iRD').value = rd;
         if(running) { clearInterval(tm); running = false; }
         up();
     }
 
-    function prevRound() {
-        let currentRD = parseInt(document.getElementById('iRD').value) || 1;
-        if (currentRD > 1) {
-            if (!roundHistory[currentRD] && !isBreak) saveCurrentRoundData();
-            displayPastRound(currentRD - 1);
-        }
-    }
-
+    function prevRound() { let currentRD = parseInt(document.getElementById('iRD').value) || 1; if (currentRD > 1) { if (!roundHistory[currentRD] && !isBreak) saveCurrentRoundData(); displayPastRound(currentRD - 1); } }
     function nextRound() {
         let currentRD = parseInt(document.getElementById('iRD').value) || 1;
-        if (roundHistory[currentRD + 1]) {
-            displayPastRound(currentRD + 1);
-        } 
+        if (roundHistory[currentRD + 1]) { displayPastRound(currentRD + 1); } 
         else {
-            isBreak = false;
-            running = false;
-            isLock = false; 
-            clearInterval(tm);
-            let nextRD = currentRD + 1;
-            document.getElementById('iRD').value = nextRD;
-            sb=0; sr=0; gb=0; gr=0; 
-            bt=0; bh=0; ba=0; bp=0; 
-            rt=0; rh=0; ra=0; rp=0;
-            time = getSetTime();
-            document.getElementById('viewingRoundText').innerText = "HIỆN TẠI";
-            addLog(`--- BẮT ĐẦU HIỆP ${nextRD} ---`, 'log-success');
-            up();
+            isBreak = false; running = false; isLock = false; clearInterval(tm);
+            let nextRD = currentRD + 1; document.getElementById('iRD').value = nextRD;
+            sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0; time = getSetTime();
+            document.getElementById('viewingRoundText').innerText = "HIỆN TẠI"; addLog(`--- BẮT ĐẦU HIỆP ${nextRD} ---`, 'log-success'); up();
         }
     }
 
-    function startBreak(forceWin = false) {
-        let backupTime = time; 
-        running = false;
+    // LOGIC XÉT ƯU THẾ & KẾT THÚC HIỆP
+function startBreak() {
+        running = false; 
         clearInterval(tm);
-        let winner = ""; let reason = ""; let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
         
+        let winner = ""; 
+        let reason = ""; 
+        let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
+        
+        // 1. Chỉ tính toán kết quả tạm thời, chưa reset gì cả
         if (gr >= maxG) { winner = "blue"; reason = "ĐỎ 5 LỖI - XANH THẮNG!"; } 
         else if (gb >= maxG) { winner = "red"; reason = "XANH 5 LỖI - ĐỎ THẮNG!"; }
         else if (sb > sr) { winner = "blue"; reason = "XANH THẮNG ĐIỂM (" + sb + "-" + sr + ")"; }
         else if (sr > sb) { winner = "red"; reason = "ĐỎ THẮNG ĐIỂM (" + sr + "-" + sb + ")"; }
         else {
-            if (bt > rt) { winner = "blue"; reason = "HÒA - XANH ƯU THẾ TECH"; }
-            else if (rt > bt) { winner = "red"; reason = "HÒA - ĐỎ ƯU THẾ TECH"; }
-            else { 
-                if(confirm("HÒA TẤT CẢ CHỈ SỐ. XANH THẮNG?")) { winner = "blue"; reason = "HÒA - TRỌNG TÀI CHỌN XANH"; } 
-                else { winner = "red"; reason = "HÒA - TRỌNG TÀI CHỌN ĐỎ"; } 
-            }
+            if (bt > rt) { winner = "blue"; reason = "HÒA " + sb + "-" + sr + " (XANH ƯU THẾ TECH: " + bt + ")"; }
+            else if (rt > bt) { winner = "red"; reason = "HÒA " + sr + "-" + sb + " (ĐỎ ƯU THẾ TECH: " + rt + ")"; }
+            else { winner = "draw"; reason = "HÒA TUYỆT ĐỐI"; }
         }
 
-        if (forceWin || confirm("KẾT THÚC HIỆP: " + reason + "\n\nBấm OK để CHỐT KẾT QUẢ & NGHỈ.")) {
-            saveCurrentRoundData(); 
+        // 2. Hiện thông báo xác nhận
+        let confirmMsg = (winner === "draw") 
+            ? "HIỆP HÒA TUYỆT ĐỐI! OK = XANH THẮNG, CANCEL = ĐỎ THẮNG" 
+            : "XÁC NHẬN KẾT QUẢ: " + reason + "\n\n(Bấm CANCEL nếu muốn sửa điểm hoặc đánh tiếp)";
+
+        if (confirm(confirmMsg)) {
+            // CHỈ KHI BẤM OK MỚI CHỐT VÀ RESET
+            saveCurrentRoundData();
             addLog(`CHỐT HIỆP: ${reason}`, 'log-success');
-            if (winner === "blue") wb++; else wr++;
+            if (winner === "blue" || (winner === "draw")) wb++; else wr++;
             
-            // RESET NGAY ĐỂ TRÁNH LẶP
             sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0;
+            isLock = false; 
             up();
 
             if (wb >= 2 || wr >= 2) { 
@@ -535,14 +458,14 @@
             }
             isBreak = true; 
             time = parseInt(document.getElementById('iBreakSet').value) || 60; 
-            isLock = false; 
             runT(); 
         } else {
-            time = backupTime; 
+            // BẤM CANCEL -> GIỮ NGUYÊN ĐIỂM VÀ THỜI GIAN ĐỂ SỬA
+            isLock = false;
             running = false;
-            isLock = false; 
-            addLog(`HỦY CHỐT HIỆP - TIẾP TỤC: ${time}s`, 'log-red');
+            if (time < 0) time = 0; // Trả về 0 nếu đang hiện PTG/PUN cho dễ nhìn
             up();
+            addLog("ĐÃ HUỶ CHỐT: MỜI SỬA ĐIỂM HOẶC BẤM SPACE ĐÁNH TIẾP", "log-red");
         }
     }
 
@@ -556,27 +479,18 @@
     function up() { 
         const uv=(id,v)=>{document.querySelectorAll('#'+id).forEach(e=>e.innerText=v);}; 
         const displayArea = document.getElementById('display-area');
-        
         if (isBreak) {
-            displayArea.classList.add('is-break-active');
-            uv('vSB', wb); uv('vSR', wr); 
+            displayArea.classList.add('is-break-active'); uv('vSB', wb); uv('vSR', wr); 
             for (let i = 1; i <= 3; i++) {
                 let rdData = roundHistory[i] || { sr: "-", sb: "-" };
-                document.getElementById(`red_r${i}_val`).innerText = rdData.sr;
-                document.getElementById(`blue_r${i}_val`).innerText = rdData.sb;
+                document.getElementById(`red_r${i}_val`).innerText = rdData.sr; document.getElementById(`blue_r${i}_val`).innerText = rdData.sb;
             }
-        } else {
-            displayArea.classList.remove('is-break-active');
-            uv('vSB', sb); uv('vSR', sr); 
-        }
+        } else { displayArea.classList.remove('is-break-active'); uv('vSB', sb); uv('vSR', sr); }
 
         document.querySelectorAll('#vGB').forEach(e => e.innerText = "GAM-JEOM: " + gb);
         document.querySelectorAll('#vGR').forEach(e => e.innerText = "GAM-JEOM: " + gr);
-        uv('vBT',bt); uv('vBH',bh); uv('vBA',ba); uv('vBP',bp); 
-        uv('vRT',rt); uv('vRH',rh); uv('vRA',ra); uv('vRP',rp); 
-        uv('vMT',document.getElementById('iMT').value||1); 
-        const nameB = document.getElementById('iB').value; 
-        const nameR = document.getElementById('iR').value; 
+        uv('vBT',bt); uv('vBH',bh); uv('vBA',ba); uv('vBP',bp); uv('vRT',rt); uv('vRH',rh); uv('vRA',ra); uv('vRP',rp); uv('vMT',document.getElementById('iMT').value||1); 
+        const nameB = document.getElementById('iB').value, nameR = document.getElementById('iR').value; 
         document.querySelectorAll('#vNB').forEach(e => { e.innerText = nameB; adjustFontSize(e); }); 
         document.querySelectorAll('#vNR').forEach(e => { e.innerText = nameR; adjustFontSize(e); }); 
         document.querySelectorAll('#vRD').forEach(e=> { e.innerText = isBreak ? "BREAK TIME" : "ROUND "+(document.getElementById('iRD').value||1); }); 
@@ -585,21 +499,14 @@
         document.querySelectorAll('#rw1').forEach(e=>e.className=wr>=1?"win-dot active":"win-dot"); 
         document.querySelectorAll('#rw2').forEach(e=>e.className=wr>=2?"win-dot active":"win-dot"); 
         
-        let m = Math.floor(time / 60), s = Math.floor(time % 60); 
-        let str;
-        if (time === -99) str = "PTG"; 
-        else if (time === -88) str = "PUN";
-        else if (time >= 10.0) str = m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
-        else if (time > 0) str = time.toFixed(2); 
-        else str = "0:00"; 
+        let m = Math.floor(time / 60), s = Math.floor(time % 60); let str;
+        if (time === -99) str = "PTG"; else if (time === -88) str = "PUN";
+        else if (time >= 10.0) str = m + ":" + (s < 10 ? "0" : "") + Math.floor(s); else if (time > 0) str = time.toFixed(2); else str = "0:00"; 
         
         document.querySelectorAll('#vTD').forEach(e => {
-            e.innerText = str; 
-            e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
+            e.innerText = str; e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
             if (str === "PTG" || str === "PUN") {
-                e.style.setProperty("color", "var(--highlight-yellow)", "important");
-                e.style.setProperty("background-color", "#000", "important");
-                e.style.setProperty("border-color", "var(--highlight-yellow)", "important");
+                e.style.setProperty("color", "var(--highlight-yellow)", "important"); e.style.setProperty("background-color", "#000", "important"); e.style.setProperty("border-color", "var(--highlight-yellow)", "important");
             } else { e.style.removeProperty("color"); e.style.removeProperty("background-color"); e.style.removeProperty("border-color"); }
         });
 
@@ -609,7 +516,6 @@
         document.querySelectorAll('#vTK_Val').forEach(e => { e.innerText = kyeshiTime; }); 
         if(vW && !vW.closed) { vW.document.body.innerHTML = document.getElementById('display-area').outerHTML; vW.document.querySelectorAll('#vNB, #vNR').forEach(e => adjustFontSize(e)); } 
         
-        // KIỂM TRA ĐIỀU KIỆN DỪNG
         if(!isBreak && running && !isLock) { 
             let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5; 
             if(document.getElementById('pointGapActive').checked && Math.abs(sb-sr)>=12) stopAndBuzzer("CÁCH BIỆT 12 ĐIỂM!"); 
@@ -620,55 +526,42 @@
     function toggleKyeshi() { if (kyeshiRunning) { clearInterval(kyeshiTm); kyeshiRunning = false; } else { if (running) runT(); kyeshiRunning = true; kyeshiTime = 60; addLog("🚑 BẮT ĐẦU Y TẾ (KYE-SHI)", 'log-red'); kyeshiTm = setInterval(() => { if (kyeshiTime > 0) { kyeshiTime--; if (kyeshiTime <= 10) playSound('beep'); } else { clearInterval(kyeshiTm); kyeshiRunning = false; playSound('buzzer'); alert("HẾT GIỜ Y TẾ!"); } up(); }, 1000); } up(); }
     
     function stopAndBuzzer(msg){ 
-        if (isLock) return;
-        isLock = true;
+        if (isLock) return; 
+        isLock = true; 
         clearInterval(tm); 
         running = false; 
-        let originalTime = time; 
-        if (msg.includes("12 ĐIỂM")) { time = -99; } 
-        else if (msg.includes("LỖI")) { time = -88; }
-        playSound('buzzer'); 
-        addLog(`DỪNG TRẬN: ${msg}`, 'log-red'); 
-        up(); 
         
-        setTimeout(() => { 
-            if(!confirm(msg + "\n\nBấm OK để CHỐT HIỆP.")) { 
-                time = originalTime; 
-                isLock = false;
-                up(); 
-            } else { 
-                startBreak(true); 
-            } 
-        }, 100); 
+        let oldTime = time; // Lưu lại thời gian lúc dừng để nếu sửa thì trả lại
+        if (msg.includes("12 ĐIỂM")) time = -99; 
+        else if (msg.includes("LỖI")) time = -88;
+        
+        playSound('buzzer'); 
+        up(); 
+
+        setTimeout(() => {
+            if (confirm(msg + "\n\nOK = XÉT THẮNG HIỆP NGAY\nCANCEL = GIỮ NGUYÊN ĐỂ SỬA LẠI")) {
+                startBreak(); 
+            } else {
+                time = oldTime; // Trả lại đúng số giây lúc nãy
+                isLock = false; 
+                up();
+            }
+        }, 150);
     }
 
     function resetCurrentMatch() { 
-        sb=0;sr=0;gb=0;gr=0;bt=0;bh=0;ba=0;bp=0;rt=0;rh=0;ra=0;rp=0;wb=0;wr=0; 
-        isLock=false; 
-        roundHistory={}; 
-        document.getElementById('iRD').value=1; 
-        isBreak=false; running=false; 
-        clearInterval(tm); clearInterval(kyeshiTm); kyeshiRunning=false; kyeshiTime=60; 
-        time=getSetTime(); 
-        document.getElementById('point-log').innerHTML=''; 
-        addLog("--- RESET TRẬN ĐẤU MỚI ---", 'log-success'); 
-        up(); 
+        sb=0;sr=0;gb=0;gr=0;bt=0;bh=0;ba=0;bp=0;rt=0;rh=0;ra=0;rp=0;wb=0;wr=0; isLock=false; roundHistory={}; document.getElementById('iRD').value=1; isBreak=false; running=false; clearInterval(tm); clearInterval(kyeshiTm); kyeshiRunning=false; kyeshiTime=60; time=getSetTime(); document.getElementById('point-log').innerHTML=''; addLog("--- RESET TRẬN ĐẤU MỚI ---", 'log-success'); up(); 
     }
     
     function runT(){ 
         if(kyeshiRunning) toggleKyeshi(); 
         if(running){ clearInterval(tm); running = false; } 
         else { 
-            if (time <= 0 && (time === -99 || time === -88)) return;
-            document.getElementById('viewingRoundText').innerText = "HIỆN TẠI"; 
-            running = true; 
+            if (time <= 0 && !isBreak) return;
+            document.getElementById('viewingRoundText').innerText = "HIỆN TẠI"; running = true; 
             tm = setInterval(() => { 
                 if(time > 0.01){ time = parseFloat((time - 0.01).toFixed(2)); up(); } 
-                else { 
-                    clearInterval(tm); running = false; time = 0; playSound('buzzer'); up();
-                    if(!isBreak) setTimeout(() => startBreak(true), 100); 
-                    else { nextRound(); } 
-                } 
+                else { clearInterval(tm); running = false; time = 0; playSound('buzzer'); up(); if(!isBreak) setTimeout(() => startBreak(true), 100); else { nextRound(); } } 
             }, 10); 
         } 
         up(); 
@@ -676,39 +569,20 @@
 
     function loadNextMatch() { let tx=document.getElementById('matchListData'); let lines=tx.value.split('\n').filter(l=>l.trim()!=""); if(lines.length>0 && lines[0].includes('|')){ let p=lines[0].split('|'); document.getElementById('iMT').value=p[0].trim(); document.getElementById('iB').value=p[1].trim(); document.getElementById('iR').value=p[2].trim(); lines.shift(); tx.value=lines.join('\n'); } else { document.getElementById('iMT').value++; } resetCurrentMatch(); }
     function ch(side, p){ playSound('beep'); if(side==='sb'){ sb=Math.max(0,sb+p); if(p===1) bp=Math.max(0,bp+1); else if(p===-1) bp=Math.max(0,bp-1); else if(p===2) ba=Math.max(0,ba+1); else if(p===-2) ba=Math.max(0,ba-1); else if(p===3) bh=Math.max(0,bh+1); else if(p===-3) bh=Math.max(0,bh-1); } else { sr=Math.max(0,sr+p); if(p===1) rp=Math.max(0,rp+1); else if(p===-1) rp=Math.max(0,rp-1); else if(p===2) ra=Math.max(0,ra+1); else if(p===-2) ra=Math.max(0,ra-1); else if(p===3) rh=Math.max(0,rh+1); else if(p===-3) rh=Math.max(0,rh-1); } up(); }
-    function l(s){ 
-        if(isBreak || isLock) return; 
-        playSound('beep'); 
-        let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
-        if(s == 'b'){ gb++; sr++; addLog("LỖI (GAM-JEOM) CHO XANH", 'log-blue'); if(gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH 5 LỖI!"), 50); return; } } 
-        else { gr++; sb++; addLog("LỖI (GAM-JEOM) CHO ĐỎ", 'log-red'); if(gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ 5 LỖI!"), 50); return; } } 
-        up(); 
-    }
+    function l(s){ if(isBreak || isLock) return; playSound('beep'); let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5; if(s == 'b'){ gb++; sr++; addLog("LỖI (GAM-JEOM) CHO XANH", 'log-blue'); if(gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH 5 LỖI!"), 50); return; } } else { gr++; sb++; addLog("LỖI (GAM-JEOM) CHO ĐỎ", 'log-red'); if(gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ 5 LỖI!"), 50); return; } } up(); }
     function ul(s){ if(isBreak)return; playSound('beep'); if(s=='b'&&gb>0){gb--; sr--;} else if(s=='r'&&gr>0){gr--; sb--;} up(); }
     function mo(){ vW=window.open("","_blank","width=1200,height=800"); vW.document.write('<html><head><style>'+document.getElementsByTagName('style')[0].innerHTML+' #control-area, #settings-modal, #log-container{display:none}</style></head><body>'+document.getElementById('display-area').outerHTML+'<\/body></html>'); }
     function suaHiep(ben, giatri) { if (ben === 'b') wb = Math.max(0, Math.min(2, wb + giatri)); else wr = Math.max(0, Math.min(2, wr + giatri)); playSound('beep'); up(); }
 
     function fullSwap() {
-        [sb, sr] = [sr, sb]; [gb, gr] = [gr, gb]; [bt, rt] = [rt, bt]; 
-        [bh, rh] = [rh, bh]; [ba, ra] = [ra, ba]; [bp, rp] = [rp, bp]; [wb, wr] = [wr, wb];
-        for (let rd in roundHistory) {
-            let d = roundHistory[rd];
-            [d.sb, d.sr] = [d.sr, d.sb]; [d.gb, d.gr] = [d.gr, d.gb];
-            [d.bt, d.rt] = [d.rt, d.bt]; [d.bh, d.rh] = [d.rh, d.bh];
-            [d.ba, d.ra] = [d.ra, d.ba]; [d.bp, d.rp] = [d.rp, d.bp];
-        }
-        let iB = document.getElementById('iB'); let iR = document.getElementById('iR'); let tempN = iB.value; iB.value = iR.value; iR.value = tempN;
-        const redNameBar = document.querySelector('.red-side-name'); const blueNameBar = document.querySelector('.blue-side-name');
-        if (!redNameBar.dataset.isSwapped) {
-            redNameBar.style.background = "linear-gradient(to right, #000080, #0044cc)"; blueNameBar.style.background = "linear-gradient(to left, #800000, #cc0000)"; redNameBar.dataset.isSwapped = "true";
-        } else { redNameBar.style.background = ""; blueNameBar.style.background = ""; delete redNameBar.dataset.isSwapped; }
+        [sb, sr] = [sr, sb]; [gb, gr] = [gr, gb]; [bt, rt] = [rt, bt]; [bh, rh] = [rh, bh]; [ba, ra] = [ra, ba]; [bp, rp] = [rp, bp]; [wb, wr] = [wr, wb];
+        for (let rd in roundHistory) { let d = roundHistory[rd]; [d.sb, d.sr] = [d.sr, d.sb]; [d.gb, d.gr] = [d.gr, d.gb]; [d.bt, d.rt] = [d.rt, d.bt]; [d.bh, d.rh] = [d.rh, d.bh]; [d.ba, d.ra] = [d.ra, d.ba]; [d.bp, d.rp] = [d.rp, d.bp]; }
+        let iB = document.getElementById('iB'), iR = document.getElementById('iR'), tempN = iB.value; iB.value = iR.value; iR.value = tempN;
+        const redNameBar = document.querySelector('.red-side-name'), blueNameBar = document.querySelector('.blue-side-name');
+        if (!redNameBar.dataset.isSwapped) { redNameBar.style.background = "linear-gradient(to right, #000080, #0044cc)"; blueNameBar.style.background = "linear-gradient(to left, #800000, #cc0000)"; redNameBar.dataset.isSwapped = "true"; } 
+        else { redNameBar.style.background = ""; blueNameBar.style.background = ""; delete redNameBar.dataset.isSwapped; }
         document.querySelector('.side.red').classList.toggle('swapped-to-blue'); document.querySelector('.side.blue').classList.toggle('swapped-to-red');
-        document.querySelectorAll('.btn-r, .btn-b').forEach(btn => {
-            if (btn.classList.contains('btn-r')) { btn.classList.replace('btn-r', 'btn-b'); btn.style.backgroundColor = "var(--blue-main)"; } 
-            else { btn.classList.replace('btn-b', 'btn-r'); btn.style.backgroundColor = "var(--red-main)"; }
-        });
-        addLog("🔄 ĐÃ ĐẢO TOÀN BỘ", "log-success");
-        up();
+        addLog("🔄 ĐÃ ĐẢO TOÀN BỘ", "log-success"); up();
     }
 
     window.addEventListener('keydown', function(e) {
