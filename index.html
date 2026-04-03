@@ -469,7 +469,20 @@ function startBreak() {
         }
     }
 
-    function adjustFontSize(element) { if (!element) return; const container = element.parentElement; if (!container) return; let fontSize = 55; element.style.fontSize = fontSize + "px"; const maxW = container.clientWidth - 5; while (element.scrollWidth > maxW && fontSize > 12) { fontSize -= 2; element.style.fontSize = fontSize + "px"; } }
+    function adjustFontSize(element) {
+    if (!element || !element.parentElement) return;
+    if (element.getAttribute('data-v') === element.innerText) return;
+    element.setAttribute('data-v', element.innerText);
+    let fontSize = 55; 
+    element.style.fontSize = fontSize + "px";
+    const maxW = element.parentElement.clientWidth - 15; 
+    if (element.scrollWidth > maxW) {
+        while (element.scrollWidth > maxW && fontSize > 12) {
+            fontSize -= 2;
+            element.style.fontSize = fontSize + "px";
+        }
+    }
+}
     function getSetTime() { return (parseInt(document.getElementById('min').value)||0)*60 + (parseInt(document.getElementById('sec').value)||0); }
     var time = getSetTime();
     function adjT(val) { time = Math.max(0, parseFloat((time + val).toFixed(1))); up(); playSound('beep'); }
