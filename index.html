@@ -41,7 +41,7 @@
         .side.red.swapped-to-blue { background-color: var(--blue-main) !important; }
         .side.blue.swapped-to-red { background-color: var(--red-main) !important; }
 
-        .score-big { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 900; font-variant-numeric: tabular-nums; font-size: 25vw; line-height: 0.7; margin-top: -20px; z-index: 5; display: inline-block; text-align: center; transition: all 0.3s ease; }
+        .score-big { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; font-size: 25vw; line-height: 0.7; margin-top: 30px; z-index: 5; display: inline-block; text-align: center; transition: all 0.3s ease; }
         
         .win-tracker { position: absolute; top: 155px; display: flex; gap: 10px; z-index: 10; }
         #tracker-red { right: 20px; }
@@ -67,7 +67,7 @@
         .is-break-active .judge-vertical, .is-break-active .bottom-stats { display: none !important; }
         
         .center-column { width: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 50px; align-items: center; background: #000; z-index: 10; }
-        .time-txt { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 900; font-size: 160px; letter-spacing: 5px; font-variant-numeric: tabular-nums; width: 100%; height: 170px; line-height: 185px; padding-bottom: 10px; border: 5px solid #fff; margin: 2px auto; display: flex; align-items: center; justify-content: center; box-sizing: border-box; transition: all 0.1s; }
+        .time-txt { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 550; font-size: 160px; letter-spacing: 5px; font-variant-numeric: tabular-nums; width: 100%; height: 170px; line-height: 200px; padding-bottom: 10px; border: 5px solid #fff; margin: -2px auto; display: flex; align-items: center; justify-content: center; box-sizing: border-box; transition: all 0.1s; }
         .t-run { color: #fff; background: transparent; border-color: #fff; } 
         .t-stop, .t-break { color: #000; background-color: var(--highlight-yellow); border-color: var(--highlight-yellow); }
         #vTK { display: none; margin-top: 10px; border: 3px solid #fff; padding: 5px 20px; border-radius: 15px; background: rgba(0,0,0,0.9); }
@@ -419,55 +419,68 @@
 
     // LOGIC XÉT ƯU THẾ & KẾT THÚC HIỆP
 function startBreak() {
-        running = false; 
-        clearInterval(tm);
-        
-        let winner = ""; 
-        let reason = ""; 
-        let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
-        
-        // 1. Chỉ tính toán kết quả tạm thời, chưa reset gì cả
-        if (gr >= maxG) { winner = "blue"; reason = "ĐỎ 5 LỖI - XANH THẮNG!"; } 
-        else if (gb >= maxG) { winner = "red"; reason = "XANH 5 LỖI - ĐỎ THẮNG!"; }
-        else if (sb > sr) { winner = "blue"; reason = "XANH THẮNG ĐIỂM (" + sb + "-" + sr + ")"; }
-        else if (sr > sb) { winner = "red"; reason = "ĐỎ THẮNG ĐIỂM (" + sr + "-" + sb + ")"; }
-        else {
-            if (bt > rt) { winner = "blue"; reason = "HÒA " + sb + "-" + sr + " (XANH ƯU THẾ TECH: " + bt + ")"; }
-            else if (rt > bt) { winner = "red"; reason = "HÒA " + sr + "-" + sb + " (ĐỎ ƯU THẾ TECH: " + rt + ")"; }
-            else { winner = "draw"; reason = "HÒA TUYỆT ĐỐI"; }
-        }
+    running = false; 
+    clearInterval(tm);
+    
+    let winner = ""; 
+    let reason = ""; 
+    let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
+    
+    // Kiểm tra các điều kiện thắng cơ bản
+    if (gr >= maxG) { winner = "blue"; reason = "ĐỎ 5 LỖI - XANH THẮNG!"; } 
+    else if (gb >= maxG) { winner = "red"; reason = "XANH 5 LỖI - ĐỎ THẮNG!"; }
+    else if (sb > sr) { winner = "blue"; reason = "XANH THẮNG ĐIỂM (" + sb + "-" + sr + ")"; }
+    else if (sr > sb) { winner = "red"; reason = "ĐỎ THẮNG ĐIỂM (" + sr + "-" + sb + ")"; }
+    else {
+        if (bt > rt) { winner = "blue"; reason = "HÒA " + sb + "-" + sr + " (XANH ƯU THẾ TECH: " + bt + ")"; }
+        else if (rt > bt) { winner = "red"; reason = "HÒA " + sr + "-" + sb + " (ĐỎ ƯU THẾ TECH: " + rt + ")"; }
+        else { winner = "draw"; reason = "HÒA TUYỆT ĐỐI"; }
+    }
 
-        // 2. Hiện thông báo xác nhận
-        let confirmMsg = (winner === "draw") 
-            ? "HIỆP HÒA TUYỆT ĐỐI! OK = XANH THẮNG, CANCEL = ĐỎ THẮNG" 
-            : "XÁC NHẬN KẾT QUẢ: " + reason + "\n\n(Bấm CANCEL nếu muốn sửa điểm hoặc đánh tiếp)";
-
-        if (confirm(confirmMsg)) {
-            // CHỈ KHI BẤM OK MỚI CHỐT VÀ RESET
-            saveCurrentRoundData();
-            addLog(`CHỐT HIỆP: ${reason}`, 'log-success');
-            if (winner === "blue" || (winner === "draw")) wb++; else wr++;
-            
-            sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0;
-            isLock = false; 
-            up();
-
-            if (wb >= 2 || wr >= 2) { 
-                setTimeout(() => { alert("TRẬN ĐẤU KẾT THÚC!"); loadNextMatch(); }, 300); 
-                return; 
-            }
-            isBreak = true; 
-            time = parseInt(document.getElementById('iBreakSet').value) || 60; 
-            runT(); 
+    // Xử lý thông báo xác nhận
+    if (winner === "draw") {
+        // TRƯỜNG HỢP HÒA TUYỆT ĐỐI: Ép buộc chọn 1 trong 2
+        if (confirm("HIỆP HÒA TUYỆT ĐỐI!\nNhấn OK để chọn XANH thắng ưu thế.\nNhấn CANCEL để chọn ĐỎ thắng ưu thế.")) {
+            winner = "blue";
+            reason = "HÒA TUYỆT ĐỐI - XANH THẮNG ƯU THẾ";
         } else {
-            // BẤM CANCEL -> GIỮ NGUYÊN ĐIỂM VÀ THỜI GIAN ĐỂ SỬA
+            winner = "red";
+            reason = "HÒA TUYỆT ĐỐI - ĐỎ THẮNG ƯU THẾ";
+        }
+    } else {
+        // TRƯỜNG HỢP CÓ KẾT QUẢ RÕ RÀNG: Hỏi để xác nhận hoặc sửa điểm
+        if (!confirm("XÁC NHẬN KẾT QUẢ: " + reason + "\n\n(Bấm CANCEL nếu muốn sửa điểm hoặc đánh tiếp)")) {
             isLock = false;
             running = false;
-            if (time < 0) time = 0; // Trả về 0 nếu đang hiện PTG/PUN cho dễ nhìn
+            if (time < 0) time = 0; 
             up();
             addLog("ĐÃ HUỶ CHỐT: MỜI SỬA ĐIỂM HOẶC BẤM SPACE ĐÁNH TIẾP", "log-red");
+            return; // Thoát ra để người dùng sửa điểm
         }
     }
+
+    // CHỐT KẾT QUẢ VÀ CHUYỂN QUA NGHỈ (BREAK)
+    saveCurrentRoundData();
+    addLog(`CHỐT HIỆP: ${reason}`, 'log-success');
+    
+    if (winner === "blue") wb++; else wr++;
+    
+    // Reset các thông số hiệp cũ
+    sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0;
+    isLock = false; 
+    up();
+
+    // Kiểm tra kết thúc trận
+    if (wb >= 2 || wr >= 2) { 
+        setTimeout(() => { alert("TRẬN ĐẤU KẾT THÚC!"); loadNextMatch(); }, 300); 
+        return; 
+    }
+
+    // Chạy thời gian nghỉ
+    isBreak = true; 
+    time = parseInt(document.getElementById('iBreakSet').value) || 60; 
+    runT(); 
+}
 
     function adjustFontSize(element) {
     if (!element || !element.parentElement) return;
@@ -601,19 +614,83 @@ function startBreak() {
     window.addEventListener('keydown', function(e) {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
         const key = e.key.toLowerCase(); 
-        if (e.code === 'Space') { e.preventDefault(); runT(); }
-        if (e.code === 'Escape') { if(confirm('Reset?')) resetCurrentMatch(); }
-        if(key === '1') recordVote(1,'sb',1); if(key === '2') recordVote(1,'sb',2); if(key === '3') recordVote(1,'sb',3);
-        if(key === 'q') recordVote(2,'sb',1); if(key === 'w') recordVote(2,'sb',2); if(key === 'e') recordVote(2,'sb',3);
-        if(key === 'a') recordVote(3,'sb',1); if(key === 's') recordVote(3,'sb',2); if(key === 'd') recordVote(3,'sb',3);
-        if(key === '7') recordVote(1,'sr',1); if(key === '8') recordVote(1,'sr',2); if(key === '9') recordVote(1,'sr',3);
-        if(key === 'u') recordVote(2,'sr',1); if(key === 'i') recordVote(2,'sr',2); if(key === 'o') recordVote(2,'sr',3);
-        if(key === 'j') recordVote(3,'sr',1); if(key === 'k') recordVote(3,'sr',2); if(key === 'l') recordVote(3,'sr',3);
-        if(key === 'z') recordVote(1,'sb', 0, true); if(key === 'x') recordVote(2,'sb', 0, true); if(key === 'c') recordVote(3,'sb', 0, true);
-        if(key === 'n') recordVote(1,'sr', 0, true); if(key === 'm') recordVote(2,'sr', 0, true); if(key === ',') recordVote(3,'sr', 0, true);
-        if(key === 'g') l('b'); if(key === 'h') l('r');
+
+        // --- TRỌNG TÀI 1 (J1) ---
+        if(key === 'x') recordVote(1,'sb',1); 
+        if(key === 'c') recordVote(1,'sb',2); 
+        if(key === 'v') recordVote(1,'sb',3);
+        if(key === 'z') recordVote(1,'sb', 0, true); // TECH Xanh
+        if(key === 'b') recordVote(1,'sr',1); 
+        if(key === 'n') recordVote(1,'sr',2); 
+        if(key === 'm') recordVote(1,'sr',3);
+        if(key === 'r') recordVote(1,'sr', 0, true); // TECH Đỏ
+
+        // --- TRỌNG TÀI 2 (J2) ---
+        if(key === 'q') recordVote(2,'sb',1); 
+        if(key === 'w') recordVote(2,'sb',2); 
+        if(key === 'e') recordVote(2,'sb',3);
+        if(key === 't') recordVote(2,'sb', 0, true); // TECH Xanh
+        if(key === 'u') recordVote(2,'sr',1); 
+        if(key === 'i') recordVote(2,'sr',2); 
+        if(key === 'o') recordVote(2,'sr',3);
+        if(key === 'y') recordVote(2,'sr', 0, true); // TECH Đỏ
+
+        // --- TRỌNG TÀI 3 (J3) ---
+        if(key === 'a') recordVote(3,'sb',1); 
+        if(key === 's') recordVote(3,'sb',2); 
+        if(key === 'd') recordVote(3,'sb',3);
+        if(key === 'f') recordVote(3,'sb', 0, true); // TECH Xanh
+        if(key === 'j') recordVote(3,'sr',1); 
+        if(key === 'k') recordVote(3,'sr',2); 
+        if(key === 'l') recordVote(3,'sr',3);
+        if(key === 'p') recordVote(3,'sr', 0, true); // TECH Đỏ
+
+        // --- HỆ THỐNG & LỖI ---
+        if(key === 'g') l('b'); // Lỗi Xanh
+        if(key === 'h') l('r'); // Lỗi Đỏ
+        if(e.code === 'Space') { e.preventDefault(); runT(); }
+        if(e.code === 'Escape') { if(confirm('Bạn có chắc muốn Reset trận đấu?')) resetCurrentMatch(); }
     }, true);
     up();
+function st(type, val) {
+        playSound('beep');
+        if(type === 'bt' || type === 'rt') {
+            // Xác định điểm gốc (3 nếu vừa đá đầu, 2 nếu vừa đá giáp)
+            let basePts = (type === 'bt') ? (bh > 0 ? 3 : 2) : (rh > 0 ? 3 : 2);
+
+            if (val > 0) {
+                // KHI NHẤN +TECH:
+                // Ô TECH cộng dồn đúng số điểm được nhân đôi (ví dụ 6 hoặc 4)
+                // Tổng điểm cộng thêm phần chênh lệch để thành x2
+                if(type === 'bt') { 
+                    bt += (basePts * 2); 
+                    sb += basePts; 
+                } else { 
+                    rt += (basePts * 2); 
+                    sr += basePts; 
+                }
+            } else {
+                // KHI NHẤN -TECH (Trừ điểm không hợp lệ):
+                // Trừ đúng số điểm đã nhân đôi trong ô TECH
+                // Trừ phần điểm thưởng trong tổng điểm, giữ lại điểm gốc ban đầu
+                if(type === 'bt') { 
+                    bt = Math.max(0, bt - (basePts * 2)); 
+                    sb = Math.max(0, sb - basePts); 
+                } else { 
+                    rt = Math.max(0, rt - (basePts * 2)); 
+                    sr = Math.max(0, sr - basePts); 
+                }
+            }
+        } 
+        // Giữ nguyên các nút bh, rh, ba, ra, bp, rp của bạn
+        else if(type==='bh'){ bh=Math.max(0,bh+val); sb=Math.max(0,sb+(val*3)); } 
+        else if(type==='rh'){ rh=Math.max(0,rh+val); sr=Math.max(0,sr+(val*3)); }
+        else if(type==='ba'){ ba=Math.max(0,ba+val); sb=Math.max(0,sb+(val*2)); } 
+        else if(type==='ra'){ ra=Math.max(0,ra+val); sr=Math.max(0,sr+(val*2)); }
+        else if(type==='bp'){ bp=Math.max(0,bp+val); sb=Math.max(0,sb+val); } 
+        else if(type==='rp'){ rp=Math.max(0,rp+val); sr=Math.max(0,sr+val); }
+        up();
+    }
 </script>
 </body>
 </html>
