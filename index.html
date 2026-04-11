@@ -652,45 +652,78 @@ function startBreak() {
         if(e.code === 'Escape') { if(confirm('Bạn có chắc muốn Reset trận đấu?')) resetCurrentMatch(); }
     }, true);
     up();
-function st(type, val) {
-        playSound('beep');
-        if(type === 'bt' || type === 'rt') {
-            // Xác định điểm gốc (3 nếu vừa đá đầu, 2 nếu vừa đá giáp)
-            let basePts = (type === 'bt') ? (bh > 0 ? 3 : 2) : (rh > 0 ? 3 : 2);
+var sb=0, sr=0, bh=0, ba=0, bp=0, bt=0, rh=0, ra=0, rp=0, rt=0, gb=0, gr=0;
+var lastPointSide = '';  // Lưu bên vừa ghi điểm ('blue' hoặc 'red')
+var lastPointValue = 0; // Lưu giá trị điểm gốc (2 hoặc 3) để nhân đôi
 
-            if (val > 0) {
-                // KHI NHẤN +TECH:
-                // Ô TECH cộng dồn đúng số điểm được nhân đôi (ví dụ 6 hoặc 4)
-                // Tổng điểm cộng thêm phần chênh lệch để thành x2
-                if(type === 'bt') { 
-                    bt += (basePts * 2); 
-                    sb += basePts; 
-                } else { 
-                    rt += (basePts * 2); 
-                    sr += basePts; 
-                }
-            } else {
-                // KHI NHẤN -TECH (Trừ điểm không hợp lệ):
-                // Trừ đúng số điểm đã nhân đôi trong ô TECH
-                // Trừ phần điểm thưởng trong tổng điểm, giữ lại điểm gốc ban đầu
-                if(type === 'bt') { 
-                    bt = Math.max(0, bt - (basePts * 2)); 
-                    sb = Math.max(0, sb - basePts); 
-                } else { 
-                    rt = Math.max(0, rt - (basePts * 2)); 
-                    sr = Math.max(0, sr - basePts); 
-                }
-            }
-        } 
-        // Giữ nguyên các nút bh, rh, ba, ra, bp, rp của bạn
-        else if(type==='bh'){ bh=Math.max(0,bh+val); sb=Math.max(0,sb+(val*3)); } 
-        else if(type==='rh'){ rh=Math.max(0,rh+val); sr=Math.max(0,sr+(val*3)); }
-        else if(type==='ba'){ ba=Math.max(0,ba+val); sb=Math.max(0,sb+(val*2)); } 
-        else if(type==='ra'){ ra=Math.max(0,ra+val); sr=Math.max(0,sr+(val*2)); }
-        else if(type==='bp'){ bp=Math.max(0,bp+val); sb=Math.max(0,sb+val); } 
-        else if(type==='rp'){ rp=Math.max(0,rp+val); sr=Math.max(0,sr+val); }
-        up();
+function ch(side, p){
+    playSound('beep');
+    if(side==='sb'){
+        sb=Math.max(0,sb+p);
+        if(p===1) bp=Math.max(0,bp+1);
+        else if(p===2) { 
+            ba=Math.max(0,ba+1); 
+            lastPointSide='blue'; lastPointValue=2; // Nhớ đòn Armor Xanh
+        }
+        else if(p===3) { 
+            bh=Math.max(0,bh+1); 
+            lastPointSide='blue'; lastPointValue=3; // Nhớ đòn Head Xanh
+        }
+        else if(p < 0) { lastPointValue = 0; } // Nếu bấm trừ điểm thì reset bộ nhớ
+    } else {
+        sr=Math.max(0,sr+p);
+        if(p===1) rp=Math.max(0,rp+1);
+        else if(p===2) { 
+            ra=Math.max(0,ra+1); 
+            lastPointSide='red'; lastPointValue=2; // Nhớ đòn Armor Đỏ
+        }
+        else if(p===3) { 
+            rh=Math.max(0,rh+1); 
+            lastPointSide='red'; lastPointValue=3; // Nhớ đòn Head Đỏ
+        }
+        else if(p < 0) { lastPointValue = 0; }
     }
+    up();
+}
+
+function st(type, val) {
+    playSound('beep');
+    let isBlue = (type === 'bt');
+    let currentSide = isBlue ? 'blue' : 'red';
+
+    if (val > 0) { // NÚT CỘNG TECH
+        // Kiểm tra xem đòn vừa bấm có phải của bên này không và có phải đòn 2đ/3đ không
+        if (lastPointSide === currentSide && lastPointValue >= 2) {
+            let techAdd = lastPointValue; 
+            if (isBlue) {
+                sb += techAdd;        // Tổng cộng thêm phần kỹ thuật (ví dụ 3đ)
+                bt += (techAdd * 2);  // Ô Tech cộng dồn điểm đã nhân đôi (ví dụ 6đ)
+            } else {
+                sr += techAdd;
+                rt += (techAdd * 2);
+            }
+            addLog(`+TECH (x2 đòn ${techAdd}đ) cho ${currentSide.toUpperCase()}`, 'log-success');
+            lastPointValue = 0; // Reset bộ nhớ sau khi đã nhân đôi xong đòn đó
+        } else {
+            addLog(`Cảnh báo: Phải bấm điểm Armor/Head trước khi bấm Tech!`, 'log-red');
+        }
+    } 
+    else { // NÚT TRỪ TECH (Bấm khi xác định không có kỹ thuật)
+        if (isBlue && bt > 0) {
+            // Tự suy luận đòn Tech gần nhất là 2 hay 3 dựa trên số dư ô Tech
+            let techToSub = (bt % 6 === 0 && bt > 0) ? 3 : 2; 
+            sb = Math.max(0, sb - techToSub);
+            bt = Math.max(0, bt - (techToSub * 2));
+            addLog(`-TECH: Trả về điểm thường cho XANH`, 'log-red');
+        } else if (!isBlue && rt > 0) {
+            let techToSub = (rt % 6 === 0 && rt > 0) ? 3 : 2;
+            sr = Math.max(0, sr - techToSub);
+            rt = Math.max(0, rt - (techToSub * 2));
+            addLog(`-TECH: Trả về điểm thường cho ĐỎ`, 'log-red');
+        }
+    }
+    up();
+}
 </script>
 </body>
 </html>
