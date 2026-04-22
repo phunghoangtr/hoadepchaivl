@@ -5,33 +5,118 @@
     <title>HUSI_Scoreboard_TKD_International_Layout</title>
     <style>
         :root {
-            --blue-main: #0055ff; --red-main: #ff1100; --gold: #ffcc00;
+            --blue-main: #0055ff; --red-main: #FF2400; --gold: #ffcc00;
             --bg-dark: #000; --panel-bg: #1a1a1a; --vn-red: #da251d;
             --highlight-yellow: #ffff00;
             --kyeshi-orange: #ff6600; 
         }
         body { background: var(--bg-dark); color: #fff; font-family: "Segoe UI", sans-serif; margin: 0; text-align: center; overflow-y: auto; }
-        #display-area { height: 95vh; display: flex; background: #000; position: relative; gap: 0; padding: 0; box-sizing: border-box; border: 10px solid #333; outline: 3px solid var(--gold); }
+        #display-area { 
+    height: 100vh; /* Full màn hình luôn */
+    display: flex; 
+    background: #000; 
+    position: relative; 
+    gap: 0; 
+    padding: 0; 
+    margin: 0;
+    box-sizing: border-box; 
+    border: none !important; /* XÓA CÁI NÀY - Chính nó làm hở đáy */
+    outline: 5px solid var(--gold); /* Dùng outline để viền vàng vẫn còn mà không chiếm chỗ */
+    outline-offset: -5px;
+    overflow: hidden;
+}
+.bottom-stats {
+    position: absolute;
+    bottom: 0 !important; /* Ép sát đáy */
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 140px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    margin: 0;
+    border: none !important;
+}
+
+/* Đổ màu full không khe hở */
+.red .bottom-stats { background: linear-gradient(to right, #EE0000); }
+.blue .bottom-stats { background: linear-gradient(to left, #000080); }
+/* Thiết lập cho thanh dọc bên Đỏ */
+.side.red {
+    position: relative;
+    padding-left: 140px !important; /* Tạo không gian cho thanh dọc */
+}
+
+.side.red::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 140px;
+    /* Dùng dải màu y hệt thanh ngang để khi chạm nhau nó biến mất vết nối */
+    background: linear-gradient(to right, #EE0000);
+    z-index: 5; /* Nằm dưới thanh Tên và thanh Stats để bị che vết nối */
+}
+
+/* Thiết lập cho thanh dọc bên Xanh */
+.side.blue {
+    position: relative;
+    padding-right: 140px !important;
+}
+
+.side.blue::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 140px;
+    background: linear-gradient(to left, #000080);
+    z-index: 5;
+}
+
+/* Đảm bảo thanh Tên và thanh Stats nằm ĐÈ lên thanh dọc để giấu vết nối */
+.red-side-name, .blue-side-name, .bottom-stats {
+    z-index: 10 !important;
+    border: none !important; /* Xóa sạch viền trắng gây chia cắt */
+}
+/* Ép đổi màu nền chính khi đảo bên */
+.side.red.swapped-to-blue { background-color: var(--blue-main) !important; }
+.side.blue.swapped-to-red { background-color: var(--red-main) !important; }
+
+/* Ép đổi màu thanh dọc (Before/After) */
+.side.red.swapped-to-blue::before { background: linear-gradient(to right, #000080) !important; }
+.side.blue.swapped-to-red::after { background: linear-gradient(to left, #EE0000) !important; }
+
+/* Ép đổi màu thanh ngang (Tên và Stats) */
+.side.red.swapped-to-blue .red-side-name, 
+.side.red.swapped-to-blue .bottom-stats { background: linear-gradient(to right, #000080, #0044cc) !important; }
+
+.side.blue.swapped-to-red .blue-side-name, 
+.side.blue.swapped-to-red .bottom-stats { background: linear-gradient(to left, #EE0000, #cc0000) !important; }
         
-        .judge-vertical { position: absolute; top: 260px; display: flex; flex-direction: column; gap: 12px; z-index: 100; }
+        .judge-vertical { position: absolute; top: 280px; display: flex; flex-direction: column; gap: 25px; z-index: 100; }
         #lights-red { left: 20px; } 
         #lights-blue { right: 20px; } 
 
         .j-group { display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
         .j-label-small { font-size: 10px; color: #444; font-weight: bold; margin-bottom: 2px; }
-        .j-box { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.1); transition: 0.1s; }
+        .j-box { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.1); transition: 0.1s; }
         .j-box.active-b, .j-box.active-r { background: #ffffff !important; color: #000 !important; box-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff; opacity: 1 !important; border-color: #fff !important; }
 
-        .top-bar { position: absolute; top: 0; left: 0; width: 100%; height: 140px; display: flex; z-index: 20; }
+        .top-bar { position: absolute; top: 0; left: 0; width: 100%; height: 130px; display: flex; z-index: 20; }
         .name-wrapper { flex: 1; height: 100%; display: flex; align-items: center; position: relative; overflow: hidden; transition: background 0.3s; }
         .name-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 115px; box-sizing: border-box; overflow: hidden; }
-        .name-wrapper span { font-size: 55px; font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
+        .name-wrapper span { font-size: 30px; font-weight: 700; text-transform: uppercase; white-space: nowrap; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); display: inline-block; }
         
-        .red-side-name { background: linear-gradient(to right, #800000, #cc0000); border-bottom: 2px solid rgba(255,255,255,0.2); }
+        .red-side-name { background: linear-gradient(to right, #EE0000, #cc0000); border-bottom: 2px solid rgba(255,255,255,0.2); }
         .blue-side-name { background: linear-gradient(to left, #000080, #0044cc); border-bottom: 2px solid rgba(255,255,255,0.2); }
-        
-        .flag-vn { width: 130px; height: 85px; background-color: var(--vn-red); border: 3px solid #fff; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: absolute; top: 25px; }
-        .flag-vn::before { content: "★"; color: #ffff00; font-size: 65px; line-height: 1; margin-top: -3px; }
+        .flag-vn { width: 140px; height: 100px; background-color: var(--vn-red); border: 3px solid #fff; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: absolute; top: 10px; }
+        .flag-vn::before { content: "★"; color: #ffff00; font-size: 70px; line-height: 1; margin-top: -7px; }
         .red-side-name .flag-vn { left: 10px; }
         .blue-side-name .flag-vn { right: 10px; }
 
@@ -43,40 +128,132 @@
 
         .score-big { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; font-size: 25vw; line-height: 0.7; margin-top: 30px; z-index: 5; display: inline-block; text-align: center; transition: all 0.3s ease; }
         
-        .win-tracker { position: absolute; top: 155px; display: flex; gap: 10px; z-index: 10; }
-        #tracker-red { right: 20px; }
+        .win-tracker { position: absolute; top: 250px; display: flex; gap: 10px; z-index: 10; }
+        #tracker-red { 
+    right: 20px; 
+    flex-direction: row-reverse; /* Đảo ngược thứ tự các dấu chấm bên trong */
+}
         #tracker-blue { left: 20px; }
 
-        .win-dot { width: 35px; height: 35px; border-radius: 50%; border: 3px solid #fff; background: rgba(255,255,255,0.1); }
+        .win-dot { width: 35px; height: 35px; border-radius: 50%; border: 0px solid #fff; background: none; }
         .win-dot.active { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 15px var(--gold); }
-        .bottom-stats { position: absolute; bottom: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; transition: opacity 0.3s; }
-        .gj-big { font-size: 37px; color: var(--gold); border: 3px solid var(--gold); padding: 5px 20px; border-radius: 10px; background: rgba(0,0,0,0.8); font-weight: 900; }
-        .stats-row { display: flex; gap: 8px; }
-        .stat-item { background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; border-bottom: 3px solid var(--gold); min-width: 70px; }
-        .stat-label { font-size: 10px; display: block; color: var(--gold); font-weight: bold; }
-        .stat-val { font-size: 20px; font-weight: 900; }
+        /* Xóa hoặc sửa .gj-big cũ thành: */
+.stats-row { 
+    display: flex; 
+    gap: 10px; 
+    width: 95%; /* Mở rộng chiều ngang để chứa 5 ô */
+    justify-content: center;
+}
 
-        .break-stats-overlay { position: absolute; top: 160px; font-size: 40px; font-weight: 900; display: none; flex-direction: column; gap: 5px; z-index: 15; opacity: 0.9; }
-        .red .break-stats-overlay { left: 10px; text-align: left; }
-        .blue .break-stats-overlay { right: 10px; text-align: right; }
+.stat-item { 
+    display: flex;
+    flex-direction: column; /* Chữ trên, số dưới */
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+    /* Bỏ background và border cũ */
+    background: none !important; 
+    border: none !important; 
+}
+
+.stat-label { 
+    font-family: "Arial", Gadget, sans-serif; /* Đổi font dày và mạnh mẽ hơn */
+    font-size: 15px; 
+    color: var(--gold); 
+    font-weight: 400; 
+    margin-bottom: 5px; 
+}
+
+.stat-val { 
+    font-family: "Arial", sans-serif; /* Font dạng số nén thường dùng trong thể thao */
+    font-size: 40px; 
+    font-weight: 400; 
+    display: inline-block;
+    line-height: 1;
+}
+/* Tìm và thay thế đoạn này để số thành màu trắng và to hơn */
+.gj-item .stat-val {
+    font-size: 100px !important;
+    color: #ffffff !important;
+    border-bottom: 0px solid #ff3300 !important;
+    min-width: 100px !important;
+    line-height: 0.8;
+    display: inline-block;
+    font-weight: 400;
+    /* THÊM DÒNG NÀY */
+    margin-top: 5px !important; 
+}
+
+/* Đổi luôn chữ GAM-JEOM thành màu trắng nếu bạn muốn */
+.gj-item .stat-label {
+    font-size: 25px !important;
+    color: #ffffff !important;      /* CHỮ CŨNG MÀU TRẮNG */
+    margin-bottom: 4px;
+}
+/* Bên Đỏ nằm sát lề trái */
+#red-side .gj-item {
+    left: 20px;
+    text-align: left;
+}
+
+/* Bên Xanh nằm sát lề phải */
+#blue-side .gj-item {
+    right: 20px;
+    text-align: right;
+}
+
+
+        .break-stats-overlay { position: absolute; top: 220px; font-size: 55px; font-weight: 900; display: none; flex-direction: column; gap: 5px; z-index: 15; opacity: 0.9; }
+        .red .break-stats-overlay { left: 150px; text-align: left; }
+        .blue .break-stats-overlay { right: 150px; text-align: right; }
         .br-row { display: flex; gap: 15px; justify-content: flex-end; }
         .red .br-row { justify-content: flex-start; }
 
-        .is-break-active .break-stats-overlay { display: flex; }
-        .is-break-active .score-big { font-size: 28vw !important; margin-top: 50px !important; }
-        .is-break-active .judge-vertical, .is-break-active .bottom-stats { display: none !important; }
+        .is-break-active .gj-item, 
+.is-break-active .stats-grid {
+    display: none !important;
+}
+
+/* Ép các ô ưu thế biến mất nếu nó nằm lẻ tẻ */
+.is-break-active .stat-item {
+    display: none !important;
+}
+
+/* ĐẢM BẢO giữ lại R1, R2, R3 (Vì chúng nằm trong class khác) */
+.is-break-active .break-stats-overlay, 
+.is-break-active .br-row, 
+.is-break-active .br-label {
+    display: flex !important;
+    visibility: visible !important;
+}
+        .is-break-active .score-big { font-size: 20vw !important; margin-top: 230px !important; } số lớn
+        .is-break-active .judge-vertical { display: none !important; }
         
         .center-column { width: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 50px; align-items: center; background: #000; z-index: 10; }
-        .time-txt { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 550; font-size: 160px; letter-spacing: 5px; font-variant-numeric: tabular-nums; width: 100%; height: 170px; line-height: 200px; padding-bottom: 10px; border: 5px solid #fff; margin: -2px auto; display: flex; align-items: center; justify-content: center; box-sizing: border-box; transition: all 0.1s; }
+        .time-txt { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 550; font-size: 160px; letter-spacing: 5px; font-variant-numeric: tabular-nums; width: 100%; height: 170px; line-height: 200px; padding-bottom: 10px; border: 5px solid #fff; margin: 90px auto; display: flex; align-items: center; justify-content: center; box-sizing: border-box; transition: all 0.1s; }
         .t-run { color: #fff; background: transparent; border-color: #fff; } 
         .t-stop, .t-break { color: #000; background-color: var(--highlight-yellow); border-color: var(--highlight-yellow); }
-        #vTK { display: none; margin-top: 10px; border: 3px solid #fff; padding: 5px 20px; border-radius: 15px; background: rgba(0,0,0,0.9); }
-        .tk-label { font-size: 20px; color: #aaa; display: block; font-weight: bold; margin-bottom: -5px; }
-        .tk-time { font-size: 90px; color: #fff; font-family: monospace; font-weight: 900; line-height: 1; }
-        .btn-kyeshi { background: #fff; color: #000; padding: 12px 0; font-size: 18px; width: 100%; border-radius: 8px; border: 2px solid #fff; cursor: pointer; font-weight: bold; margin-top: 5px; }
-        .match-display { color: #fff; font-size: 50px; font-weight: 900; margin-top: 20px; display: flex; flex-direction: column; }
-        #vMT { font-size: 130px; line-height: 1.1; color: var(--gold); text-shadow: 0 0 20px rgba(255, 204, 0, 0.5); }
-        .round-box { font-size: 45px; font-weight: 900; color: #fff; margin-bottom: 7px; min-height: 70px; white-space: nowrap; width: 100%; text-align: center; }
+#vTK { 
+    display: none; 
+    position: absolute;    /* Chuyển sang dạng nổi */
+    top: 67%;              /* Đè lên vị trí đồng hồ chính */
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    z-index: 1000;         /* Luôn nằm trên cùng */
+    border: 0px solid #fff; 
+    padding: 8px 35px; 
+    border-radius: 20px; 
+    background: #000;      /* Nền đen để che phần bên dưới khi hiện y tế */
+    box-shadow: 0 0 0px rgba(0,0,0,1);
+}
+        .tk-label { font-size: 15px; color: #aaa; display: block; font-weight: bold; margin-bottom: -5px; }
+        .tk-time { font-size: 90px; color: #fff; font-family: "Arial Unicode MS", "Arial" ; font-weight: 700; line-height: 1; }
+        .btn-kyeshi { background: #fff; color: #000; padding: 12px 0; font-size: 18px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 5px; }
+        .match-display { color: #fff; font-size: 50px; font-weight: 800; margin-top: 30px; display: flex; flex-direction: column; }
+        #vMT { font-size: 130px; line-height: 1.1; color: var(--gold); font-weight: 0; text-shadow: 0 0 20px rgba(255, 204, 0, 0.5); transform: scaleY(1.3); /* Kéo số cao thêm 30% nữa theo chiều dọc */
+    color: #fff ;  font-family: "Arial Unicode MS", "Arial", sans-serif; }
+        .round-box { font-size: 52px; font-weight: 800; color: #fff; margin-bottom: -60px; min-height: 70px; white-space: nowrap; width: 100%; text-align: center; }
 
         #control-area { min-height: 35vh; background: var(--panel-bg); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding: 20px; border-top: 5px solid #444; }
         .col { display: flex; flex-direction: column; gap: 8px; justify-content: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; }
@@ -106,6 +283,32 @@
         #settings-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; border: 2px solid var(--gold); padding: 20px; z-index: 1000; border-radius: 15px; width: 350px;}
         .setting-row { margin: 10px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
         .btn-time-adj { background: #555; border: 1px solid #fff; padding: 10px; font-size: 16px; flex: 1; }
+		/* Dải băng đen hiển thị tên giải đấu */
+#tournament-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px; 
+    background: #000;
+    /* --- CHỈNH SỬA TẠI ĐÂY --- */
+    color: #fff;          /* Đổi màu chữ (Ví dụ: #ffff00 là màu vàng tươi) */
+    font-size: 40px;         /* Tăng kích cỡ chữ (Gốc là 24px) */
+    /* ------------------------- */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 30; 
+    border-bottom: 0px solid var(--gold);
+    letter-spacing: 2px;
+}
+
+/* Đẩy thanh tên VĐV xuống dưới dải băng đen */
+.top-bar {
+    top: 100px !important; 
+}
     </style>
 </head>
 <body>
@@ -127,6 +330,7 @@
 </div>
 
 <div id="display-area">
+<div id="tournament-header" id="vTournamentName">GIẢI TAEKWONDO ĐÀ LẠT 2026</div>
     <div class="judge-vertical" id="lights-red">
         <div class="j-group"><div class="j-label-small">J1</div><div id="jr1_1" class="j-box">1</div><div id="jr1_2" class="j-box">2</div><div id="jr1_3" class="j-box">3</div></div>
         <div class="j-group"><div class="j-label-small">J2</div><div id="jr2_1" class="j-box">1</div><div id="jr2_2" class="j-box">2</div><div id="jr2_3" class="j-box">3</div></div>
@@ -151,15 +355,17 @@
         </div>
         <div class="win-tracker" id="tracker-red"><div id="rw1" class="win-dot"></div><div id="rw2" class="win-dot"></div></div>
         <div class="score-big" id="vSR">0</div>
-        <div class="bottom-stats">
-            <div class="gj-big" id="vGR">GAM-JEOM: 0</div>
-            <div class="stats-row">
-                <div class="stat-item"><span class="stat-label">TECH</span><span class="stat-val" id="vRT">0</span></div>
-                <div class="stat-item"><span class="stat-label">HEAD</span><span class="stat-val" id="vRH">0</span></div>
-                <div class="stat-item"><span class="stat-label">ARMOR</span><span class="stat-val" id="vRA">0</span></div>
-                <div class="stat-item"><span class="stat-label">PUNCH</span><span class="stat-val" id="vRP">0</span></div>
-            </div>
-        </div>
+       <div class="bottom-stats">
+    <div class="stats-row">
+        <div class="stat-item gj-item" style="flex: 1.5;"> 
+            <span class="stat-label">GAM JEOM</span>
+            <span class="stat-val" id="vGR">0</span> </div>
+        <div class="stat-item"><span class="stat-label">TECH</span><span class="stat-val" id="vRT">0</span></div>
+        <div class="stat-item"><span class="stat-label">HEAD</span><span class="stat-val" id="vRH">0</span></div>
+        <div class="stat-item"><span class="stat-label">ARMOR</span><span class="stat-val" id="vRA">0</span></div>
+        <div class="stat-item"><span class="stat-label">PUNCH</span><span class="stat-val" id="vRP">0</span></div>
+    </div>
+</div>
     </div>
 
     <div class="center-column">
@@ -180,15 +386,19 @@
         </div>
         <div class="win-tracker" id="tracker-blue"><div id="bw1" class="win-dot"></div><div id="bw2" class="win-dot"></div></div>
         <div class="score-big" id="vSB">0</div>
-        <div class="bottom-stats">
-            <div class="gj-big" id="vGB">GAM-JEOM: 0</div>
-            <div class="stats-row">
-                <div class="stat-item"><span class="stat-label">TECH</span><span class="stat-val" id="vBT">0</span></div>
-                <div class="stat-item"><span class="stat-label">HEAD</span><span class="stat-val" id="vBH">0</span></div>
-                <div class="stat-item"><span class="stat-label">ARMOR</span><span class="stat-val" id="vBA">0</span></div>
-                <div class="stat-item"><span class="stat-label">PUNCH</span><span class="stat-val" id="vBP">0</span></div>
-            </div>
-        </div>
+<div class="bottom-stats">
+    <div class="stats-row">
+        <div class="stat-item"><span class="stat-label">TECH</span><span class="stat-val" id="vBT">0</span></div>
+        <div class="stat-item"><span class="stat-label">HEAD</span><span class="stat-val" id="vBH">0</span></div>
+        <div class="stat-item"><span class="stat-label">ARMOR</span><span class="stat-val" id="vBA">0</span></div>
+        <div class="stat-item"><span class="stat-label">PUNCH</span><span class="stat-val" id="vBP">0</span></div>
+        <div class="stat-item gj-item" style="flex: 1.5;"> 
+            <span class="stat-label">GAM JEOM</span>
+            <span class="stat-val" id="vGB">0</span> </div>
+    </div>
+</div>
+</div>
+</div>
     </div>
 </div>
 
@@ -234,7 +444,7 @@
             <button class="btn-s" onclick="mo()" style="background:#6200ea">MỞ DISPLAY</button>
             <button class="btn-s" onclick="resetCurrentMatch()" style="background:#d32f2f">RESET [Esc]</button>
         </div>
-        <button onclick="loadNextMatch()" style="background: #ffcc00; color: #000; padding: 15px 0; font-size: 18px; width: 100%; border-radius: 8px;">⚡ NẠP TRẬN TIẾP THEO</button>
+        <button onclick="loadNextMatch()" style="background: #ffcc00; color: #000; padding: 15px 0; font-size: 18px; width: 100%; border-radius: 8px;">⚡ TRẬN TIẾP THEO</button>
         <button class="btn-kyeshi" onclick="toggleKyeshi()">🚑 KYE-SHI (Y TẾ)</button>
     </div>
 
@@ -281,6 +491,11 @@
     <div id="match-list-footer">
         <textarea id="matchListData" placeholder="Số trận | VĐV Xanh | VĐV Đỏ">Số trận | VĐV Xanh | VĐV Đỏ</textarea>
     </div>
+	<div class="col" style="grid-column: span 3; background: #222; margin-bottom: 10px;">
+    <div class="row">
+        <span style="color:var(--gold); font-weight:bold; margin-right:10px;">TÊN GIẢI:</span>
+        <input type="text" id="iTournament" value="GIẢI TAEKWONDO ĐÀ LẠT 2026" oninput="up()" style="flex:1; font-weight:bold; color:var(--gold);">
+    </div>
 </div>
 
 <script>
@@ -323,7 +538,7 @@
             addLog(`J${judgeId} bấm ${sideTxt}: ${points}đ`, sideClass);
             const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
             const lightEl = document.getElementById(lightId);
-            if (lightEl) { lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r'); setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1500); }
+            if (lightEl) { lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r'); setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1200); }
         }
 
         pendingVotes.push({ judgeId, side, points, isTech, time: now, processedScore: false, processedTech: false });
@@ -439,23 +654,35 @@ function startBreak() {
 
     // Xử lý thông báo xác nhận
     if (winner === "draw") {
-        // TRƯỜNG HỢP HÒA TUYỆT ĐỐI: Ép buộc chọn 1 trong 2
-        if (confirm("HIỆP HÒA TUYỆT ĐỐI!\nNhấn OK để chọn XANH thắng ưu thế.\nNhấn CANCEL để chọn ĐỎ thắng ưu thế.")) {
-            winner = "blue";
-            reason = "HÒA TUYỆT ĐỐI - XANH THẮNG ƯU THẾ";
+        // Cập nhật: Cho phép chọn Sửa điểm hoặc chọn bên thắng ưu thế
+        let drawChoice = confirm("HIỆP HÒA TUYỆT ĐỐI!\n\n- Nhấn OK: Để chọn bên thắng ưu thế (Xanh/Đỏ).\n- Nhấn CANCEL: Để QUAY LẠI SỬA ĐIỂM.");
+        
+        if (!drawChoice) {
+            // Nếu nhấn Cancel thì quay lại màn hình cho sửa điểm
+            isLock = false;
+            running = false;
+            up();
+            addLog("HÒA: ĐÃ HỦY ĐỂ SỬA ĐIỂM", "log-red");
+            return; 
         } else {
-            winner = "red";
-            reason = "HÒA TUYỆT ĐỐI - ĐỎ THẮNG ƯU THẾ";
+            // Nếu nhấn OK thì mới bắt đầu chọn bên thắng
+            if (confirm("CHỌN BÊN THẮNG ƯU THẾ:\nNhấn OK cho XANH thắng.\nNhấn CANCEL cho ĐỎ thắng.")) {
+                winner = "blue";
+                reason = "HÒA TUYỆT ĐỐI - XANH THẮNG ƯU THẾ";
+            } else {
+                winner = "red";
+                reason = "HÒA TUYỆT ĐỐI - ĐỎ THẮNG ƯU THẾ";
+            }
         }
     } else {
-        // TRƯỜNG HỢP CÓ KẾT QUẢ RÕ RÀNG: Hỏi để xác nhận hoặc sửa điểm
+        // TRƯỜNG HỢP CÓ KẾT QUẢ RÕ RÀNG (Vẫn giữ nguyên như cũ)
         if (!confirm("XÁC NHẬN KẾT QUẢ: " + reason + "\n\n(Bấm CANCEL nếu muốn sửa điểm hoặc đánh tiếp)")) {
             isLock = false;
             running = false;
             if (time < 0) time = 0; 
             up();
             addLog("ĐÃ HUỶ CHỐT: MỜI SỬA ĐIỂM HOẶC BẤM SPACE ĐÁNH TIẾP", "log-red");
-            return; // Thoát ra để người dùng sửa điểm
+            return;
         }
     }
 
@@ -471,16 +698,23 @@ function startBreak() {
     up();
 
     // Kiểm tra kết thúc trận
-    if (wb >= 2 || wr >= 2) { 
-        setTimeout(() => { alert("TRẬN ĐẤU KẾT THÚC!"); loadNextMatch(); }, 300); 
+if (wb >= 2 || wr >= 2) { 
+        isBreak = true; // Ép trạng thái hiện tỉ số hiệp (2-0, 2-1)
+        running = false;
+        clearInterval(tm);
+        up(); // Cập nhật để hiện số hiệp thắng to giữa màn hình
+        
+        addLog(`TRẬN ĐẤU KẾT THÚC! TỈ SỐ: ${wr}-${wb}`, 'log-success');
+        
+        // Không dùng alert hay loadNextMatch tự động nữa
+        // Để nguyên cho khán giả xem, khi nào bạn nhấn "NẠP TRẬN TIẾP THEO" thì mới nhảy
         return; 
     }
 
-    // Chạy thời gian nghỉ
+    // Nếu chưa kết thúc trận thì mới chạy thời gian nghỉ hiệp như bình thường
     isBreak = true; 
     time = parseInt(document.getElementById('iBreakSet').value) || 60; 
-    runT(); 
-}
+    runT();}
 
     function adjustFontSize(element) {
     if (!element || !element.parentElement) return;
@@ -513,8 +747,8 @@ function startBreak() {
             }
         } else { displayArea.classList.remove('is-break-active'); uv('vSB', sb); uv('vSR', sr); }
 
-        document.querySelectorAll('#vGB').forEach(e => e.innerText = "GAM-JEOM: " + gb);
-        document.querySelectorAll('#vGR').forEach(e => e.innerText = "GAM-JEOM: " + gr);
+        document.querySelectorAll('#vGB').forEach(e => e.innerText = gb);
+        document.querySelectorAll('#vGR').forEach(e => e.innerText = gr);
         uv('vBT',bt); uv('vBH',bh); uv('vBA',ba); uv('vBP',bp); uv('vRT',rt); uv('vRH',rh); uv('vRA',ra); uv('vRP',rp); uv('vMT',document.getElementById('iMT').value||1); 
         const nameB = document.getElementById('iB').value, nameR = document.getElementById('iR').value; 
         document.querySelectorAll('#vNB').forEach(e => { e.innerText = nameB; adjustFontSize(e); }); 
@@ -524,6 +758,9 @@ function startBreak() {
         document.querySelectorAll('#bw2').forEach(e=>e.className=wb>=2?"win-dot active":"win-dot"); 
         document.querySelectorAll('#rw1').forEach(e=>e.className=wr>=1?"win-dot active":"win-dot"); 
         document.querySelectorAll('#rw2').forEach(e=>e.className=wr>=2?"win-dot active":"win-dot"); 
+		const tournamentName = document.getElementById('iTournament').value;
+        document.querySelectorAll('#tournament-header').forEach(e => {
+    e.innerText = tournamentName;  });
         
         let m = Math.floor(time / 60), s = Math.floor(time % 60); let str;
         if (time === -99) str = "PTG"; else if (time === -88) str = "PUN";
@@ -610,7 +847,6 @@ function startBreak() {
         document.querySelector('.side.red').classList.toggle('swapped-to-blue'); document.querySelector('.side.blue').classList.toggle('swapped-to-red');
         addLog("🔄 ĐÃ ĐẢO TOÀN BỘ", "log-success"); up();
     }
-
     window.addEventListener('keydown', function(e) {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
         const key = e.key.toLowerCase(); 
