@@ -262,8 +262,16 @@
         button { cursor: pointer; border: none; border-radius: 8px; font-weight: bold; color: #fff; text-transform: uppercase; transition: 0.1s; }
         .btn-m { background: #28a745; font-size: 35px; height: 100px; width: 100%; border: 4px solid #fff; }
         .btn-m.stopped { background: #ff6600 !important; }
-        .btn-b { background: var(--blue-main); flex: 1; padding: 12px 0; }
-        .btn-r { background: var(--red-main); flex: 1; padding: 12px 0; }
+        .btn-b { background: #333 !important; /* Đưa về màu xám trung tính */
+    flex: 1; 
+    padding: 12px 0; 
+    border: 2px solid #555 !important;
+} 
+        .btn-r { background: #333 !important; /* Đưa về màu xám trung tính */
+    flex: 1; 
+    padding: 12px 0; 
+    border: 2px solid #555 !important;
+} 
         .btn-s { background: #444; flex: 1; font-size: 13px; padding: 10px 0; }
         .btn-st { background: #333; font-size: 11px; padding: 5px; border: 1px solid #666; flex: 1; }
         .btn-sub { background: #222; border: 1px solid #555; font-size: 14px; padding: 5px 0; flex: 1; }
@@ -308,6 +316,16 @@
 /* Đẩy thanh tên VĐV xuống dưới dải băng đen */
 .top-bar {
     top: 100px !important; 
+}
+/* Hiệu ứng chớp: (Nền Vàng - Chữ Đen) sang (Nền Đen - Chữ Trắng) */
+@keyframes blink-custom {
+    0% { background-color: var(--highlight-yellow); color: #000; }
+    50% { background-color: #000; color: #fff; } 
+    100% { background-color: var(--highlight-yellow); color: #000; }
+}
+
+.t-blink {
+    animation: blink-custom 0.5s infinite;
 }
     </style>
 </head>
@@ -501,16 +519,41 @@
 <script>
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(t) {
-        if (audioCtx.state==='suspended') audioCtx.resume();
-        const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
-        if(t==='beep'){o.type='sine'; o.frequency.setValueAtTime(880,audioCtx.currentTime); g.gain.setValueAtTime(0.1,audioCtx.currentTime); o.start(); o.stop(audioCtx.currentTime+0.1);}
-        else if(t==='buzzer'){o.type='sawtooth'; o.frequency.setValueAtTime(150,audioCtx.currentTime); g.gain.setValueAtTime(0.3,audioCtx.currentTime); o.start(); o.stop(audioCtx.currentTime+2);}
+    // Nếu là tiếng 'beep' (tiếng tít), chỉ cho phép kêu khi bấm nút Lỗi (hàm l() gọi)
+    // Nếu các hàm cộng điểm gọi, nó sẽ bị chặn lại
+    if (t === 'beep') {
+        const stack = new Error().stack;
+        // Kiểm tra xem có phải hàm cộng lỗi l(s) đang gọi không
+        if (!stack.includes('at l ') && !stack.includes('at l(')) {
+            return; // Nếu không phải hàm lỗi gọi thì im lặng
+        }
     }
+
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let o = audioCtx.createOscillator();
+    let g = audioCtx.createGain();
+    o.connect(g);
+    g.connect(audioCtx.destination);
+
+    if (t === 'beep') {
+        o.type = 'sine';
+        o.frequency.setValueAtTime(880, audioCtx.currentTime);
+        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        o.start();
+        o.stop(audioCtx.currentTime + 0.1);
+    } else if (t === 'buzzer') {
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(150, audioCtx.currentTime);
+        g.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        o.start();
+        o.stop(audioCtx.currentTime + 0.8); // Tiếng còi dài 1 giây
+    }
+}
 
     var sb=0, sr=0, gb=0, gr=0, wb=0, wr=0, running=false, isBreak=false, tm, vW;
     var bt=0, bh=0, ba=0, bp=0, rt=0, rh=0, ra=0, rp=0;
     var kyeshiTime = 60, kyeshiRunning = false, kyeshiTm;
-    const JUDGE_WINDOW = 1500;
+    const JUDGE_WINDOW = 1200;
     let pendingVotes = [];
     var roundHistory = {}; 
     let isLock = false; 
@@ -766,12 +809,30 @@ if (wb >= 2 || wr >= 2) {
         if (time === -99) str = "PTG"; else if (time === -88) str = "PUN";
         else if (time >= 10.0) str = m + ":" + (s < 10 ? "0" : "") + Math.floor(s); else if (time > 0) str = time.toFixed(2); else str = "0:00"; 
         
-        document.querySelectorAll('#vTD').forEach(e => {
-            e.innerText = str; e.className = "time-txt " + (isBreak ? "t-break" : (!running ? "t-stop" : "t-run"));
-            if (str === "PTG" || str === "PUN") {
-                e.style.setProperty("color", "var(--highlight-yellow)", "important"); e.style.setProperty("background-color", "#000", "important"); e.style.setProperty("border-color", "var(--highlight-yellow)", "important");
-            } else { e.style.removeProperty("color"); e.style.removeProperty("background-color"); e.style.removeProperty("border-color"); }
-        });
+document.querySelectorAll('#vTD').forEach(e => {
+    e.innerText = str;
+    
+    // 1. Xác định class trạng thái cơ bản
+    let stateClass = !running ? "t-stop" : (isBreak ? "t-break" : "t-run");
+    
+    // 2. Kiểm tra điều kiện chớp: Đang chạy, không phải giờ nghỉ, thời gian từ 1-10 giây
+    if (running && !isBreak && time <= 10 && time > 0) {
+        e.className = "time-txt " + stateClass + " t-blink";
+    } else {
+        e.className = "time-txt " + stateClass;
+    }
+
+    // 3. Giữ nguyên xử lý màu đặc biệt cho PTG/PUN của mày
+    if (str === "PTG" || str === "PUN") {
+        e.style.setProperty("color", "var(--highlight-yellow)", "important"); 
+        e.style.setProperty("background-color", "#000", "important"); 
+        e.style.setProperty("border-color", "var(--highlight-yellow)", "important");
+    } else { 
+        e.style.removeProperty("color"); 
+        e.style.removeProperty("background-color"); 
+        e.style.removeProperty("border-color"); 
+    }
+});
 
         const btnM = document.getElementById('pk'); 
         if (running) { btnM.innerText = "DỪNG [Space]"; btnM.classList.remove('stopped'); } else { btnM.innerText = time === 0 ? "BẮT ĐẦU [Space]" : "TIẾP TỤC [Space]"; btnM.classList.add('stopped'); } 
@@ -831,8 +892,21 @@ if (wb >= 2 || wr >= 2) {
     }
 
     function loadNextMatch() { let tx=document.getElementById('matchListData'); let lines=tx.value.split('\n').filter(l=>l.trim()!=""); if(lines.length>0 && lines[0].includes('|')){ let p=lines[0].split('|'); document.getElementById('iMT').value=p[0].trim(); document.getElementById('iB').value=p[1].trim(); document.getElementById('iR').value=p[2].trim(); lines.shift(); tx.value=lines.join('\n'); } else { document.getElementById('iMT').value++; } resetCurrentMatch(); }
-    function ch(side, p){ playSound('beep'); if(side==='sb'){ sb=Math.max(0,sb+p); if(p===1) bp=Math.max(0,bp+1); else if(p===-1) bp=Math.max(0,bp-1); else if(p===2) ba=Math.max(0,ba+1); else if(p===-2) ba=Math.max(0,ba-1); else if(p===3) bh=Math.max(0,bh+1); else if(p===-3) bh=Math.max(0,bh-1); } else { sr=Math.max(0,sr+p); if(p===1) rp=Math.max(0,rp+1); else if(p===-1) rp=Math.max(0,rp-1); else if(p===2) ra=Math.max(0,ra+1); else if(p===-2) ra=Math.max(0,ra-1); else if(p===3) rh=Math.max(0,rh+1); else if(p===-3) rh=Math.max(0,rh-1); } up(); }
-    function l(s){ if(isBreak || isLock) return; playSound('beep'); let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5; if(s == 'b'){ gb++; sr++; addLog("LỖI (GAM-JEOM) CHO XANH", 'log-blue'); if(gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH 5 LỖI!"), 50); return; } } else { gr++; sb++; addLog("LỖI (GAM-JEOM) CHO ĐỎ", 'log-red'); if(gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ 5 LỖI!"), 50); return; } } up(); }
+function ch(side, p){
+    // Đã xóa playSound('beep') ở đây
+    if(side==='sb'){
+        sb += p;
+        if(sb < 0) sb = 0;
+        lastPointSide = 'blue';
+        lastPointValue = p;
+    } else {
+        sr += p;
+        if(sr < 0) sr = 0;
+        lastPointSide = 'red';
+        lastPointValue = p;
+    }
+    up();
+}    function l(s){ if(isBreak || isLock) return; playSound('beep'); let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5; if(s == 'b'){ gb++; sr++; addLog("LỖI (GAM-JEOM) CHO XANH", 'log-blue'); if(gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH 5 LỖI!"), 50); return; } } else { gr++; sb++; addLog("LỖI (GAM-JEOM) CHO ĐỎ", 'log-red'); if(gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ 5 LỖI!"), 50); return; } } up(); }
     function ul(s){ if(isBreak)return; playSound('beep'); if(s=='b'&&gb>0){gb--; sr--;} else if(s=='r'&&gr>0){gr--; sb--;} up(); }
     function mo(){ vW=window.open("","_blank","width=1200,height=800"); vW.document.write('<html><head><style>'+document.getElementsByTagName('style')[0].innerHTML+' #control-area, #settings-modal, #log-container{display:none}</style></head><body>'+document.getElementById('display-area').outerHTML+'<\/body></html>'); }
     function suaHiep(ben, giatri) { if (ben === 'b') wb = Math.max(0, Math.min(2, wb + giatri)); else wr = Math.max(0, Math.min(2, wr + giatri)); playSound('beep'); up(); }
@@ -847,7 +921,7 @@ if (wb >= 2 || wr >= 2) {
         document.querySelector('.side.red').classList.toggle('swapped-to-blue'); document.querySelector('.side.blue').classList.toggle('swapped-to-red');
         addLog("🔄 ĐÃ ĐẢO TOÀN BỘ", "log-success"); up();
     }
-    window.addEventListener('keydown', function(e) {
+window.addEventListener('keydown', function(e) {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
         const key = e.key.toLowerCase(); 
 
