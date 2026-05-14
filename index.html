@@ -599,7 +599,7 @@ var subTimeB = 0;
     var sb=0, sr=0, gb=0, gr=0, wb=0, wr=0, running=false, isBreak=false, tm, vW;
     var bt=0, bh=0, ba=0, bp=0, rt=0, rh=0, ra=0, rp=0;
     var kyeshiTime = 60, kyeshiRunning = false, kyeshiTm;
-    const JUDGE_WINDOW = 1200;
+    const JUDGE_WINDOW = 1100;
     let pendingVotes = [];
     var roundHistory = {}; 
     let isLock = false; 
@@ -627,7 +627,7 @@ var subTimeB = 0;
             addLog(`J${judgeId} bấm ${sideTxt}: ${points}đ`, sideClass);
             const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
             const lightEl = document.getElementById(lightId);
-            if (lightEl) { lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r'); setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1200); }
+            if (lightEl) { lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r'); setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1100); }
         }
 
         pendingVotes.push({ judgeId, side, points, isTech, time: now, processedScore: false, processedTech: false });
@@ -993,8 +993,8 @@ function ch(side, p){
 window.addEventListener('keydown', function(e) {
        const key = e.key.toLowerCase();
 	   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
-		if(key === '1') tagPlayer('r'); // Phím 1: Đỏ đổi người
-if(key === '2') tagPlayer('b'); // Phím 2: Xanh đổi người 
+		if(key === '2') tagPlayer('r'); // Phím 1: Đỏ đổi người
+if(key === '1') tagPlayer('b'); // Phím 2: Xanh đổi người 
 
         // --- TRỌNG TÀI 1 (J1) ---
         if(key === 'x') recordVote(1,'sb',1); 
