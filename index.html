@@ -99,7 +99,7 @@
 .side.blue.swapped-to-red .blue-side-name, 
 .side.blue.swapped-to-red .bottom-stats { background: linear-gradient(to left, #EE0000, #cc0000) !important; }
         
-        .judge-vertical { position: absolute; top: 330px; display: flex; flex-direction: column; gap: 50px; z-index: 100; }
+        .judge-vertical { position: absolute; top: 290px; display: flex; flex-direction: column; gap: 50px; z-index: 100; }
         #lights-red { left: 20px; } 
         #lights-blue { right: 20px; } 
 
@@ -141,7 +141,7 @@
 .stats-row { 
     display: flex; 
     gap: 80px; 
-    width: 98%; /* Mở rộng chiều ngang để chứa 5 ô */
+    width: 94%; /* Mở rộng chiều ngang để chứa 5 ô */
     justify-content: center;
 }
 
@@ -193,13 +193,15 @@
 }
 /* Bên Đỏ nằm sát lề trái */
 #red-side .gj-item {
-    left: 60px;
+    position: relative !important;   /* Thêm dòng này để kích hoạt di chuyển */
+    left: 80px !important;         /* Tăng số này lên nếu muốn Đỏ lui sâu vào trong */
     text-align: left;
 }
 
 /* Bên Xanh nằm sát lề phải */
 #blue-side .gj-item {
-    right: 20px;
+    position: relative !important;   /* Thêm dòng này để kích hoạt di chuyển */
+    right: 35px !important;        /* Tăng số này lên nếu muốn Xanh lui sâu vào trong */
     text-align: right;
 }
 
@@ -241,7 +243,7 @@
     height: 170px; 
     line-height: 200px; 
     border: 5px solid #fff; 
-    margin: 105px auto; /* Chỉnh khoảng cách trên/dưới ở đây (90px) */
+    margin: 50px auto; /* Chỉnh khoảng cách trên/dưới ở đây (90px) */
     display: flex; 
     align-items: center; 
     justify-content: center; 
@@ -254,22 +256,22 @@
 #vTK { 
     display: none; 
     position: absolute;    /* Chuyển sang dạng nổi */
-    top: 70%;              /* Đè lên vị trí đồng hồ chính */
+    top: 68%;              /* Đè lên vị trí đồng hồ chính */
     left: 50%; 
     transform: translate(-50%, -50%); 
     z-index: 1000;         /* Luôn nằm trên cùng */
-    border: 0px solid #ffcc00 !important; /* Dùng !important để không cho màu khác đè lên */    padding: 7px 30px; 
-    border-radius: 20px; 
+    border: 0px solid #ffcc00 !important; /* Dùng !important để không cho màu khác đè lên */    padding: 3px 30px; 
+    border-radius: 10px; 
     background: #000;      /* Nền đen để che phần bên dưới khi hiện y tế */
     box-shadow: 0 0 0px rgba(0,0,0,1);
 }
-        .tk-label { font-size: 18px; color: #aaa; display: block; font-weight: bold; margin-bottom: 13px; }
-        .tk-time { font-size: 78px; color: #fff; font-family: "Arial Unicode MS", "Arial" ; font-weight: 700; line-height: 1; }
+        .tk-label { font-size: 10px; color: #aaa; display: block; font-weight: bold; margin-bottom: 8px; }
+        .tk-time { font-size: 75px; color: #fff; font-family: "Arial Unicode MS", "Arial" ; font-weight: 700; line-height: 1; }
         .btn-kyeshi { background: #fff; color: #000; padding: 12px 0; font-size: 18px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 5px; }
         .match-display { color: #fff; font-size: 50px; font-weight: 700; gap: 20px; letter-spacing: 2px; margin-top: 30px; display: flex; flex-direction: column; }
         #vMT { font-size: 130px; line-height: 1.1; color: #fff; font-weight: 0; transform: scaleY(1.2); /* Kéo số cao thêm 30% nữa theo chiều dọc */
     color: #fff ;  font-family: "Arial Unicode MS", "Arial", sans-serif; }
-        .round-box { position: absolute; font-size: 54px; font-weight: 800; color: #fff; margin-bottom: 580px; min-height: 70px; white-space: nowrap; width: 100%; text-align: center; }
+        .round-box { position: absolute; font-size: 54px; font-weight: 800; color: #fff; margin-bottom: 520px; min-height: 70px; white-space: nowrap; width: 100%; text-align: center; }
 
         #control-area { min-height: 35vh; background: var(--panel-bg); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding: 20px; border-top: 5px solid #444; }
         .col { display: flex; flex-direction: column; gap: 8px; justify-content: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; }
@@ -347,6 +349,7 @@
     font-size: 120px; /* Chỉnh nhỏ lại một chút cho đẹp */
     color: #ffffff;
     font-weight: 500;
+	font-variant-numeric: tabular-nums;
     position: absolute; /* Chuyển sang định vị tuyệt đối */
     bottom: 130px;      /* Cách đáy dải màu 150px */
     z-index: 100;
@@ -354,12 +357,18 @@
 
 /* Căn vị trí riêng cho bên Đỏ */
 .side.red .sub-timer {
-    left: 1180px;         /* Đẩy sang trái lề bên Đỏ[cite: 1] */
+    left: 1080px;         /* Đẩy sang trái lề bên Đỏ[cite: 1] */
 }
 
 /* Căn vị trí riêng cho bên Xanh */
 .side.blue .sub-timer {
-    right: 1180px;        /* Đẩy sang phải lề bên Xanh[cite: 1] */
+    right: 1080px;        /* Đẩy sang phải lề bên Xanh[cite: 1] */
+}
+/* Thêm class này để xử lý 10s cuối: Chữ vàng nền đen */
+.time-txt.t-countdown-final { 
+    color: var(--highlight-yellow) !important; 
+    background-color: #000000 !important; 
+    border-color: var(--highlight-yellow) !important; 
 }
 
     </style>
@@ -427,7 +436,7 @@
         <div class="round-box" id="vRD">ROUND 1</div>
         <div id="vTD" class="time-txt t-stop">02:00</div>
         <div id="vTK">
-            <span class="tk-label">KYE-SHI</span>
+            <span class="tk-label"></span>
             <span class="tk-time" id="vTK_Val">60</span>
         </div>
         <div class="match-display"><span>MATCH</span><span id="vMT">1</span></div>
@@ -473,14 +482,19 @@
         <div class="row"><button class="btn-sub" onclick="ch('sr',-1)">-1</button><button class="btn-sub" onclick="ch('sr',-2)">-2</button><button class="btn-sub" onclick="ch('sr',-3)">-3</button></div>
         <div class="row"><button class="btn-s" style="background:#664400; flex:3" onclick="l('r')">LỖI ĐỎ [H]</button><button class="btn-s" style="background:#332200; flex:1" onclick="ul('r')">-G</button></div>
        <div class="row">
-    <button class="btn-s" onclick="tagPlayer('r')" style="background:#ff2400; flex:1; height: 50px; font-size: 16px;">🔄 ĐỔI NGƯỜI [1]</button>
+    <button class="btn-s" onclick="tagPlayer('b')" style="background:#ff2400; flex:1; height: 50px; font-size: 16px;">🔄 ĐỔI NGƯỜI [1]</button>
 </div>
 	   <div class="row">
-            <button class="btn-st" onclick="st('rt',1)">+TECH</button>
-            <button class="btn-st" style="background:#550000" onclick="st('rt',-1)">-TECH</button>
-            <button class="btn-st" onclick="st('rh',1)">+HEAD</button>
-            <button class="btn-st" onclick="st('ra',1)">+ARMOR</button>
-            <button class="btn-st" onclick="st('rp',1)">+PUNCH</button>
+           <div style="display: flex; gap: 4px; width: 100%; margin-bottom: 4px;">
+    <button class="btn-st" style="background:#882222; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('r', 2)">+2 Kỹ Thuật</button>
+    <button class="btn-st" style="background:#550000; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('r', -2)">-2 Kỹ Thuật</button>
+</div>
+<div style="display: flex; gap: 4px; width: 100%;">
+    <button class="btn-st" style="background:#aa3333; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('r', 3)">+3 Kỹ Thuật</button>
+    <button class="btn-st" style="background:#550000; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('r', -3)">-3 Kỹ Thuật</button>
+</div>
+<button class="btn-st" style="background:#550000" onclick="st('r', -2)"></button>
+           
         </div>
     </div>
 
@@ -521,14 +535,19 @@
         <div class="row"><button class="btn-sub" onclick="ch('sb',-1)">-1</button><button class="btn-sub" onclick="ch('sb',-2)">-2</button><button class="btn-sub" onclick="ch('sb',-3)">-3</button></div>
         <div class="row"><button class="btn-s" style="background:#664400; flex:3" onclick="l('b')">LỖI XANH [G]</button><button class="btn-s" style="background:#332200; flex:1" onclick="ul('b')">-G</button></div>
        <div class="row">
-    <button class="btn-s" onclick="tagPlayer('b')" style="background:#0055ff; flex:1; height: 50px; font-size: 16px;">🔄 ĐỔI NGƯỜI [2]</button>
+    <button class="btn-s" onclick="tagPlayer('r')" style="background:#0055ff; flex:1; height: 50px; font-size: 16px;">🔄 ĐỔI NGƯỜI [2]</button>
 </div>
 	   <div class="row">
-            <button class="btn-st" onclick="st('bt',1)">+TECH</button>
-            <button class="btn-st" style="background:#550000" onclick="st('bt',-1)">-TECH</button>
-            <button class="btn-st" onclick="st('bh',1)">+HEAD</button>
-            <button class="btn-st" onclick="st('ba',1)">+ARMOR</button>
-            <button class="btn-st" onclick="st('bp',1)">+PUNCH</button>
+            <div style="display: flex; gap: 4px; width: 100%; margin-bottom: 4px;">
+    <button class="btn-st" style="background:#222288; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('b', 2)">+2 Kỹ Thuật</button>
+    <button class="btn-st" style="background:#222288; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('b', -2)">-2 Kỹ Thuật</button>
+</div>
+<div style="display: flex; gap: 4px; width: 100%;">
+    <button class="btn-st" style="background:#222288; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('b', 3)">+3 Kỹ Thuật</button>
+    <button class="btn-st" style="background:#222288; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('b', -3)">-3 Kỹ Thuật</button>
+</div>
+<button class="btn-st" style="background:#550000" onclick="st('b', -2)"></button>
+          
         </div>
     </div>
 
@@ -556,11 +575,13 @@
 	<div class="col" style="grid-column: span 3; background: #222; margin-bottom: 10px;">
     <div class="row">
         <span style="color:var(--gold); font-weight:bold; margin-right:10px;">TÊN GIẢI:</span>
-        <input type="text" id="iTournament" value="GIẢI TAEKWONDO ĐÀ LẠT 2026" oninput="up()" style="flex:1; font-weight:bold; color:var(--gold);">
+        <input type="text" id="iTournament" value="GIẢI TAEKWONDO GÌ ĐÓ KÉO XUỐNG DƯỚI CÙNG MÀ ĐỔI" oninput="up()" style="flex:1; font-weight:bold; color:var(--gold);">
     </div>
 </div>
 
 <script>
+let redTechHistory = [];  // Lưu lịch sử các đòn TECH bên Đỏ
+let blueTechHistory = []; // Lưu lịch sử các đòn TECH bên Xanh
 var subTimeR = 0; 
 var subTimeB = 0;
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -685,14 +706,6 @@ var subTimeB = 0;
         up();
     }
 
-    function st(type, val) {
-        playSound('beep');
-        if(type==='bt'){ bt=Math.max(0,bt+(val*2)); sb=Math.max(0,sb+(val*2)); } else if(type==='rt'){ rt=Math.max(0,rt+(val*2)); sr=Math.max(0,sr+(val*2)); }
-        else if(type==='bh'){ bh=Math.max(0,bh+val); sb=Math.max(0,sb+(val*3)); } else if(type==='rh'){ rh=Math.max(0,rh+val); sr=Math.max(0,sr+(val*3)); }
-        else if(type==='ba'){ ba=Math.max(0,ba+val); sb=Math.max(0,sb+(val*2)); } else if(type==='ra'){ ra=Math.max(0,ra+val); sr=Math.max(0,sr+(val*2)); }
-        else if(type==='bp'){ bp=Math.max(0,bp+val); sb=Math.max(0,sb+val); } else if(type==='rp'){ rp=Math.max(0,rp+val); sr=Math.max(0,sr+val); }
-        up();
-    }
 
     function saveCurrentRoundData() {
         let rd = document.getElementById('iRD').value || 1;
@@ -723,7 +736,7 @@ var subTimeB = 0;
         }
     }
 
-    // LOGIC XÉT ƯU THẾ & KẾT THÚC HIỆP
+    // LOGIC XÉT ƯU THẾ & KẾT THÚC HIỆP CHUẨN MỚI
 function startBreak() {
     running = false; 
     clearInterval(tm);
@@ -732,41 +745,78 @@ function startBreak() {
     let reason = ""; 
     let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
     
-    // Kiểm tra các điều kiện thắng cơ bản
-    if (gr >= maxG) { winner = "blue"; reason = "ĐỎ 5 LỖI - XANH THẮNG!"; } 
-    else if (gb >= maxG) { winner = "red"; reason = "XANH 5 LỖI - ĐỎ THẮNG!"; }
+    // 1. Kiểm tra điều kiện thắng do đối thủ dính tối đa lỗi Gam-jeom
+    if (gr >= maxG) { winner = "blue"; reason = "ĐỎ " + maxG + " LỖI - XANH THẮNG!"; } 
+    else if (gb >= maxG) { winner = "red"; reason = "XANH " + maxG + " LỖI - ĐỎ THẮNG!"; }
+    // 2. So sánh điểm số chính của Hiệp đấu
     else if (sb > sr) { winner = "blue"; reason = "XANH THẮNG ĐIỂM (" + sb + "-" + sr + ")"; }
     else if (sr > sb) { winner = "red"; reason = "ĐỎ THẮNG ĐIỂM (" + sr + "-" + sb + ")"; }
+    // 3. TRƯỜNG HỢP HÒA ĐIỂM CHÍNH -> XÉT THỨ TỰ ƯU THẾ CHUẨN ĐỒNG BỘ
     else {
-        if (bt > rt) { winner = "blue"; reason = "HÒA " + sb + "-" + sr + " (XANH ƯU THẾ TECH: " + bt + ")"; }
-        else if (rt > bt) { winner = "red"; reason = "HÒA " + sr + "-" + sb + " (ĐỎ ƯU THẾ TECH: " + rt + ")"; }
-        else { winner = "draw"; reason = "HÒA TUYỆT ĐỐI"; }
+        // Ưu tiên 1: Xét điểm TECH (Kỹ thuật)
+        if (bt > rt) { 
+            winner = "blue"; 
+            reason = "HÒA " + sb + "-" + sr + " (XANH ƯU THẾ TECH: " + bt + " vs " + rt + ")"; 
+        }
+        else if (rt > bt) { 
+            winner = "red"; 
+            reason = "HÒA " + sr + "-" + sb + " (ĐỎ ƯU THẾ TECH: " + rt + " vs " + bt + ")"; 
+        }
+        // Ưu tiên 2: Điểm TECH hòa -> Xét điểm HEAD (Cú đá vào đầu)
+        else if (bh > rh) {
+            winner = "blue";
+            reason = "HÒA ĐIỂM & TECH - XANH ƯU THẾ HEAD (" + bh + " vs " + rh + ")";
+        }
+        else if (rh > bh) {
+            winner = "red";
+            reason = "HÒA ĐIỂM & TECH - ĐỎ ƯU THẾ HEAD (" + rh + " vs " + bh + ")";
+        }
+        // Ưu tiên 3: Điểm HEAD hòa -> Xét điểm ARMOR (Cú đá thân người)
+        else if (ba > ra) {
+            winner = "blue";
+            reason = "HÒA ĐIỂM, TECH & HEAD - XANH ƯU THẾ ARMOR (" + ba + " vs " + ra + ")";
+        }
+        else if (ra > ba) {
+            winner = "red";
+            reason = "HÒA ĐIỂM, TECH & HEAD - ĐỎ ƯU THẾ ARMOR (" + ra + " vs " + ba + ")";
+        }
+        // Ưu tiên 4: Điểm ARMOR hòa -> Xét điểm PUNCH (Cú đấm)
+        else if (bp > rp) {
+            winner = "blue";
+            reason = "HÒA ĐIỂM, TECH, HEAD & ARMOR - XANH ƯU THẾ PUNCH (" + bp + " vs " + rp + ")";
+        }
+        else if (rp > bp) {
+            winner = "red";
+            reason = "HÒA ĐIỂM, TECH, HEAD & ARMOR - ĐỎ ƯU THẾ PUNCH (" + rp + " vs " + bp + ")";
+        }
+        // Hòa tất cả các chỉ số trên -> Hòa tuyệt đối (Chờ trọng tài quyết định)
+        else { 
+            winner = "draw"; 
+            reason = "HÒA TUYỆT ĐỐI (BẰNG ĐIỂM, TECH, HEAD, ARMOR VÀ PUNCH)"; 
+        }
     }
 
-    // Xử lý thông báo xác nhận
+    // Xử lý thông báo xác nhận khi hòa tuyệt đối
     if (winner === "draw") {
-        // Cập nhật: Cho phép chọn Sửa điểm hoặc chọn bên thắng ưu thế
-        let drawChoice = confirm("HIỆP HÒA TUYỆT ĐỐI!\n\n- Nhấn OK: Để chọn bên thắng ưu thế (Xanh/Đỏ).\n- Nhấn CANCEL: Để QUAY LẠI SỬA ĐIỂM.");
+        let drawChoice = confirm("HIỆP HÒA TUYỆT ĐỐI!\n\n- Nhấn OK: Để chọn bên thắng ưu thế tay (Xanh/Đỏ).\n- Nhấn CANCEL: Để QUAY LẠI SỬA ĐIỂM.");
         
         if (!drawChoice) {
-            // Nếu nhấn Cancel thì quay lại màn hình cho sửa điểm
             isLock = false;
             running = false;
             up();
             addLog("HÒA: ĐÃ HỦY ĐỂ SỬA ĐIỂM", "log-red");
             return; 
         } else {
-            // Nếu nhấn OK thì mới bắt đầu chọn bên thắng
             if (confirm("CHỌN BÊN THẮNG ƯU THẾ:\nNhấn OK cho XANH thắng.\nNhấn CANCEL cho ĐỎ thắng.")) {
                 winner = "blue";
-                reason = "HÒA TUYỆT ĐỐI - XANH THẮNG ƯU THẾ";
+                reason = "HÒA TUYỆT ĐỐI - TRỌNG TÀI QUYẾT ĐỊNH XANH THẮNG";
             } else {
                 winner = "red";
-                reason = "HÒA TUYỆT ĐỐI - ĐỎ THẮNG ƯU THẾ";
+                reason = "HÒA TUYỆT ĐỐI - TRỌNG TÀI QUYẾT ĐỊNH ĐỎ THẮNG";
             }
         }
     } else {
-        // TRƯỜNG HỢP CÓ KẾT QUẢ RÕ RÀNG (Vẫn giữ nguyên như cũ)
+        // Xác nhận kết quả có phân định rõ ràng
         if (!confirm("XÁC NHẬN KẾT QUẢ: " + reason + "\n\n(Bấm CANCEL nếu muốn sửa điểm hoặc đánh tiếp)")) {
             isLock = false;
             running = false;
@@ -783,29 +833,26 @@ function startBreak() {
     
     if (winner === "blue") wb++; else wr++;
     
-    // Reset các thông số hiệp cũ
+    // Reset các thông số hiệp cũ để chuẩn bị cho hiệp mới
     sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0;
     isLock = false; 
     up();
 
-    // Kiểm tra kết thúc trận
-if (wb >= 2 || wr >= 2) { 
-        isBreak = true; // Ép trạng thái hiện tỉ số hiệp (2-0, 2-1)
+    // Kiểm tra kết thúc trận (Đủ 2 hiệp thắng)
+    if (wb >= 2 || wr >= 2) { 
+        isBreak = true; 
         running = false;
         clearInterval(tm);
-        up(); // Cập nhật để hiện số hiệp thắng to giữa màn hình
-        
-        addLog(`TRẬN ĐẤU KẾT THÚC! TỈ SỐ: ${wr}-${wb}`, 'log-success');
-        
-        // Không dùng alert hay loadNextMatch tự động nữa
-        // Để nguyên cho khán giả xem, khi nào bạn nhấn "NẠP TRẬN TIẾP THEO" thì mới nhảy
+        up(); 
+        addLog(`TRẬN ĐẤU KẾT THÚC! TỈ SỐ HIỆP: ${wr}-${wb}`, 'log-success');
         return; 
     }
 
-    // Nếu chưa kết thúc trận thì mới chạy thời gian nghỉ hiệp như bình thường
+    // Chạy thời gian nghỉ hiệp nếu trận đấu chưa kết thúc
     isBreak = true; 
     time = parseInt(document.getElementById('iBreakSet').value) || 60; 
-    runT();}
+    runT();
+}
 
     function adjustFontSize(element) {
     if (!element || !element.parentElement) return;
@@ -857,28 +904,36 @@ if (wb >= 2 || wr >= 2) {
         if (time === -99) str = "PTG"; else if (time === -88) str = "PUN";
         else if (time >= 10.0) str = m + ":" + (s < 10 ? "0" : "") + Math.floor(s); else if (time > 0) str = time.toFixed(2); else str = "0:00"; 
         
-document.querySelectorAll('#vTD').forEach(e => {
-    e.innerText = str;
-    
-    // Xóa hết class cũ để reset trạng thái
-    e.classList.remove('t-run', 't-stop', 't-break', 't-blink');
+// --- ĐOẠN XỬ LÝ HIỂN THỊ MÀU ĐỒNG HỒ ĐÃ ĐƯỢC SỬA CHUẨN ---
+    document.querySelectorAll('#vTD').forEach(e => {
+        e.innerText = str; 
+        
+        if (isBreak) {
+            e.className = "time-txt t-break";
+        } 
+        // 1. ƯU TIÊN SỐ 1: Nếu bấm DỪNG trận đấu -> Hiện ngay Nền vàng chữ đen (t-stop) kể cả đang ở 10s cuối
+        else if (!running) {
+            e.className = "time-txt t-stop";
+        } 
+        // 2. ƯU TIÊN SỐ 2: Nếu trận đấu ĐANG CHẠY và vào mốc 10s cuối -> Hiện Chữ vàng nền đen
+        else if (time <= 10 && time > 0 && str !== "PTG" && str !== "PUN") {
+            e.className = "time-txt t-countdown-final"; 
+        } 
+        // 3. Trạng thái bình thường khi trận đấu đang chạy (> 10s)
+        else {
+            e.className = "time-txt t-run";
+        }
 
-    // 1. Xác định class trạng thái cơ bản
-    let stateClass = !running ? "t-stop" : (isBreak ? "t-break" : "t-run");
-    e.classList.add(stateClass);
-    
-
-    // 3. Xử lý màu đặc biệt cho PTG/PUN
-    if (str === "PTG" || str === "PUN") {
-        e.style.setProperty("color", "var(--highlight-yellow)", "important"); 
-        e.style.setProperty("background-color", "#000", "important"); 
-        e.style.setProperty("border-color", "var(--highlight-yellow)", "important");
-    } else { 
-        e.style.removeProperty("color"); 
-        e.style.removeProperty("background-color"); 
-        e.style.removeProperty("border-color"); 
-    }
-});
+        if (str === "PTG" || str === "PUN") {
+            e.style.setProperty("color", "var(--highlight-yellow)", "important"); 
+            e.style.setProperty("background-color", "#000", "important"); 
+            e.style.setProperty("border-color", "var(--highlight-yellow)", "important");
+        } else { 
+            e.style.removeProperty("color"); 
+            e.style.removeProperty("background-color"); 
+            e.style.removeProperty("border-color"); 
+        }
+    });
 
         const btnM = document.getElementById('pk'); 
         if (running) { btnM.innerText = "DỪNG [Space]"; btnM.classList.remove('stopped'); } else { btnM.innerText = time === 0 ? "BẮT ĐẦU [Space]" : "TIẾP TỤC [Space]"; btnM.classList.add('stopped'); } 
@@ -891,10 +946,13 @@ document.querySelectorAll('#vTD').forEach(e => {
             if(document.getElementById('pointGapActive').checked && Math.abs(sb-sr)>=12) stopAndBuzzer("CÁCH BIỆT 12 ĐIỂM!"); 
             if(gb>=maxG || gr>=maxG) stopAndBuzzer(gb>=maxG?"XANH 5 LỖI!":"ĐỎ 5 LỖI!"); 
         } 
-		// Hiển thị đồng hồ phụ Đỏ
-document.getElementById('subTimerRed').innerText = subTimeR > 0 ? Math.ceil(subTimeR) : "SS";
-// Hiển thị đồng hồ phụ Xanh
-document.getElementById('subTimerBlue').innerText = subTimeB > 0 ? Math.ceil(subTimeB) : "SS";
+		// ĐỎ ĐI VỚI ĐỎ - XANH ĐI VỚI XANH:
+if(document.getElementById('subTimerRed')) {
+    document.getElementById('subTimerRed').innerText = subTimeR; 
+}
+if(document.getElementById('subTimerBlue')) {
+    document.getElementById('subTimerBlue').innerText = subTimeB;
+}
 let isTeamMode = document.getElementById('teamModeActive').checked;
 const showSub = (id, val) => {
     document.querySelectorAll('#' + id).forEach(e => {
@@ -940,24 +998,45 @@ showSub('subTimerBlue', subTimeB);
     up(); 
 }
     
-    function runT(){ 
-        if(kyeshiRunning) toggleKyeshi(); 
-        if(running){ clearInterval(tm); running = false; } 
-        else { 
-            if (time <= 0 && !isBreak) return;
-            document.getElementById('viewingRoundText').innerText = "HIỆN TẠI"; running = true; 
-            tm = setInterval(() => { 
-                if(time > 0.01){ time = parseFloat((time - 0.01).toFixed(2));
-				if (!isBreak) { // Chỉ chạy đồng hồ phụ khi đang trong hiệp đấu
+// Thêm 1 biến toàn cục này ở ngay TRÊN hàm runT để kiểm soát số lần vẽ màn hình
+var renderCounter = 0; 
+
+function runT(){ 
+    if(kyeshiRunning) toggleKyeshi(); 
+    if(running){ clearInterval(tm); running = false; } 
+    else { 
+        if (time <= 0 && !isBreak) return;
+        document.getElementById('viewingRoundText').innerText = "HIỆN TẠI"; running = true; 
+        
+        tm = setInterval(() => { 
+            if(time > 0.01){ 
+                time = parseFloat((time - 0.01).toFixed(2));
+                if (!isBreak) { 
                     if(subTimeR > 0) subTimeR = parseFloat((subTimeR - 0.01).toFixed(2));
                     if(subTimeB > 0) subTimeB = parseFloat((subTimeB - 0.01).toFixed(2));
                 }
-				up(); } 
-                else { clearInterval(tm); running = false; time = 0; playSound('buzzer'); up(); if(!isBreak) setTimeout(() => startBreak(true), 100); else { nextRound(); } } 
-            }, 10); 
-        } 
-        up(); 
-    }
+                
+                // --- ĐOẠN CẢI TIẾN CHÍNH Ở ĐÂY ---
+                renderCounter++;
+                // Cứ 4 chu kỳ đếm (40ms) mới cho phép gọi hàm up() để vẽ lại giao diện 1 lần.
+                // Điều này giảm số lần Render từ 100 lần/giây xuống còn 25 lần/giây (bằng tốc độ khung hình điện ảnh).
+                // Mắt người vẫn thấy mượt mà, nhưng CPU và Card đồ họa được GIẢM TẢI ĐẾN 75% công suất!
+                if (renderCounter % 4 === 0) {
+                    up(); 
+                }
+            } 
+            else { 
+                clearInterval(tm); 
+                running = false; 
+                time = 0; 
+                playSound('buzzer'); 
+                up(); // Trận đấu hết giờ thì lập tức vẽ lại để hiện số 0.00
+                if(!isBreak) setTimeout(() => startBreak(true), 100); else { nextRound(); } 
+            } 
+        }, 10); // GIỮ NGUYÊN 10ms để đảm bảo thời gian trận đấu chính xác từng mili-giây
+    } 
+    up(); 
+}
 
     function loadNextMatch() { let tx=document.getElementById('matchListData'); let lines=tx.value.split('\n').filter(l=>l.trim()!=""); if(lines.length>0 && lines[0].includes('|')){ let p=lines[0].split('|'); document.getElementById('iMT').value=p[0].trim(); document.getElementById('iB').value=p[1].trim(); document.getElementById('iR').value=p[2].trim(); lines.shift(); tx.value=lines.join('\n'); } else { document.getElementById('iMT').value++; } resetCurrentMatch(); }
 function ch(side, p){
@@ -972,6 +1051,10 @@ function ch(side, p){
         if(sr < 0) sr = 0;
         lastPointSide = 'red';
         lastPointValue = p;
+    }
+	var logBox = document.getElementById('point-log');
+    if (logBox) {
+        logBox.innerHTML = ''; 
     }
     up();
 }    function l(s){ if(isBreak || isLock) return; playSound('beep'); let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5; if(s == 'b'){ gb++; sr++; addLog("LỖI (GAM-JEOM) CHO XANH", 'log-blue'); if(gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH 5 LỖI!"), 50); return; } } else { gr++; sb++; addLog("LỖI (GAM-JEOM) CHO ĐỎ", 'log-red'); if(gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ 5 LỖI!"), 50); return; } } up(); }
@@ -993,8 +1076,8 @@ function ch(side, p){
 window.addEventListener('keydown', function(e) {
        const key = e.key.toLowerCase();
 	   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
-		if(key === '2') tagPlayer('r'); // Phím 1: Đỏ đổi người
-if(key === '1') tagPlayer('b'); // Phím 2: Xanh đổi người 
+		if(key === '1') tagPlayer('r'); // Phím 1: Đỏ đổi người
+if(key === '2') tagPlayer('b'); // Phím 2: Xanh đổi người 
 
         // --- TRỌNG TÀI 1 (J1) ---
         if(key === 'x') recordVote(1,'sb',1); 
@@ -1033,99 +1116,173 @@ if(key === '1') tagPlayer('b'); // Phím 2: Xanh đổi người
         if(e.code === 'Escape') { if(confirm('Bạn có chắc muốn Reset trận đấu?')) resetCurrentMatch(); }
     }, true);
     up();
-var sb=0, sr=0, bh=0, ba=0, bp=0, bt=0, rh=0, ra=0, rp=0, rt=0, gb=0, gr=0;
 var lastPointSide = '';  // Lưu bên vừa ghi điểm ('blue' hoặc 'red')
 var lastPointValue = 0; // Lưu giá trị điểm gốc (2 hoặc 3) để nhân đôi
 
-function ch(side, p){
-    playSound('beep');
-    if(side==='sb'){
-        sb=Math.max(0,sb+p);
-        if(p===1) bp=Math.max(0,bp+1);
-        else if(p===2) { 
-            ba=Math.max(0,ba+1); 
-            lastPointSide='blue'; lastPointValue=2; // Nhớ đòn Armor Xanh
+function st(side, val) {
+    if (isBreak || isLock) return;
+    playSound('click');
+    
+    if (side === 'r') {
+        if (val === 3) {
+            // Cộng đòn 3 TECH Đỏ
+            sr += 3; rt += 6;
+            addLog("CỘNG +3 TECH ĐỎ: (ĐIỂM LỚN +3, Ô TECH +6)", 'log-red');
+        } else if (val === 2) {
+            // Cộng đòn 2 TECH Đỏ
+            sr += 2; rt += 4;
+            addLog("CỘNG +2 TECH ĐỎ: (ĐIỂM LỚN +2, Ô TECH +4)", 'log-red');
+        } else if (val === -3) {
+            // Trừ đòn 3 TECH Đỏ
+            if (sr >= 3) sr -= 3;
+            if (rt >= 6) rt -= 6; else rt = 0; // Đảm bảo ô điểm nhỏ không bị âm
+            addLog("TRỪ ĐÒN 3 TECH ĐỎ: (ĐIỂM LỚN -3, Ô TECH -6)", 'log-red');
+        } else if (val === -2) {
+            // Trừ đòn 2 TECH Đỏ
+            if (sr >= 2) sr -= 2;
+            if (rt >= 4) rt -= 4; else rt = 0;
+            addLog("TRỪ ĐÒN 2 TECH ĐỎ: (ĐIỂM LỚN -2, Ô TECH -4)", 'log-red');
         }
-        else if(p===3) { 
-            bh=Math.max(0,bh+1); 
-            lastPointSide='blue'; lastPointValue=3; // Nhớ đòn Head Xanh
-        }
-        else if(p < 0) { lastPointValue = 0; } // Nếu bấm trừ điểm thì reset bộ nhớ
-    } else {
-        sr=Math.max(0,sr+p);
-        if(p===1) rp=Math.max(0,rp+1);
-        else if(p===2) { 
-            ra=Math.max(0,ra+1); 
-            lastPointSide='red'; lastPointValue=2; // Nhớ đòn Armor Đỏ
-        }
-        else if(p===3) { 
-            rh=Math.max(0,rh+1); 
-            lastPointSide='red'; lastPointValue=3; // Nhớ đòn Head Đỏ
-        }
-        else if(p < 0) { lastPointValue = 0; }
-    }
-    up();
-}
-
-function st(type, val) {
-    playSound('beep');
-    let isBlue = (type === 'bt');
-    let currentSide = isBlue ? 'blue' : 'red';
-
-    if (val > 0) { // NÚT CỘNG TECH
-        // Kiểm tra xem đòn vừa bấm có phải của bên này không và có phải đòn 2đ/3đ không
-        if (lastPointSide === currentSide && lastPointValue >= 2) {
-            let techAdd = lastPointValue; 
-            if (isBlue) {
-                sb += techAdd;        // Tổng cộng thêm phần kỹ thuật (ví dụ 3đ)
-                bt += (techAdd * 2);  // Ô Tech cộng dồn điểm đã nhân đôi (ví dụ 6đ)
-            } else {
-                sr += techAdd;
-                rt += (techAdd * 2);
-            }
-            addLog(`+TECH (x2 đòn ${techAdd}đ) cho ${currentSide.toUpperCase()}`, 'log-success');
-            lastPointValue = 0; // Reset bộ nhớ sau khi đã nhân đôi xong đòn đó
-        } else {
-            addLog(`Cảnh báo: Phải bấm điểm Armor/Head trước khi bấm Tech!`, 'log-red');
-        }
-    } 
-    else { // NÚT TRỪ TECH (Bấm khi xác định không có kỹ thuật)
-        if (isBlue && bt > 0) {
-            // Tự suy luận đòn Tech gần nhất là 2 hay 3 dựa trên số dư ô Tech
-            let techToSub = (bt % 6 === 0 && bt > 0) ? 3 : 2; 
-            sb = Math.max(0, sb - techToSub);
-            bt = Math.max(0, bt - (techToSub * 2));
-            addLog(`-TECH: Trả về điểm thường cho XANH`, 'log-red');
-        } else if (!isBlue && rt > 0) {
-            let techToSub = (rt % 6 === 0 && rt > 0) ? 3 : 2;
-            sr = Math.max(0, sr - techToSub);
-            rt = Math.max(0, rt - (techToSub * 2));
-            addLog(`-TECH: Trả về điểm thường cho ĐỎ`, 'log-red');
+    } else { // Bên XANH (side === 'b')
+        if (val === 3) {
+            // Cộng đòn 3 TECH Xanh
+            sb += 3; bt += 6;
+            addLog("CỘNG +3 TECH XANH: (ĐIỂM LỚN +3, Ô TECH +6)", 'log-blue');
+        } else if (val === 2) {
+            // Cộng đòn 2 TECH Xanh
+            sb += 2; bt += 4;
+            addLog("CỘNG +2 TECH XANH: (ĐIỂM LỚN +2, Ô TECH +4)", 'log-blue');
+        } else if (val === -3) {
+            // Trừ đòn 3 TECH Xanh
+            if (sb >= 3) sb -= 3;
+            if (bt >= 6) bt -= 6; else bt = 0;
+            addLog("TRỪ ĐÒN 3 TECH XANH: (ĐIỂM LỚN -3, Ô TECH -6)", 'log-blue');
+        } else if (val === -2) {
+            // Trừ đòn 2 TECH Xanh
+            if (sb >= 2) sb -= 2;
+            if (bt >= 4) bt -= 4; else bt = 0;
+            addLog("TRỪ ĐÒN 2 TECH XANH: (ĐIỂM LỚN -2, Ô TECH -4)", 'log-blue');
         }
     }
-    up();
+    up(); // Cập nhật hiển thị lên toàn bộ màn hình
 }
 function tagPlayer(side) {
-    console.log("Đã nhận lệnh đổi người cho bên: " + side); // Kiểm tra xem nút có ăn không
+    console.log("Đã nhận lệnh đổi người cho bên: " + side);
     
-    // Kiểm tra ô checkbox có tồn tại không
+    // Kiểm tra ô checkbox chế độ đồng đội
     let chk = document.getElementById('teamModeActive');
     if (chk && !chk.checked) {
-        console.log("Chế độ đồng đội chưa được bật trong Cài đặt!");
+        console.log("Chế độ đồng đội chưa được bật!");
         return; 
     }
 
-    if (side === 'r') {
-        subTimeR = 15;   
-        subTimeB = (parseFloat(subTimeB) || 0) + 10; // Đảm bảo không bị lỗi NaN
-    } else {
-        subTimeB = 15;   
-        subTimeR = (parseFloat(subTimeR) || 0) + 10;
+    // Chuẩn hóa chữ thường để nhận diện chính xác nút bấm
+    let s = String(side).toLowerCase();
+
+    // LUẬT MỚI: Thằng đổi về 15s - Thằng kia ÉP CỐ ĐỊNH về 10s chờ (Không cộng dồn nữa)
+    if (s === 'r' || s === 'red') {
+        subTimeR = 15;   // Đỏ đổi người -> Đỏ về thẳng 15s[cite: 1]
+        subTimeB = 10;   // Xanh (thằng chưa đổi) -> Bị đưa về mốc 10s chờ cố định
+        if(typeof addLog === 'function') addLog("ĐỎ ĐỔI NGƯỜI: Đỏ về 15s - Xanh về 10s chờ", "log-red");
+    } 
+    else if (s === 'b' || s === 'blue') {
+        subTimeB = 15;   // Xanh đổi người -> Xanh về thẳng 15s[cite: 1]
+        subTimeR = 10;   // Đỏ (thằng chưa đổi) -> Bị đưa về mốc 10s chờ cố định
+        if(typeof addLog === 'function') addLog("XANH ĐỔI NGƯỜI: Xanh về 15s - Đỏ về 10s chờ", "log-blue");
     }
     
     if(typeof playSound === 'function') playSound('beep');
-    if(typeof up === 'function') up(); // Cập nhật màn hình ngay
+    if(typeof up === 'function') up(); // Cập nhật đồng hồ hiển thị lên màn hình ngay lập tức
 }
+// HÀM XỬ LÝ CỘNG / TRỪ ĐIỂM TAY TỪ BẢNG ĐIỀU KHIỂN
+function ch(type, val) {
+    if (isBreak || isLock) return;
+    playSound('beep');
+
+    if (type === 'sb') { // Điều chỉnh điểm XANH
+        if (val > 0) { // Nếu bấm nút CỘNG (+1, +2, +3)
+            sb += val;
+            if (val === 1) bp++;      // +1đ -> tăng PUNCH
+            else if (val === 2) ba++; // +2đ -> tăng ARMOR
+            else if (val === 3) bh++; // +3đ -> tăng HEAD
+            addLog(`Thư ký cộng tay +${val}đ cho XANH`, 'log-blue');
+        } else { // Nếu bấm nút TRỪ (-1, -2, -3)
+            let subVal = Math.abs(val); // Lấy giá trị tuyệt đối (1, 2, 3)
+            sb = Math.max(0, sb + val); // Trừ điểm chính không để âm
+            // Tự động trừ ô ưu thế phụ tương ứng nếu ô đó đang lớn hơn 0
+            if (subVal === 1 && bp > 0) bp--;
+            else if (subVal === 2 && ba > 0) ba--;
+            else if (subVal === 3 && bh > 0) bh--;
+            addLog(`Thư ký trừ tay ${val}đ của XANH`, 'log-blue');
+        }
+    } 
+    else if (type === 'sr') { // Điều chỉnh điểm ĐỎ
+        if (val > 0) { // Nếu bấm nút CỘNG (+1, +2, +3)
+            sr += val;
+            if (val === 1) rp++;      // +1đ -> tăng PUNCH
+            else if (val === 2) ra++; // +2đ -> tăng ARMOR
+            else if (val === 3) rh++; // +3đ -> tăng HEAD
+            addLog(`Thư ký cộng tay +${val}đ cho ĐỎ`, 'log-red');
+        } else { // Nếu bấm nút TRỪ (-1, -2, -3)
+            let subVal = Math.abs(val);
+            sr = Math.max(0, sr + val); // Trừ điểm chính không để âm
+            // Tự động trừ ô ưu thế phụ tương ứng nếu ô đó đang lớn hơn 0
+            if (subVal === 1 && rp > 0) rp--;
+            else if (subVal === 2 && ra > 0) ra--;
+            else if (subVal === 3 && rh > 0) rh--;
+            addLog(`Thư ký trừ tay ${val}đ của ĐỎ`, 'log-red');
+        }
+    }
+    up(); // Cập nhật lại giao diện hiển thị
+}
+var originalL = window.l;
+    window.l = function(s) {
+        if (isBreak || isLock) return;
+        let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
+
+        // Nếu đang trong 10 giây cuối của hiệp đấu
+        if (time <= 10 && time > 0) {
+            playSound('beep');
+            if (s == 'b') { // Xanh phạm lỗi -> Đỏ được cộng 2 điểm
+                gb++;
+                sr += 2; // Cộng hẳn 2 điểm
+                addLog("LỖI 10S CUỐI CHO XANH -> ĐỎ +2Đ", 'log-blue');
+                if (gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH 5 LỖI!"), 50); return; }
+            } else { // Đỏ phạm lỗi -> Xanh được cộng 2 điểm
+                gr++;
+                sb += 2; // Cộng hẳn 2 điểm
+                addLog("LỖI 10S CUỐI CHO ĐỎ -> XANH +2Đ", 'log-red');
+                if (gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ 5 LỖI!"), 50); return; }
+            }
+            up();
+        } else {
+            // Nếu ngoài 10s thì chạy luật gốc bình thường (cộng 1 điểm)
+            if (typeof originalL === 'function') originalL(s);
+        }
+    };
+
+    // 2. ĐÈ LUẬT TRỪ LỖI (Nút -G của bạn)
+    var originalUl = window.ul;
+    window.ul = function(s) {
+        if (!isBreak && !isLock && time <= 10 && time > 0) {
+            playSound('click');
+
+            if (s == 'b') { // Hủy lỗi cho Xanh -> Đỏ bị trừ trả lại 2 điểm
+                if (gb <= 0) return;
+                gb--;
+                sr -= 2; // Trừ hẳn 2 điểm để cân bằng
+                addLog("HỦY LỖI 10S CUỐI CHO XANH -> ĐỎ TRỪ 2Đ", 'log-blue');
+            } else { // Hủy lỗi cho Đỏ -> Xanh bị trừ trả lại 2 điểm
+                if (gr <= 0) return;
+                gr--;
+                sb -= 2; // Trừ hẳn 2 điểm để cân bằng
+                addLog("HỦY LỖI 10S CUỐI CHO ĐỎ -> XANH TRỪ 2Đ", 'log-red');
+            }
+            up();
+        } else {
+            if (typeof originalUl === 'function') originalUl(s);
+        }
+    };
 </script>
 </body>
 </html>
