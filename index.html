@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>HUSI_Scoreboard_TKD_International_Layout</title>
+    <title>QoaDz_Scoreboard_TKD_International_Layout</title>
     <style>
         :root {
             --blue-main: #0055ff; --red-main: #FF2400; --gold: #ffcc00;
@@ -12,92 +12,84 @@
         }
         body { background: var(--bg-dark); color: #fff; font-family: "Segoe UI", sans-serif; margin: 0; text-align: center; overflow-y: auto; }
         #display-area { 
-    height: 100vh; /* Full màn hình luôn */
-    display: flex; 
-    background: #000; 
-    position: relative; 
-    gap: 0; 
-    padding: 0; 
-    margin: 0;
-    box-sizing: border-box; 
-    border: none !important; /* XÓA CÁI NÀY - Chính nó làm hở đáy */
-    outline: 5px solid var(--gold); /* Dùng outline để viền vàng vẫn còn mà không chiếm chỗ */
-    outline-offset: -5px;
-    overflow: hidden;
-}
-.bottom-stats {
-    position: absolute;
-    bottom: 0 !important; /* Ép sát đáy */
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 140px; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    margin: 0;
-    border: none !important;
-}
+            height: 100vh;
+            display: flex; 
+            background: #000; 
+            position: relative; 
+            gap: 0; 
+            padding: 0; 
+            margin: 0;
+            box-sizing: border-box; 
+            border: none !important;
+            outline: 5px solid var(--gold);
+            outline-offset: -5px;
+            overflow: hidden;
+        }
+        .bottom-stats {
+            position: absolute;
+            bottom: 0 !important;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 140px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            margin: 0;
+            border: none !important;
+        }
 
-/* Đổ màu full không khe hở */
-.red .bottom-stats { background: linear-gradient(to right, #EE0000); }
-.blue .bottom-stats { background: linear-gradient(to left, #000080); }
-/* Thiết lập cho thanh dọc bên Đỏ */
-.side.red {
-    position: relative;
-    padding-left: 140px !important; /* Tạo không gian cho thanh dọc */
-}
+        .red .bottom-stats { background: linear-gradient(to right, #EE0000); }
+        .blue .bottom-stats { background: linear-gradient(to left, #000080); }
+        .side.red {
+            position: relative;
+            padding-left: 140px !important;
+        }
 
-.side.red::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 140px;
-    /* Dùng dải màu y hệt thanh ngang để khi chạm nhau nó biến mất vết nối */
-    background: linear-gradient(to right, #EE0000);
-    z-index: 5; /* Nằm dưới thanh Tên và thanh Stats để bị che vết nối */
-}
+        .side.red::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 140px;
+            background: linear-gradient(to right, #EE0000);
+            z-index: 5;
+        }
 
-/* Thiết lập cho thanh dọc bên Xanh */
-.side.blue {
-    position: relative;
-    padding-right: 140px !important;
-}
+        .side.blue {
+            position: relative;
+            padding-right: 140px !important;
+        }
 
-.side.blue::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 140px;
-    background: linear-gradient(to left, #000080);
-    z-index: 5;
-}
+        .side.blue::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 140px;
+            background: linear-gradient(to left, #000080);
+            z-index: 5;
+        }
 
-/* Đảm bảo thanh Tên và thanh Stats nằm ĐÈ lên thanh dọc để giấu vết nối */
-.red-side-name, .blue-side-name, .bottom-stats {
-    z-index: 10 !important;
-    border: none !important; /* Xóa sạch viền trắng gây chia cắt */
-}
-/* Ép đổi màu nền chính khi đảo bên */
-.side.red.swapped-to-blue { background-color: var(--blue-main) !important; }
-.side.blue.swapped-to-red { background-color: var(--red-main) !important; }
+        .red-side-name, .blue-side-name, .bottom-stats {
+            z-index: 10 !important;
+            border: none !important;
+        }
+        .side.red.swapped-to-blue { background-color: var(--blue-main) !important; }
+        .side.blue.swapped-to-red { background-color: var(--red-main) !important; }
 
-/* Ép đổi màu thanh dọc (Before/After) */
-.side.red.swapped-to-blue::before { background: linear-gradient(to right, #000080) !important; }
-.side.blue.swapped-to-red::after { background: linear-gradient(to left, #EE0000) !important; }
+        .side.red.swapped-to-blue::before { background: linear-gradient(to right, #000080) !important; }
+        .side.blue.swapped-to-red::after { background: linear-gradient(to left, #EE0000) !important; }
 
-/* Ép đổi màu thanh ngang (Tên và Stats) */
-.side.red.swapped-to-blue .red-side-name, 
-.side.red.swapped-to-blue .bottom-stats { background: linear-gradient(to right, #000080, #0044cc) !important; }
+        .side.red.swapped-to-blue .red-side-name, 
+        .side.red.swapped-to-blue .bottom-stats { background: linear-gradient(to right, #000080, #0044cc) !important; }
 
-.side.blue.swapped-to-red .blue-side-name, 
-.side.blue.swapped-to-red .bottom-stats { background: linear-gradient(to left, #EE0000, #cc0000) !important; }
+        .side.blue.swapped-to-red .blue-side-name, 
+        .side.blue.swapped-to-red .bottom-stats { background: linear-gradient(to left, #EE0000, #cc0000) !important; }
         
         .judge-vertical { position: absolute; top: 290px; display: flex; flex-direction: column; gap: 50px; z-index: 100; }
         #lights-red { left: 20px; } 
@@ -126,85 +118,82 @@
         .side.red.swapped-to-blue { background-color: var(--blue-main) !important; }
         .side.blue.swapped-to-red { background-color: var(--red-main) !important; }
 
-        .score-big { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; font-size: 25vw; line-height: 0.7; margin-top: 100px; z-index: 5; display: inline-block; text-align: center; transition: all 0.3s ease; }
+        .score-big { font-family: "Arial Unicode MS", "Arial", sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; font-size: 25vw; line-height: 0.7; margin-top: 100px; z-index: 5; display: inline-block; text-align: center; transition: all 0.3s ease; color: #fff; }
+        .score-big.leading { color: var(--highlight-yellow) !important; }
         
         .win-tracker { position: absolute; top: 250px; display: flex; gap: 10px; z-index: 10; }
         #tracker-red { 
-    right: 20px; 
-    flex-direction: row-reverse; /* Đảo ngược thứ tự các dấu chấm bên trong */
-}
+            right: 20px; 
+            flex-direction: row-reverse; 
+        }
         #tracker-blue { left: 20px; }
 
         .win-dot { width: 35px; height: 35px; border-radius: 50%; border: 0px solid #fff; background: none; }
         .win-dot.active { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 15px var(--gold); }
-        /* Xóa hoặc sửa .gj-big cũ thành: */
-.stats-row { 
-    display: flex; 
-    gap: 80px; 
-    width: 94%; /* Mở rộng chiều ngang để chứa 5 ô */
-    justify-content: center;
-}
+        
+        .stats-row { 
+            display: flex; 
+            gap: 80px; 
+            width: 94%; 
+            justify-content: center;
+        }
 
-.stat-item { 
-    display: flex;
-    flex-direction: column; /* Chữ trên, số dưới */
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    min-width: 0;
-    /* Bỏ background và border cũ */
-    background: none !important; 
-    border: none !important; 
-}
+        .stat-item { 
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            min-width: 0;
+            background: none !important; 
+            border: none !important; 
+        }
 
-.stat-label { 
-    font-family: "Arial", Gadget, sans-serif; /* Đổi font dày và mạnh mẽ hơn */
-    font-size: 15px; 
-    color: var(--gold); 
-    font-weight: 400; 
-    margin-bottom: 5px; 
-}
+        .stat-label { 
+            font-family: "Arial", Gadget, sans-serif; 
+            font-size: 15px; 
+            color: var(--gold); 
+            font-weight: 400; 
+            margin-bottom: 5px; 
+        }
 
-.stat-val { 
-    font-family: "Arial", sans-serif; /* Font dạng số nén thường dùng trong thể thao */
-    font-size: 40px; 
-    font-weight: 400; 
-    display: inline-block;
-    line-height: 1;
-}
-/* Tìm và thay thế đoạn này để số thành màu trắng và to hơn */
-.gj-item .stat-val {
-    position: absolute;   /* Tách biệt hoàn toàn với chữ */
-    bottom: 14px;         /* Chỉnh số này để nâng số lên hoặc hạ số xuống */
-    font-size: 110px !important;
-    line-height: 0.8;
-    display: inline-block;
-    font-weight: 400;
-}
+        .stat-val { 
+            font-family: "Arial", sans-serif; 
+            font-size: 40px; 
+            font-weight: 400; 
+            display: inline-block;
+            line-height: 1;
+        }
+        
+        .gj-item .stat-val {
+            position: absolute;   
+            bottom: 14px;         
+            font-size: 110px !important;
+            line-height: 0.8;
+            display: inline-block;
+            font-weight: 400;
+        }
 
-/* Đổi luôn chữ GAM-JEOM thành màu trắng nếu bạn muốn */
-.gj-item .stat-label {
-    position: absolute;   /* Tách biệt hoàn toàn với số */
-    top: -3px;          /* Chỉnh số này để đưa chữ lên cao hoặc xuống thấp tùy ý */
-    font-size: 20px !important; 
-    color: #ffffff !important;
-    width: 100%;         /* Đảm bảo chữ nằm giữa ô */
-    text-align: center;
-}
-/* Bên Đỏ nằm sát lề trái */
-#red-side .gj-item {
-    position: relative !important;   /* Thêm dòng này để kích hoạt di chuyển */
-    left: 80px !important;         /* Tăng số này lên nếu muốn Đỏ lui sâu vào trong */
-    text-align: left;
-}
+        .gj-item .stat-label {
+            position: absolute;   
+            top: -3px;          
+            font-size: 20px !important; 
+            color: #ffffff !important;
+            width: 100%;         
+            text-align: center;
+        }
+        
+        #red-side .gj-item {
+            position: relative !important;   
+            left: 80px !important;         
+            text-align: left;
+        }
 
-/* Bên Xanh nằm sát lề phải */
-#blue-side .gj-item {
-    position: relative !important;   /* Thêm dòng này để kích hoạt di chuyển */
-    right: 35px !important;        /* Tăng số này lên nếu muốn Xanh lui sâu vào trong */
-    text-align: right;
-}
-
+        #blue-side .gj-item {
+            position: relative !important;   
+            right: 35px !important;        
+            text-align: right;
+        }
 
         .break-stats-overlay { position: absolute; top: 220px; font-size: 55px; font-weight: 900; display: none; flex-direction: column; gap: 5px; z-index: 15; opacity: 0.9; }
         .red .break-stats-overlay { left: 150px; text-align: left; }
@@ -213,83 +202,73 @@
         .red .br-row { justify-content: flex-start; }
 
         .is-break-active .judge-vertical, 
-.is-break-active .gj-item, 
-.is-break-active .stats-grid {
-    display: none !important;
-}
+        .is-break-active .gj-item, 
+        .is-break-active .stats-grid {
+            display: none !important;
+        }
 
-/* Ép các ô ưu thế biến mất nếu nó nằm lẻ tẻ */
-.is-break-active .stat-item {
-    display: none !important;
-}
+        .is-break-active .stat-item {
+            display: none !important;
+        }
 
-/* ĐẢM BẢO giữ lại R1, R2, R3 (Vì chúng nằm trong class khác) */
-.is-break-active .break-stats-overlay, 
-.is-break-active .br-row, 
-.is-break-active .br-label {
-    display: flex !important;
-    visibility: visible !important;
-}
-        .is-break-active .score-big { font-size: 20vw !important; margin-top: 230px !important; } số lớn
+        .is-break-active .break-stats-overlay, 
+        .is-break-active .br-row, 
+        .is-break-active .br-label {
+            display: flex !important;
+            visibility: visible !important;
+        }
+        .is-break-active .score-big { font-size: 20vw !important; margin-top: 230px !important; } 
         .is-break-active .judge-vertical { display: none !important; }
         
         .center-column { width: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 50px; align-items: center; background: #000; z-index: 10; }
         .time-txt { 
-    font-family: "Arial Unicode MS", "Arial", sans-serif; 
-    font-weight: 550; 
-    font-size: 160px; /* Kích thước chữ số */
-    letter-spacing: 5px; 
-    width: 100%; 
-    height: 170px; 
-    line-height: 200px; 
-    border: 5px solid #fff; 
-    margin: 50px auto; /* Chỉnh khoảng cách trên/dưới ở đây (90px) */
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    box-sizing: border-box; 
-    transition: all 0.1s; 
-}
+            font-family: "Arial Unicode MS", "Arial", sans-serif; 
+            font-weight: 550; 
+            font-size: 160px; 
+            letter-spacing: 5px; 
+            width: 100%; 
+            height: 170px; 
+            line-height: 200px; 
+            border: 5px solid #fff; 
+            margin: 30px auto; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-sizing: border-box; 
+            transition: all 0.1s; 
+        }
 
         .t-run { color: #fff; background: transparent; border-color: var(--highlight-yellow); } 
         .t-stop, .t-break { color: #000; background-color: var(--highlight-yellow); border-color: var(--highlight-yellow); }
-#vTK { 
-    display: none; 
-    position: absolute;    /* Chuyển sang dạng nổi */
-    top: 68%;              /* Đè lên vị trí đồng hồ chính */
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    z-index: 1000;         /* Luôn nằm trên cùng */
-    border: 0px solid #ffcc00 !important; /* Dùng !important để không cho màu khác đè lên */    padding: 3px 30px; 
-    border-radius: 10px; 
-    background: #000;      /* Nền đen để che phần bên dưới khi hiện y tế */
-    box-shadow: 0 0 0px rgba(0,0,0,1);
-}
-        .tk-label { font-size: 10px; color: #aaa; display: block; font-weight: bold; margin-bottom: 8px; }
-        .tk-time { font-size: 75px; color: #fff; font-family: "Arial Unicode MS", "Arial" ; font-weight: 700; line-height: 1; }
+        #vTK { 
+            display: none; 
+            position: absolute;    
+            top: 68%;              
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 1000;         
+            border: 0px solid #ffcc00 !important;    
+            padding: 2px 30px; 
+            border-radius: 10px; 
+            background: #000;      
+            box-shadow: 0 0 0px rgba(0,0,0,1);
+        }
+        .tk-label { font-size: 10px; color: #aaa; display: block; font-weight: bold; margin-bottom: 5px; }
+        .tk-time { font-size: 70px; color: #fff; font-family: "Arial Unicode MS", "Arial" ; font-weight: 700; margin-top: 10px; line-height: 1; }
         .btn-kyeshi { background: #fff; color: #000; padding: 12px 0; font-size: 18px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 5px; }
-        .match-display { color: #fff; font-size: 50px; font-weight: 700; gap: 20px; letter-spacing: 2px; margin-top: 30px; display: flex; flex-direction: column; }
-        #vMT { font-size: 130px; line-height: 1.1; color: #fff; font-weight: 0; transform: scaleY(1.2); /* Kéo số cao thêm 30% nữa theo chiều dọc */
-    color: #fff ;  font-family: "Arial Unicode MS", "Arial", sans-serif; }
+        .match-display { color: #fff; font-size: 50px; font-weight: 550; gap: 20px; letter-spacing: 2px; margin-top: 40px; display: flex; flex-direction: column; }
+        #vMT { font-size: 130px; line-height: 1.1; color: #fff; font-weight: 0; transform: scaleY(1.2); color: #fff ;  font-family: "Arial Unicode MS", "Arial", sans-serif; }
         .round-box { position: absolute; font-size: 54px; font-weight: 800; color: #fff; margin-bottom: 520px; min-height: 70px; white-space: nowrap; width: 100%; text-align: center; }
 
         #control-area { min-height: 35vh; background: var(--panel-bg); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding: 20px; border-top: 5px solid #444; }
         .col { display: flex; flex-direction: column; gap: 8px; justify-content: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; }
         .row { display: flex; gap: 5px; justify-content: center; align-items: center; flex-wrap: wrap; }
-        input { background: #000; color: #fff; border: 1px solid #555; text-align: center; font-size: 18px; padding: 8px; border-radius: 5px; }
+        input, select { background: #000; color: #fff; border: 1px solid #555; text-align: center; font-size: 18px; padding: 8px; border-radius: 5px; }
         button { cursor: pointer; border: none; border-radius: 8px; font-weight: bold; color: #fff; text-transform: uppercase; transition: 0.1s; }
         .btn-m { background: #28a745; font-size: 35px; height: 100px; width: 100%; border: 4px solid #fff; }
         .btn-m.stopped { background: #ff6600 !important; }
-        .btn-b { background: #333 !important; /* Đưa về màu xám trung tính */
-    flex: 1; 
-    padding: 12px 0; 
-    border: 2px solid #555 !important;
-} 
-        .btn-r { background: #333 !important; /* Đưa về màu xám trung tính */
-    flex: 1; 
-    padding: 12px 0; 
-    border: 2px solid #555 !important;
-} 
+        .btn-b { background: #333 !important; flex: 1; padding: 12px 0; border: 2px solid #555 !important; } 
+        .btn-r { background: #333 !important; flex: 1; padding: 12px 0; border: 2px solid #555 !important; } 
         .btn-s { background: #444; flex: 1; font-size: 13px; padding: 10px 0; }
         .btn-st { background: #333; font-size: 11px; padding: 5px; border: 1px solid #666; flex: 1; }
         .btn-sub { background: #222; border: 1px solid #555; font-size: 14px; padding: 5px 0; flex: 1; }
@@ -306,71 +285,167 @@
         #manual-win-control { grid-column: span 3; background: #222; padding: 10px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; align-items: center; margin-bottom: -5px; }
         #match-list-footer { grid-column: span 3; background: #111; padding: 15px; border-radius: 10px; border: 1px solid #444; display: flex; flex-direction: column; align-items: center;}
         #matchListData { width: 100%; height: 80px; background: #000; color: #0f0; border: 1px solid #555; padding: 8px; font-family: monospace; resize: none; }
-        #settings-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; border: 2px solid var(--gold); padding: 20px; z-index: 1000; border-radius: 15px; width: 350px;}
+        #settings-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; border: 2px solid var(--gold); padding: 20px; z-index: 1000; border-radius: 15px; width: 380px;}
         .setting-row { margin: 10px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
         .btn-time-adj { background: #555; border: 1px solid #fff; padding: 10px; font-size: 16px; flex: 1; }
-		/* Dải băng đen hiển thị tên giải đấu */
-#tournament-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100px; 
-    background: #000;
-    /* --- CHỈNH SỬA TẠI ĐÂY --- */
-    color: #fff;          /* Đổi màu chữ (Ví dụ: #ffff00 là màu vàng tươi) */
-    font-size: 40px;         /* Tăng kích cỡ chữ (Gốc là 24px) */
-    /* ------------------------- */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    text-transform: uppercase;
-    z-index: 30; 
-    border-bottom: 0px solid var(--gold);
-    letter-spacing: 2px;
-}
+        
+        #tournament-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px; 
+            background: #000;
+            color: #fff;          
+            font-size: 45px;         
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            z-index: 30; 
+            border-bottom: 0px solid var(--gold);
+            letter-spacing: 2px;
+        }
 
-/* Đẩy thanh tên VĐV xuống dưới dải băng đen */
-.top-bar {
-    top: 100px !important; 
-}
-/* Hiệu ứng chớp: (Nền Vàng - Chữ Đen) sang (Nền Đen - Chữ Trắng) */
-@keyframes blink-custom {
-    0% { background-color: var(--highlight-yellow); color: #000; }
-    50% { background-color: #000; color: #fff; } 
-    100% { background-color: var(--highlight-yellow); color: #000; }
-}
+        .top-bar {
+            top: 100px !important; 
+        }
 
-.t-blink {
-    animation: blink-custom 0.5s infinite;
-}
-.sub-timer {
-    font-size: 120px; /* Chỉnh nhỏ lại một chút cho đẹp */
-    color: #ffffff;
-    font-weight: 500;
-	font-variant-numeric: tabular-nums;
-    position: absolute; /* Chuyển sang định vị tuyệt đối */
-    bottom: 130px;      /* Cách đáy dải màu 150px */
-    z-index: 100;
-}
+        @keyframes blink-custom {
+            0% { background-color: var(--highlight-yellow); color: #000; }
+            50% { background-color: #000; color: #fff; } 
+            100% { background-color: var(--highlight-yellow); color: #000; }
+        }
 
-/* Căn vị trí riêng cho bên Đỏ */
-.side.red .sub-timer {
-    left: 1080px;         /* Đẩy sang trái lề bên Đỏ[cite: 1] */
-}
+        .t-blink {
+            animation: blink-custom 0.5s infinite;
+        }
+        .sub-timer {
+            font-size: 120px; 
+            color: #ffffff;
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+            position: absolute; 
+            bottom: 130px;      
+            z-index: 100;
+        }
 
-/* Căn vị trí riêng cho bên Xanh */
-.side.blue .sub-timer {
-    right: 1080px;        /* Đẩy sang phải lề bên Xanh[cite: 1] */
-}
-/* Thêm class này để xử lý 10s cuối: Chữ vàng nền đen */
-.time-txt.t-countdown-final { 
-    color: var(--highlight-yellow) !important; 
-    background-color: #000000 !important; 
-    border-color: var(--highlight-yellow) !important; 
-}
+        .side.red .sub-timer {
+            left: 1080px;         
+        }
 
+        .side.blue .sub-timer {
+            right: 1080px;        
+        }
+
+        .time-txt.t-countdown-final { 
+            color: var(--highlight-yellow) !important; 
+            background-color: #000000 !important; 
+            border-color: var(--highlight-yellow) !important; 
+        }
+
+        #result-board-overlay {
+            display: none;
+            position: absolute;
+            top: 100px; 
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 100px);
+            background: #111;
+            z-index: 999;
+            box-sizing: border-box;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: "Arial", sans-serif;
+            padding-bottom: 40px;
+        }
+        .res-match-title {
+            font-size: 80px;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+        }
+        .res-score-row {
+            display: flex;
+            width: 85%;
+            height: 160px;
+            gap: 15px;
+            margin-bottom: 25px;
+			 align-items: center;
+            justify-content: center;
+        }
+        .res-winner-box {
+            flex: 2;
+            height: 100%;
+            background: var(--gold);
+            color: #000;
+            font-size: 110px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            border-radius: 4px;
+            letter-spacing: 3px;
+        }
+        .res-dot-box {
+            width: 180px;
+            height: 100%;
+            font-size: 150px;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+        .res-dot-box.blue-box { background: #0011aa; }
+        .res-dot-box.red-box { background: #cc0000; }
+        
+        .res-name-row {
+            display: flex;
+            width: 85%;
+            height: 190px;
+            gap: 28px;
+        }
+        .res-flag-box {
+            width: 280px;
+            height: 100%;
+            background-color: #cc0000;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .res-flag-box::before {
+            content: "★";
+            color: #ffff00;
+            font-size: 125px;
+            line-height: 1;
+            margin-top: -10px;
+        }
+        .res-name-box {
+            flex: 1;
+            height: 100%;
+            color: #fff;
+            font-size: 80px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+            padding-left: 0px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .res-name-box.blue-bg { background: linear-gradient(to right, #0022cc, #0055ff); }
+        .res-name-box.red-bg { background: linear-gradient(to right, #cc0000, #ff2400); }
     </style>
 </head>
 <body>
@@ -381,19 +456,36 @@
     <div class="setting-row">Thời gian nghỉ (s): <input type="number" id="iBreakSet" value="60" style="width:110px"></div>
     <div class="setting-row">Số trận (Match): <input type="number" id="iMT" value="1" style="width:110px" oninput="up()"></div>
     <div class="setting-row">Hiệp hiện tại: <input type="number" id="iRD" value="1" style="width:110px" oninput="up()"></div>
-    <div class="setting-row">Luật cách biệt 12đ: <input type="checkbox" id="pointGapActive" checked style="width:25px; height:25px;"></div>
+    <div class="setting-row">Ngưỡng cách biệt điểm: <input type="number" id="iPointGap" value="15" style="width:110px"></div>    
     <div class="setting-row">Chế độ 1 trọng tài: <input type="checkbox" id="singleJudgeMode" style="width:25px; height:25px;"></div>
     <div class="setting-row">Số lỗi tối đa (Gam-jeom): <input type="number" id="iMaxGJ" value="5" style="width:110px"></div>
-	<div class="setting-row">Chế độ đồng đội (15s): <input type="checkbox" id="teamModeActive" style="width:25px; height:25px;" onchange="up()"></div>
+    <div class="setting-row">Chế độ đồng đội : <input type="checkbox" id="teamModeActive" style="width:25px; height:25px;" onchange="up()"></div>
     
-    <div class="setting-row" style="border-top: 1px solid #444; padding-top: 10px; margin-top: 15px;">
-        <button onclick="fullSwap()" style="background:#ff00ff; color:#fff; width:100%; padding:12px; font-weight:bold; border-radius:8px; border:2px solid #fff;">🔄 ĐẢO BÊN VÕ SĨ & GIAO DIỆN</button>
+    <!-- CÔNG TẮC CHỌN KIỂU 10S CUỐI -->
+    <div class="setting-row" style="background: rgba(255,204,0,0.1); padding: 5px; border-radius: 5px;">
+        <span style="color:var(--gold); font-weight:bold; font-size:14px;">Kiểu 10s cuối:</span>
+        <select id="last10sModeSelect" onchange="up()" style="font-size:14px; padding:3px;">
+            <option value="decimal">Pro</option>
+            <option value="classic">Classic</option>
+        </select>
     </div>
+
+   
     <button onclick="closeSettings()" style="background:var(--gold); color:#000; width:100%; padding:10px; margin-top:10px">LƯU & ĐÓNG</button>
 </div>
 
 <div id="display-area">
-<div id="tournament-header" id="vTournamentName">GIẢI TAEKWONDO ĐÀ LẠT 2026</div>
+    <div id="tournament-header">GIẢI TAEKWONDO ĐÀ LẠT 2026</div>
+
+    <div id="result-board-overlay">
+        <div class="res-match-title" id="resMatchTitle">MATCH 1 RESULT</div>
+        <div class="res-score-row" id="resScoreRow"></div>
+        <div class="res-name-row">
+            <div class="res-flag-box"></div>
+            <div class="res-name-box" id="resNameBox">VĐV CHIẾN THẮNG</div>
+        </div>
+    </div>
+
     <div class="judge-vertical" id="lights-red">
         <div class="j-group"><div class="j-label-small">J1</div><div id="jr1_1" class="j-box">1</div><div id="jr1_2" class="j-box">2</div><div id="jr1_3" class="j-box">3</div></div>
         <div class="j-group"><div class="j-label-small">J2</div><div id="jr2_1" class="j-box">1</div><div id="jr2_2" class="j-box">2</div><div id="jr2_3" class="j-box">3</div></div>
@@ -418,18 +510,18 @@
         </div>
         <div class="win-tracker" id="tracker-red"><div id="rw1" class="win-dot"></div><div id="rw2" class="win-dot"></div></div>
         <div class="score-big" id="vSR">0</div>
-		<div class="sub-timer" id="subTimerRed">SS </div>
-       <div class="bottom-stats">
-    <div class="stats-row">
-        <div class="stat-item gj-item" style="flex: 1.5;"> 
-            <span class="stat-label">GAM JEOM</span>
-            <span class="stat-val" id="vGR">0</span> </div>
-        <div class="stat-item"><span class="stat-label">TECH</span><span class="stat-val" id="vRT">0</span></div>
-        <div class="stat-item"><span class="stat-label">HEAD</span><span class="stat-val" id="vRH">0</span></div>
-        <div class="stat-item"><span class="stat-label">ARMOR</span><span class="stat-val" id="vRA">0</span></div>
-        <div class="stat-item"><span class="stat-label">PUNCH</span><span class="stat-val" id="vRP">0</span></div>
-    </div>
-</div>
+        <div class="sub-timer" id="subTimerRed">SS </div>
+        <div class="bottom-stats">
+            <div class="stats-row">
+                <div class="stat-item gj-item" style="flex: 1.5;"> 
+                    <span class="stat-label">GAM JEOM</span>
+                    <span class="stat-val" id="vGR">0</span> </div>
+                <div class="stat-item"><span class="stat-label">TECH</span><span class="stat-val" id="vRT">0</span></div>
+                <div class="stat-item"><span class="stat-label">HEAD</span><span class="stat-val" id="vRH">0</span></div>
+                <div class="stat-item"><span class="stat-label">ARMOR</span><span class="stat-val" id="vRA">0</span></div>
+                <div class="stat-item"><span class="stat-label">PUNCH</span><span class="stat-val" id="vRP">0</span></div>
+            </div>
+        </div>
     </div>
 
     <div class="center-column">
@@ -450,20 +542,18 @@
         </div>
         <div class="win-tracker" id="tracker-blue"><div id="bw1" class="win-dot"></div><div id="bw2" class="win-dot"></div></div>
         <div class="score-big" id="vSB">0</div>
-		<div class="sub-timer" id="subTimerBlue">SS</div>
-<div class="bottom-stats">
-    <div class="stats-row">
-        <div class="stat-item"><span class="stat-label">TECH</span><span class="stat-val" id="vBT">0</span></div>
-        <div class="stat-item"><span class="stat-label">HEAD</span><span class="stat-val" id="vBH">0</span></div>
-        <div class="stat-item"><span class="stat-label">ARMOR</span><span class="stat-val" id="vBA">0</span></div>
-        <div class="stat-item"><span class="stat-label">PUNCH</span><span class="stat-val" id="vBP">0</span></div>
-        <div class="stat-item gj-item" style="flex: 1.5;"> 
-            <span class="stat-label">GAM JEOM</span>
-            <span class="stat-val" id="vGB">0</span> </div>
-    </div>
-</div>
-</div>
-</div>
+        <div class="sub-timer" id="subTimerBlue">SS</div>
+        <div class="bottom-stats">
+            <div class="stats-row">
+                <div class="stat-item"><span class="stat-label">TECH</span><span class="stat-val" id="vBT">0</span></div>
+                <div class="stat-item"><span class="stat-label">HEAD</span><span class="stat-val" id="vBH">0</span></div>
+                <div class="stat-item"><span class="stat-label">ARMOR</span><span class="stat-val" id="vBA">0</span></div>
+                <div class="stat-item"><span class="stat-label">PUNCH</span><span class="stat-val" id="vBP">0</span></div>
+                <div class="stat-item gj-item" style="flex: 1.5;"> 
+                    <span class="stat-label">GAM JEOM</span>
+                    <span class="stat-val" id="vGB">0</span> </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -479,22 +569,24 @@
             <button class="btn-quick-minus" onclick="quick(-6, 'r')">-6 (T+H)</button>
         </div>
         <div class="row"><button class="btn-r" onclick="ch('sr',1)">+1</button><button class="btn-r" onclick="ch('sr',2)">+2</button><button class="btn-r" onclick="ch('sr',3)">+3</button></div>
-        <div class="row"><button class="btn-sub" onclick="ch('sr',-1)">-1</button><button class="btn-sub" onclick="ch('sr',-2)">-2</button><button class="btn-sub" onclick="ch('sr',-3)">-3</button></div>
-        <div class="row"><button class="btn-s" style="background:#664400; flex:3" onclick="l('r')">LỖI ĐỎ [H]</button><button class="btn-s" style="background:#332200; flex:1" onclick="ul('r')">-G</button></div>
+        <div class="row"><button class="btn-r" onclick="ch('sr',-1)">-1</button><button class="btn-r" onclick="ch('sr',-2)">-2</button><button class="btn-r" onclick="ch('sr',-3)">-3</button></div>
+        <div class="row"><button class="btn-s" style="background:#aa3333; flex: 2; font-size:30px; padding: 7px 0;" onclick="l('r')">+ Gam Jeom </button><button class="btn-s" style="background:#aa3333; flex: 2; font-size:30px; padding: 7px 0;" onclick="ul('r')">- Gam Jeom</button></div>
        <div class="row">
-    <button class="btn-s" onclick="tagPlayer('b')" style="background:#ff2400; flex:1; height: 50px; font-size: 16px;">🔄 ĐỔI NGƯỜI [1]</button>
-</div>
-	   <div class="row">
            <div style="display: flex; gap: 4px; width: 100%; margin-bottom: 4px;">
-    <button class="btn-st" style="background:#882222; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('r', 2)">+2 Kỹ Thuật</button>
-    <button class="btn-st" style="background:#550000; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('r', -2)">-2 Kỹ Thuật</button>
-</div>
-<div style="display: flex; gap: 4px; width: 100%;">
-    <button class="btn-st" style="background:#aa3333; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('r', 3)">+3 Kỹ Thuật</button>
-    <button class="btn-st" style="background:#550000; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('r', -3)">-3 Kỹ Thuật</button>
-</div>
-<button class="btn-st" style="background:#550000" onclick="st('r', -2)"></button>
-           
+                <button class="btn-st" style="background:#aa3333; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('r', 2)">+2 Kỹ Thuật</button>
+                <button class="btn-st" style="background:#aa3333; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('r', -2)">-2 Kỹ Thuật</button>
+            </div>
+            <div style="display: flex; gap: 4px; width: 100%;">
+                <button class="btn-st" style="background:#aa3333; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('r', 3)">+3 Kỹ Thuật</button>
+                <button class="btn-st" style="background:#aa3333; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('r', -3)">-3 Kỹ Thuật</button>
+            </div>
+            <div class="controls-red">
+                <button onclick="addPenalty(2, 'r')" style="background:#aa3333; flex: 2; font-size:31px; padding: 10px 0;"> +Gam Jeom X2</button>
+                <button class="btn-minus-big" style="background:#aa3333; flex: 2; font-size:31px; padding: 7px 0;" onclick="undoPenalty(2, 'r')">Hủy GJ X2 </button>
+            </div>
+        </div>
+        <div class="row">
+            <button class="btn-s" onclick="tagPlayer('b')" style="background:#ff2400; flex:1; height: 50px; font-size: 16px;">🔄 ĐỔI NGƯỜI </button>
         </div>
     </div>
 
@@ -517,8 +609,18 @@
             <button class="btn-s" onclick="mo()" style="background:#6200ea">MỞ DISPLAY</button>
             <button class="btn-s" onclick="resetCurrentMatch()" style="background:#d32f2f">RESET [Esc]</button>
         </div>
-        <button onclick="loadNextMatch()" style="background: #ffcc00; color: #000; padding: 15px 0; font-size: 18px; width: 100%; border-radius: 8px;">⚡ TRẬN TIẾP THEO</button>
+        <button onclick="loadNextMatch()" style="background: #ffcc00; color: #000; padding: 15px 0; font-size: 18px; width: 100%; border-radius: 8px;"> TRẬN TIẾP THEO</button>
         <button class="btn-kyeshi" onclick="toggleKyeshi()">🚑 KYE-SHI (Y TẾ)</button>
+        
+        <!-- Ô KẾT THÚC TRẬN (2 lựa chọn: Xanh thắng hoặc Đỏ thắng) -->
+        <div style="background: #222; border: 1px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 5px; text-align: center;">
+            <span style="font-size: 11px; color: var(--gold); font-weight: bold; display: block; margin-bottom: 5px; text-transform: uppercase;">KẾT THÚC TRẬN   ( BỎ CUỘC )</span>
+            <div style="display: flex; gap: 6px;">
+                <button onclick="forceMatchEnd('red')" style="background: #FF2400; flex: 1; padding: 10px 0; font-size: 14px; font-weight: bold;">❤️ ĐỎ THẮNG</button>
+                <button onclick="forceMatchEnd('blue')" style="background: #0055ff; flex: 1; padding: 10px 0; font-size: 14px; font-weight: bold;">💙 XANH THẮNG</button>
+
+		   </div>
+        </div>
     </div>
 
     <div class="col" id="col-right">
@@ -532,22 +634,24 @@
             <button class="btn-quick-minus" onclick="quick(-6, 'b')">-6 (T+H)</button>
         </div>
         <div class="row"><button class="btn-b" onclick="ch('sb',1)">+1</button><button class="btn-b" onclick="ch('sb',2)">+2</button><button class="btn-b" onclick="ch('sb',3)">+3</button></div>
-        <div class="row"><button class="btn-sub" onclick="ch('sb',-1)">-1</button><button class="btn-sub" onclick="ch('sb',-2)">-2</button><button class="btn-sub" onclick="ch('sb',-3)">-3</button></div>
-        <div class="row"><button class="btn-s" style="background:#664400; flex:3" onclick="l('b')">LỖI XANH [G]</button><button class="btn-s" style="background:#332200; flex:1" onclick="ul('b')">-G</button></div>
+        <div class="row"><button class="btn-b" onclick="ch('sb',-1)">-1</button><button class="btn-b" onclick="ch('sb',-2)">-2</button><button class="btn-b" onclick="ch('sb',-3)">-3</button></div>
+        <div class="row"><button class="btn-s" style="background:#222288; flex: 2; font-size:30px; padding: 7px 0;" onclick="l('b')">+ Gam Jeom</button><button class="btn-s" style="background:#222288; flex: 2; font-size:30px; padding: 7px 0;" onclick="ul('b')">- Gam Jeom</button></div>
        <div class="row">
-    <button class="btn-s" onclick="tagPlayer('r')" style="background:#0055ff; flex:1; height: 50px; font-size: 16px;">🔄 ĐỔI NGƯỜI [2]</button>
-</div>
-	   <div class="row">
             <div style="display: flex; gap: 4px; width: 100%; margin-bottom: 4px;">
-    <button class="btn-st" style="background:#222288; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('b', 2)">+2 Kỹ Thuật</button>
-    <button class="btn-st" style="background:#222288; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('b', -2)">-2 Kỹ Thuật</button>
-</div>
-<div style="display: flex; gap: 4px; width: 100%;">
-    <button class="btn-st" style="background:#222288; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('b', 3)">+3 Kỹ Thuật</button>
-    <button class="btn-st" style="background:#222288; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('b', -3)">-3 Kỹ Thuật</button>
-</div>
-<button class="btn-st" style="background:#550000" onclick="st('b', -2)"></button>
-          
+                <button class="btn-st" style="background:#222288; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('b', 2)">+2 Kỹ Thuật</button>
+                <button class="btn-st" style="background:#222288; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('b', -2)">-2 Kỹ Thuật</button>
+            </div>
+            <div style="display: flex; gap: 4px; width: 100%;">
+                <button class="btn-st" style="background:#222288; flex: 2; font-size:14px; padding: 5px 0;" onclick="st('b', 3)">+3 Kỹ Thuật</button>
+                <button class="btn-st" style="background:#222288; flex: 1; font-size:14px; padding: 5px 0;" onclick="st('b', -3)">-3 Kỹ Thuật</button>
+            </div>
+            <div class="controls-red">
+                <button onclick="addPenalty(2, 'b')" style="background:#222288; flex: 2; font-size:31px; padding: 7px 0;">+Gam Jeom X2</button>
+                <button class="btn-minus-big" style="background:#222288; flex: 2; font-size:31px; padding: 7px 0;" onclick="undoPenalty(2, 'b')">Hủy GJ X2 </button>
+            </div>
+        </div>
+         <div class="row">
+            <button class="btn-s" onclick="tagPlayer('r')" style="background:#0055ff; flex:1; height: 50px; font-size: 16px;">🔄 ĐỔI NGƯỜI </button>
         </div>
     </div>
 
@@ -572,30 +676,28 @@
     <div id="match-list-footer">
         <textarea id="matchListData" placeholder="Số trận | VĐV Xanh | VĐV Đỏ">Số trận | VĐV Xanh | VĐV Đỏ</textarea>
     </div>
-	<div class="col" style="grid-column: span 3; background: #222; margin-bottom: 10px;">
-    <div class="row">
-        <span style="color:var(--gold); font-weight:bold; margin-right:10px;">TÊN GIẢI:</span>
-        <input type="text" id="iTournament" value="GIẢI TAEKWONDO GÌ ĐÓ KÉO XUỐNG DƯỚI CÙNG MÀ ĐỔI" oninput="up()" style="flex:1; font-weight:bold; color:var(--gold);">
+    <div class="col" style="grid-column: span 3; background: #222; margin-bottom: 10px;">
+        <div class="row">
+            <span style="color:var(--gold); font-weight:bold; margin-right:10px;">TÊN GIẢI:</span>
+            <input type="text" id="iTournament" value="GIẢI TAEKWONDO GÌ THÌ KÉO XUỐNG DƯỚI CÙNG MÀ ĐỔI" oninput="up()" style="flex:1; font-weight:bold; color:var(--gold);">
+        </div>
     </div>
 </div>
 
 <script>
-let redTechHistory = [];  // Lưu lịch sử các đòn TECH bên Đỏ
-let blueTechHistory = []; // Lưu lịch sử các đòn TECH bên Xanh
+let redTechHistory = [];  
+let blueTechHistory = []; 
 var subTimeR = 0; 
 var subTimeB = 0;
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(t) {
-    // Nếu là tiếng 'beep' (tiếng tít), chỉ cho phép kêu khi bấm nút Lỗi (hàm l() gọi)
-    // Nếu các hàm cộng điểm gọi, nó sẽ bị chặn lại
+var audioCtx = null;
+
+function playSound(t) {
     if (t === 'beep') {
         const stack = new Error().stack;
-        // Kiểm tra xem có phải hàm cộng lỗi l(s) đang gọi không
-        if (!stack.includes('at l ') && !stack.includes('at l(')) {
-            return; // Nếu không phải hàm lỗi gọi thì im lặng
+        if (!stack.includes('at l ') && !stack.includes('at l(') && !stack.includes('at addPenalty') && !stack.includes('at undoPenalty') && !stack.includes('at suaHiep') && !stack.includes('at tagPlayer')) {
+            return; 
         }
     }
-
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     let o = audioCtx.createOscillator();
     let g = audioCtx.createGain();
@@ -613,130 +715,131 @@ var subTimeB = 0;
         o.frequency.setValueAtTime(150, audioCtx.currentTime);
         g.gain.setValueAtTime(0.3, audioCtx.currentTime);
         o.start();
-        o.stop(audioCtx.currentTime + 0.8); // Tiếng còi dài 1 giây
+        o.stop(audioCtx.currentTime + 0.8); 
     }
 }
 
-    var sb=0, sr=0, gb=0, gr=0, wb=0, wr=0, running=false, isBreak=false, tm, vW;
-    var bt=0, bh=0, ba=0, bp=0, rt=0, rh=0, ra=0, rp=0;
-    var kyeshiTime = 60, kyeshiRunning = false, kyeshiTm;
-    const JUDGE_WINDOW = 1100;
-    let pendingVotes = [];
-    var roundHistory = {}; 
-    let isLock = false; 
+var sb=0, sr=0, gb=0, gr=0, wb=0, wr=0, running=false, isBreak=false, tm, vW;
+var bt=0, bh=0, ba=0, bp=0, rt=0, rh=0, ra=0, rp=0;
+var kyeshiTime = 60, kyeshiRunning = false, kyeshiTm;
+const JUDGE_WINDOW = 1000;
+let pendingVotes = [];
+var roundHistory = {}; 
+let isLock = false; 
+var isMatchOver = false; 
 
-    function addLog(msg, colorClass = "") {
-        const logBox = document.getElementById('point-log');
-        const now = new Date();
-        const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
-        let m = Math.floor(time / 60), s = Math.floor(time % 60);
-        let matchTimeStr = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
-        let roundStr = isBreak ? "BRK" : "RD" + (document.getElementById('iRD').value || 1);
-        const entry = document.createElement('div'); entry.className = 'log-entry ' + colorClass;
-        entry.innerHTML = `[${timeStr}] <span style="color:#ffcc00">[${roundStr} - ${matchTimeStr}]</span> ${msg}`;
-        logBox.prepend(entry);
+function addLog(msg, colorClass = "") {
+    const logBox = document.getElementById('point-log');
+    const now = new Date();
+    const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
+    let m = Math.floor(time / 60), s = Math.floor(time % 60);
+    let matchTimeStr = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+    let roundStr = isBreak ? "BRK" : "RD" + (document.getElementById('iRD').value || 1);
+    const entry = document.createElement('div'); entry.className = 'log-entry ' + colorClass;
+    entry.innerHTML = `[${timeStr}] <span style="color:#ffcc00">[${roundStr} - ${matchTimeStr}]</span> ${msg}`;
+    logBox.prepend(entry);
+}
+
+function recordVote(judgeId, side, points, isTech = false) {
+    if (!running || isBreak || isLock || isMatchOver) return;
+    const now = Date.now();
+    const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
+    const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
+    
+    if (isTech) { addLog(`J${judgeId} bấm TECH cho ${sideTxt}`, sideClass); } 
+    else if (points > 0) {
+        addLog(`J${judgeId} bấm ${sideTxt}: ${points}đ`, sideClass);
+        const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
+        const lightEl = document.getElementById(lightId);
+        if (lightEl) { lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r'); setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1000); }
     }
 
-    function recordVote(judgeId, side, points, isTech = false) {
-        if (!running || isBreak || isLock) return;
-        const now = Date.now();
-        const sideTxt = side === 'sb' ? 'XANH' : 'ĐỎ';
-        const sideClass = side === 'sb' ? 'log-blue' : 'log-red';
-        
-        if (isTech) { addLog(`J${judgeId} bấm TECH cho ${sideTxt}`, sideClass); } 
-        else if (points > 0) {
-            addLog(`J${judgeId} bấm ${sideTxt}: ${points}đ`, sideClass);
-            const lightId = (side === 'sb' ? 'jb' : 'jr') + judgeId + '_' + points;
-            const lightEl = document.getElementById(lightId);
-            if (lightEl) { lightEl.classList.add(side === 'sb' ? 'active-b' : 'active-r'); setTimeout(() => { lightEl.classList.remove('active-b', 'active-r'); }, 1100); }
-        }
+    pendingVotes.push({ judgeId, side, points, isTech, time: now, processedScore: false, processedTech: false });
+    pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
 
-        pendingVotes.push({ judgeId, side, points, isTech, time: now, processedScore: false, processedTech: false });
-        pendingVotes = pendingVotes.filter(v => now - v.time <= JUDGE_WINDOW);
-
-        if (document.getElementById('singleJudgeMode').checked) {
-            let lastVote = pendingVotes[pendingVotes.length - 1];
-            if (lastVote.isTech) {
-                let prevPoint = pendingVotes.findLast(v => v.side === side && v.points >= 2 && !v.isMultiplied);
-                if (prevPoint) {
-                    let extra = prevPoint.points; 
-                    if (side === 'sb') { sb += extra; bt += (extra * 2); } else { sr += extra; rt += (extra * 2); }
-                    prevPoint.isMultiplied = true; addLog(`>>> CẬP NHẬT TECH (x2): +${extra}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
-                }
-            } else if (points > 0) {
-                if (side === 'sb') { sb += points; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
-                else { sr += points; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
-                addLog(`>>> CỘNG ${points}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
+    if (document.getElementById('singleJudgeMode').checked) {
+        let lastVote = pendingVotes[pendingVotes.length - 1];
+        if (lastVote.isTech) {
+            let prevPoint = pendingVotes.findLast(v => v.side === side && v.points >= 2 && !v.isMultiplied);
+            if (prevPoint) {
+                let extra = prevPoint.points; 
+                if (side === 'sb') { sb += extra; bt += (extra * 2); } else { sr += extra; rt += (extra * 2); }
+                prevPoint.isMultiplied = true; addLog(`>>> CẬP NHẬT TECH (x2): +${extra}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
             }
-        } else {
-            [1, 2, 3].forEach(pts => {
-                const scoreJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.points === pts && !v.processedScore).map(v => v.judgeId))];
-                if (scoreJudges.length >= 2) {
-                    pendingVotes.filter(v => v.side === side && v.points === pts).forEach(v => v.processedScore = true);
-                    if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
-                    else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
-                    addLog(`>>> ĐIỂM ĐA SỐ: +${pts}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
-                }
-            });
-            const techJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.isTech && !v.processedTech).map(v => v.judgeId))];
-            if (techJudges.length >= 2) {
-                let confirmedPts = 0;
-                if (pendingVotes.some(v => v.side === side && v.points === 3 && v.processedScore)) confirmedPts = 3;
-                else if (pendingVotes.some(v => v.side === side && v.points === 2 && v.processedScore)) confirmedPts = 2;
-                if (confirmedPts > 0) {
-                    pendingVotes.filter(v => v.side === side && v.isTech).forEach(v => v.processedTech = true);
-                    if (side === 'sb') { sb += confirmedPts; bt += (confirmedPts * 2); } else { sr += confirmedPts; rt += (confirmedPts * 2); }
-                    addLog(`>>> TECH ĐA SỐ (x2): +${confirmedPts}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
-                }
+        } else if (points > 0) {
+            if (side === 'sb') { sb += points; if(points===1) bp++; else if(points===2) ba++; else if(points===3) bh++; } 
+            else { sr += points; if(points===1) rp++; else if(points===2) ra++; else if(points===3) rh++; }
+            addLog(`>>> CỘNG ${points}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
+        }
+    } else {
+        [1, 2, 3].forEach(pts => {
+            const scoreJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.points === pts && !v.processedScore).map(v => v.judgeId))];
+            if (scoreJudges.length >= 2) {
+                pendingVotes.filter(v => v.side === side && v.points === pts).forEach(v => v.processedScore = true);
+                if (side === 'sb') { sb += pts; if(pts===1) bp++; else if(pts===2) ba++; else if(pts===3) bh++; } 
+                else { sr += pts; if(pts===1) rp++; else if(pts===2) ra++; else if(pts===3) rh++; }
+                addLog(`>>> ĐIỂM ĐA SỐ: +${pts}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
+            }
+        });
+        const techJudges = [...new Set(pendingVotes.filter(v => v.side === side && v.isTech && !v.processedTech).map(v => v.judgeId))];
+        if (techJudges.length >= 2) {
+            let confirmedPts = 0;
+            if (pendingVotes.some(v => v.side === side && v.points === 3 && v.processedScore)) confirmedPts = 3;
+            else if (pendingVotes.some(v => v.side === side && v.points === 2 && v.processedScore)) confirmedPts = 2;
+            if (confirmedPts > 0) {
+                pendingVotes.filter(v => v.side === side && v.isTech).forEach(v => v.processedTech = true);
+                if (side === 'sb') { sb += confirmedPts; bt += (confirmedPts * 2); } else { sr += confirmedPts; rt += (confirmedPts * 2); }
+                addLog(`>>> TECH ĐA SỐ (x2): +${confirmedPts}đ CHO ${sideTxt}`, 'log-success'); playSound('beep');
             }
         }
-        up();
     }
+    up();
+}
 
-    function quick(val, side) {
-        playSound('beep'); const sideTxt = side === 'b' ? 'XANH' : 'ĐỎ';
-        addLog(`Thư ký cộng nhanh ${val}đ cho ${sideTxt}`, 'log-success');
-        if (side === 'b') {
-            if (val === 4) { bt += 4; ba++; sb += 4; } else if (val === -4) { bt = Math.max(0, bt-4); ba = Math.max(0, ba-1); sb = Math.max(0, sb-4); }
-            else if (val === 6) { bt += 6; bh++; sb += 6; } else if (val === -6) { bt = Math.max(0, bt-6); bh = Math.max(0, bh-1); sb = Math.max(0, sb-6); }
-        } else {
-            if (val === 4) { rt += 4; ra++; sr += 4; } else if (val === -4) { rt = Math.max(0, rt-4); ra = Math.max(0, ra-1); sr = Math.max(0, sr-4); }
-            else if (val === 6) { rt += 6; rh++; sr += 6; } else if (val === -6) { rt = Math.max(0, rh-6); rh = Math.max(0, rh-1); sr = Math.max(0, sr-6); }
-        }
-        up();
+function quick(val, side) {
+    if (isMatchOver) return;
+    playSound('beep'); const sideTxt = side === 'b' ? 'XANH' : 'ĐỎ';
+    addLog(`Thư ký cộng nhanh ${val}đ cho ${sideTxt}`, 'log-success');
+    if (side === 'b') {
+        if (val === 4) { bt += 4; ba++; sb += 4; } else if (val === -4) { bt = Math.max(0, bt-4); ba = Math.max(0, ba-1); sb = Math.max(0, sb-4); }
+        else if (val === 6) { bt += 6; bh++; sb += 6; } else if (val === -6) { bt = Math.max(0, bt-6); bh = Math.max(0, bh-1); sb = Math.max(0, sb-6); }
+    } else {
+        if (val === 4) { rt += 4; ra++; sr += 4; } else if (val === -4) { rt = Math.max(0, rt-4); ra = Math.max(0, ra-1); sr = Math.max(0, sr-4); }
+        else if (val === 6) { rt += 6; rh++; sr += 6; } else if (val === -6) { rt = Math.max(0, rt-6); rh = Math.max(0, rh-1); sr = Math.max(0, sr-6); }
     }
+    up();
+}
 
+function saveCurrentRoundData() {
+    let rd = document.getElementById('iRD').value || 1;
+    roundHistory[rd] = { sb, sr, gb, gr, bt, bh, ba, bp, rt, rh, ra, rp, savedTime: time };
+}
 
-    function saveCurrentRoundData() {
-        let rd = document.getElementById('iRD').value || 1;
-        roundHistory[rd] = { sb, sr, gb, gr, bt, bh, ba, bp, rt, rh, ra, rp, savedTime: time };
+function displayPastRound(rd) {
+    if (!roundHistory[rd]) return;
+    let data = roundHistory[rd];
+    sb = data.sb; sr = data.sr; gb = data.gb; gr = data.gr; bt = data.bt; bh = data.bh; ba = data.ba; bp = data.bp; rt = data.rt; rh = data.rh; ra = data.ra; rp = data.rp; time = data.savedTime; 
+    document.getElementById('viewingRoundText').innerText = "XEM LẠI HIỆP " + rd;
+    document.getElementById('iRD').value = rd;
+    if(running) { clearInterval(tm); running = false; }
+    up();
+}
+
+function prevRound() { if (isMatchOver) return; let currentRD = parseInt(document.getElementById('iRD').value) || 1; if (currentRD > 1) { if (!roundHistory[currentRD] && !isBreak) saveCurrentRoundData(); displayPastRound(currentRD - 1); } }
+function nextRound() {
+    if (isMatchOver) return;
+    let currentRD = parseInt(document.getElementById('iRD').value) || 1;
+    if (roundHistory[currentRD + 1]) { displayPastRound(currentRD + 1); } 
+    else {
+        isBreak = false; running = false; isLock = false; clearInterval(tm);
+        let nextRD = currentRD + 1; document.getElementById('iRD').value = nextRD;
+        sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0; time = getSetTime();
+        subTimeR = 0; 
+        subTimeB = 0; 
+        document.getElementById('viewingRoundText').innerText = "HIỆN TẠI"; addLog(`--- BẮT ĐẦU HIỆP ${nextRD} ---`, 'log-success'); up();
     }
+}
 
-    function displayPastRound(rd) {
-        if (!roundHistory[rd]) return;
-        let data = roundHistory[rd];
-        sb = data.sb; sr = data.sr; gb = data.gb; gr = data.gr; bt = data.bt; bh = data.bh; ba = data.ba; bp = data.bp; rt = data.rt; rh = data.rh; ra = data.ra; rp = data.rp; time = data.savedTime; 
-        document.getElementById('viewingRoundText').innerText = "XEM LẠI HIỆP " + rd;
-        document.getElementById('iRD').value = rd;
-        if(running) { clearInterval(tm); running = false; }
-        up();
-    }
-
-    function prevRound() { let currentRD = parseInt(document.getElementById('iRD').value) || 1; if (currentRD > 1) { if (!roundHistory[currentRD] && !isBreak) saveCurrentRoundData(); displayPastRound(currentRD - 1); } }
-    function nextRound() {
-        let currentRD = parseInt(document.getElementById('iRD').value) || 1;
-        if (roundHistory[currentRD + 1]) { displayPastRound(currentRD + 1); } 
-        else {
-            isBreak = false; running = false; isLock = false; clearInterval(tm);
-            let nextRD = currentRD + 1; document.getElementById('iRD').value = nextRD;
-            sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0; time = getSetTime();
-			subTimeR = 0; // Thêm dòng này để reset về SS
-        subTimeB = 0; // Thêm dòng này để reset về SS
-            document.getElementById('viewingRoundText').innerText = "HIỆN TẠI"; addLog(`--- BẮT ĐẦU HIỆP ${nextRD} ---`, 'log-success'); up();
-        }
-    }
-
-    // LOGIC XÉT ƯU THẾ & KẾT THÚC HIỆP CHUẨN MỚI
 function startBreak() {
     running = false; 
     clearInterval(tm);
@@ -745,116 +848,137 @@ function startBreak() {
     let reason = ""; 
     let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
     
-    // 1. Kiểm tra điều kiện thắng do đối thủ dính tối đa lỗi Gam-jeom
     if (gr >= maxG) { winner = "blue"; reason = "ĐỎ " + maxG + " LỖI - XANH THẮNG!"; } 
     else if (gb >= maxG) { winner = "red"; reason = "XANH " + maxG + " LỖI - ĐỎ THẮNG!"; }
-    // 2. So sánh điểm số chính của Hiệp đấu
     else if (sb > sr) { winner = "blue"; reason = "XANH THẮNG ĐIỂM (" + sb + "-" + sr + ")"; }
     else if (sr > sb) { winner = "red"; reason = "ĐỎ THẮNG ĐIỂM (" + sr + "-" + sb + ")"; }
-    // 3. TRƯỜNG HỢP HÒA ĐIỂM CHÍNH -> XÉT THỨ TỰ ƯU THẾ CHUẨN ĐỒNG BỘ
     else {
-        // Ưu tiên 1: Xét điểm TECH (Kỹ thuật)
-        if (bt > rt) { 
-            winner = "blue"; 
-            reason = "HÒA " + sb + "-" + sr + " (XANH ƯU THẾ TECH: " + bt + " vs " + rt + ")"; 
-        }
-        else if (rt > bt) { 
-            winner = "red"; 
-            reason = "HÒA " + sr + "-" + sb + " (ĐỎ ƯU THẾ TECH: " + rt + " vs " + bt + ")"; 
-        }
-        // Ưu tiên 2: Điểm TECH hòa -> Xét điểm HEAD (Cú đá vào đầu)
-        else if (bh > rh) {
-            winner = "blue";
-            reason = "HÒA ĐIỂM & TECH - XANH ƯU THẾ HEAD (" + bh + " vs " + rh + ")";
-        }
-        else if (rh > bh) {
-            winner = "red";
-            reason = "HÒA ĐIỂM & TECH - ĐỎ ƯU THẾ HEAD (" + rh + " vs " + bh + ")";
-        }
-        // Ưu tiên 3: Điểm HEAD hòa -> Xét điểm ARMOR (Cú đá thân người)
-        else if (ba > ra) {
-            winner = "blue";
-            reason = "HÒA ĐIỂM, TECH & HEAD - XANH ƯU THẾ ARMOR (" + ba + " vs " + ra + ")";
-        }
-        else if (ra > ba) {
-            winner = "red";
-            reason = "HÒA ĐIỂM, TECH & HEAD - ĐỎ ƯU THẾ ARMOR (" + ra + " vs " + ba + ")";
-        }
-        // Ưu tiên 4: Điểm ARMOR hòa -> Xét điểm PUNCH (Cú đấm)
-        else if (bp > rp) {
-            winner = "blue";
-            reason = "HÒA ĐIỂM, TECH, HEAD & ARMOR - XANH ƯU THẾ PUNCH (" + bp + " vs " + rp + ")";
-        }
-        else if (rp > bp) {
-            winner = "red";
-            reason = "HÒA ĐIỂM, TECH, HEAD & ARMOR - ĐỎ ƯU THẾ PUNCH (" + rp + " vs " + bp + ")";
-        }
-        // Hòa tất cả các chỉ số trên -> Hòa tuyệt đối (Chờ trọng tài quyết định)
+        if (bt > rt) { winner = "blue"; reason = "HÒA " + sb + "-" + sr + " (XANH ƯU THẾ TECH: " + bt + " vs " + rt + ")"; }
+        else if (rt > bt) { winner = "red"; reason = "HÒA " + sr + "-" + sb + " (ĐỎ ƯU THẾ TECH: " + rt + " vs " + bt + ")"; }
+        else if (bh > rh) { winner = "blue"; reason = "HÒA ĐIỂM & TECH - XANH ƯU THẾ HEAD (" + bh + " vs " + rh + ")"; }
+        else if (rh > bh) { winner = "red"; reason = "HÒA ĐIỂM & TECH - ĐỎ ƯU THẾ HEAD (" + rh + " vs " + bh + ")"; }
+        else if (ba > ra) { winner = "blue"; reason = "HÒA ĐIỂM, TECH & HEAD - XANH ƯU THẾ ARMOR (" + ba + " vs " + ra + ")"; }
+        else if (ra > ba) { winner = "red"; reason = "HÒA ĐIỂM, TECH & HEAD - ĐỎ ƯU THẾ ARMOR (" + ra + " vs " + ba + ")"; }
+        else if (bp > rp) { winner = "blue"; reason = "HÒA ĐIỂM, TECH, HEAD & ARMOR - XANH ƯU THẾ PUNCH (" + bp + " vs " + rp + ")"; }
+        else if (rp > bp) { winner = "red"; reason = "HÒA ĐIỂM, TECH, HEAD & ARMOR - ĐỎ ƯU THẾ PUNCH (" + rp + " vs " + bp + ")"; }
         else { 
             winner = "draw"; 
             reason = "HÒA TUYỆT ĐỐI (BẰNG ĐIỂM, TECH, HEAD, ARMOR VÀ PUNCH)"; 
         }
     }
 
-    // Xử lý thông báo xác nhận khi hòa tuyệt đối
     if (winner === "draw") {
         let drawChoice = confirm("HIỆP HÒA TUYỆT ĐỐI!\n\n- Nhấn OK: Để chọn bên thắng ưu thế tay (Xanh/Đỏ).\n- Nhấn CANCEL: Để QUAY LẠI SỬA ĐIỂM.");
-        
-        if (!drawChoice) {
-            isLock = false;
-            running = false;
-            up();
-            addLog("HÒA: ĐÃ HỦY ĐỂ SỬA ĐIỂM", "log-red");
-            return; 
-        } else {
+        if (!drawChoice) { isLock = false; running = false; up(); addLog("HÒA: ĐÃ HỦY ĐỂ SỬA ĐIỂM", "log-red"); return; } 
+        else {
             if (confirm("CHỌN BÊN THẮNG ƯU THẾ:\nNhấn OK cho XANH thắng.\nNhấn CANCEL cho ĐỎ thắng.")) {
-                winner = "blue";
-                reason = "HÒA TUYỆT ĐỐI - TRỌNG TÀI QUYẾT ĐỊNH XANH THẮNG";
+                winner = "blue"; reason = "HÒA TUYỆT ĐỐI - TRỌNG TÀI QUYẾT ĐỊNH XANH THẮNG";
             } else {
-                winner = "red";
-                reason = "HÒA TUYỆT ĐỐI - TRỌNG TÀI QUYẾT ĐỊNH ĐỎ THẮNG";
+                winner = "red"; reason = "HÒA TUYỆT ĐỐI - TRỌNG TÀI QUYẾT ĐỊNH ĐỎ THẮNG";
             }
         }
     } else {
-        // Xác nhận kết quả có phân định rõ ràng
         if (!confirm("XÁC NHẬN KẾT QUẢ: " + reason + "\n\n(Bấm CANCEL nếu muốn sửa điểm hoặc đánh tiếp)")) {
-            isLock = false;
-            running = false;
-            if (time < 0) time = 0; 
-            up();
-            addLog("ĐÃ HUỶ CHỐT: MỜI SỬA ĐIỂM HOẶC BẤM SPACE ĐÁNH TIẾP", "log-red");
-            return;
+            isLock = false; running = false; if (time < 0) time = 0; up(); addLog("ĐÃ HUỶ CHỐT: MỜI SỬA ĐIỂM HOẶC BẤM SPACE ĐÁNH TIẾP", "log-red"); return;
         }
     }
 
-    // CHỐT KẾT QUẢ VÀ CHUYỂN QUA NGHỈ (BREAK)
     saveCurrentRoundData();
     addLog(`CHỐT HIỆP: ${reason}`, 'log-success');
     
     if (winner === "blue") wb++; else wr++;
     
-    // Reset các thông số hiệp cũ để chuẩn bị cho hiệp mới
+    let actualWinner = winner; 
+
     sb=0; sr=0; gb=0; gr=0; bt=0; bh=0; ba=0; bp=0; rt=0; rh=0; ra=0; rp=0;
     isLock = false; 
-    up();
 
-    // Kiểm tra kết thúc trận (Đủ 2 hiệp thắng)
+    isBreak = true; 
+    time = parseInt(document.getElementById('iBreakSet').value) || 60; 
+    
+    up(); 
+
     if (wb >= 2 || wr >= 2) { 
-        isBreak = true; 
-        running = false;
-        clearInterval(tm);
-        up(); 
-        addLog(`TRẬN ĐẤU KẾT THÚC! TỈ SỐ HIỆP: ${wr}-${wb}`, 'log-success');
+        setTimeout(() => {
+            if (confirm("TRẬN ĐẤU ĐÃ KẾT THÚC (TỈ SỐ HIỆP: " + wr + "-" + wb + ")\n\nNhấn [OK] để HIỂN THỊ NGƯỜI THẮNG lên màn hình.\nNhấn [CANCEL] để BỎ QUA (Giữ nguyên màn hình Break).")) {
+                isMatchOver = true;
+                running = false;
+                clearInterval(tm);
+                showResultBoard(actualWinner); 
+                up(); 
+                addLog(`TRẬN ĐẤU KẾT THÚC! ĐÃ HIỂN THỊ BẢNG VÀNG KẾT QUẢ`, 'log-success');
+            } else {
+                addLog(`TRẬN ĐẤU KẾT THÚC! BỎ QUA KHÔNG HIỆN BẢNG VÀNG (GIỮ BREAK)`, 'log-red');
+            }
+        }, 500);
         return; 
     }
 
-    // Chạy thời gian nghỉ hiệp nếu trận đấu chưa kết thúc
-    isBreak = true; 
-    time = parseInt(document.getElementById('iBreakSet').value) || 60; 
     runT();
 }
 
-    function adjustFontSize(element) {
+function showResultBoard(finalWinner) {
+    const matchNum = document.getElementById('iMT').value || "1";
+    document.getElementById('resMatchTitle').innerText = "MATCH " + matchNum + " RESULT";
+    
+    const nameBlue = document.getElementById('iB').value;
+    const nameRed = document.getElementById('iR').value;
+    
+    const scoreRow = document.getElementById('resScoreRow');
+    const nameBox = document.getElementById('resNameBox');
+    
+    if (finalWinner === 'blue') {
+        scoreRow.innerHTML = `
+            <div class="res-winner-box">WINNER</div>
+            <div class="res-dot-box blue-box">${wb}</div>
+            <div class="res-dot-box red-box">${wr}</div>
+        `;
+        nameBox.innerText = nameBlue;
+        nameBox.className = "res-name-box blue-bg";
+    } else {
+        scoreRow.innerHTML = `
+            <div class="res-winner-box">WINNER</div>
+            <div class="res-dot-box red-box">${wr}</div>
+            <div class="res-dot-box blue-box">${wb}</div>
+        `;
+        nameBox.innerText = nameRed;
+        nameBox.className = "res-name-box red-bg";
+    }
+    
+    document.getElementById('result-board-overlay').style.display = 'flex';
+}
+
+// HÀM KẾT THÚC TRẬN NGAY LẬP TỨC (XANH/ĐỎ THẮNG DO BỎ CUỘC)
+function forceMatchEnd(winnerSide) {
+    if (isMatchOver) return;
+    let nameBlue = document.getElementById('iB').value;
+    let nameRed = document.getElementById('iR').value;
+    let winnerName = (winnerSide === 'blue') ? nameBlue : nameRed;
+
+    if (!confirm(`XÁC NHẬN KẾT THÚC TRẬN LUÔN?\n\n- Bên thắng: ${winnerName} (${winnerSide === 'blue' ? 'XANH' : 'ĐỎ'}) do đối thủ bỏ cuộc/dừng trận.\n- Thao tác này sẽ kết thúc trận đấu ngay lập tức và hiện bảng vàng!`)) {
+        return;
+    }
+
+    running = false;
+    clearInterval(tm);
+    if(kyeshiRunning) { clearInterval(kyeshiTm); kyeshiRunning = false; }
+    isMatchOver = true;
+    isLock = true;
+
+    // Gán điểm hiệp/vinh danh
+    if (winnerSide === 'blue') {
+        wb = 2; wr = 0;
+    } else {
+        wr = 2; wb = 0;
+    }
+
+    playSound('buzzer');
+    showResultBoard(winnerSide);
+    up();
+    addLog(`>>> KẾT THÚC TRẬN NGAY: ${winnerName} (${winnerSide.toUpperCase()}) THẮNG DO BỎ CUỘC!`, 'log-success');
+}
+
+function adjustFontSize(element) {
     if (!element || !element.parentElement) return;
     if (element.getAttribute('data-v') === element.innerText) return;
     element.setAttribute('data-v', element.innerText);
@@ -868,61 +992,89 @@ function startBreak() {
         }
     }
 }
-    function getSetTime() { return (parseInt(document.getElementById('min').value)||0)*60 + (parseInt(document.getElementById('sec').value)||0); }
-    var time = getSetTime();
-    function adjT(val) { time = Math.max(0, parseFloat((time + val).toFixed(1))); up(); playSound('beep'); }
-    function openSettings() { document.getElementById('settings-modal').style.display='block'; }
-    function closeSettings() { document.getElementById('settings-modal').style.display='none'; if(!running&&!isBreak) time=getSetTime(); up(); }
-    
-    function up() { 
-        const uv=(id,v)=>{document.querySelectorAll('#'+id).forEach(e=>e.innerText=v);}; 
-        const displayArea = document.getElementById('display-area');
-        if (isBreak) {
-            displayArea.classList.add('is-break-active'); uv('vSB', wb); uv('vSR', wr); 
-            for (let i = 1; i <= 3; i++) {
-                let rdData = roundHistory[i] || { sr: "-", sb: "-" };
-                document.getElementById(`red_r${i}_val`).innerText = rdData.sr; document.getElementById(`blue_r${i}_val`).innerText = rdData.sb;
-            }
-        } else { displayArea.classList.remove('is-break-active'); uv('vSB', sb); uv('vSR', sr); }
+function getSetTime() { return (parseInt(document.getElementById('min').value)||0)*60 + (parseInt(document.getElementById('sec').value)||0); }
+var time = getSetTime();
+function adjT(val) { if (isMatchOver) return; time = Math.max(0, parseFloat((time + val).toFixed(1))); up(); playSound('beep'); }
+function openSettings() { document.getElementById('settings-modal').style.display='block'; }
+function closeSettings() { document.getElementById('settings-modal').style.display='none'; if(!running&&!isBreak) time=getSetTime(); up(); }
 
-        document.querySelectorAll('#vGB').forEach(e => e.innerText = gb);
-        document.querySelectorAll('#vGR').forEach(e => e.innerText = gr);
-        uv('vBT',bt); uv('vBH',bh); uv('vBA',ba); uv('vBP',bp); uv('vRT',rt); uv('vRH',rh); uv('vRA',ra); uv('vRP',rp); uv('vMT',document.getElementById('iMT').value||1); 
-        const nameB = document.getElementById('iB').value, nameR = document.getElementById('iR').value; 
-        document.querySelectorAll('#vNB').forEach(e => { e.innerText = nameB; adjustFontSize(e); }); 
-        document.querySelectorAll('#vNR').forEach(e => { e.innerText = nameR; adjustFontSize(e); }); 
-        document.querySelectorAll('#vRD').forEach(e=> { e.innerText = isBreak ? "BREAK TIME" : "ROUND "+(document.getElementById('iRD').value||1); }); 
-        document.querySelectorAll('#bw1').forEach(e=>e.className=wb>=1?"win-dot active":"win-dot"); 
-        document.querySelectorAll('#bw2').forEach(e=>e.className=wb>=2?"win-dot active":"win-dot"); 
-        document.querySelectorAll('#rw1').forEach(e=>e.className=wr>=1?"win-dot active":"win-dot"); 
-        document.querySelectorAll('#rw2').forEach(e=>e.className=wr>=2?"win-dot active":"win-dot"); 
-		const tournamentName = document.getElementById('iTournament').value;
-        document.querySelectorAll('#tournament-header').forEach(e => {
-    e.innerText = tournamentName;  });
+function up() { 
+    const uv=(id,v)=>{document.querySelectorAll('#'+id).forEach(e=>e.innerText=v);}; 
+    const displayArea = document.getElementById('display-area');
+    if (isBreak) {
+        displayArea.classList.add('is-break-active'); uv('vSB', wb); uv('vSR', wr); 
+        for (let i = 1; i <= 3; i++) {
+            let rdData = roundHistory[i] || { sr: "-", sb: "-" };
+            document.getElementById(`red_r${i}_val`).innerText = rdData.sr; document.getElementById(`blue_r${i}_val`).innerText = rdData.sb;
+        }
+    } else { 
+        displayArea.classList.remove('is-break-active'); 
+        uv('vSB', sb); 
+        uv('vSR', sr); 
         
-        let m = Math.floor(time / 60), s = Math.floor(time % 60); let str;
-        if (time === -99) str = "PTG"; else if (time === -88) str = "PUN";
-        else if (time >= 10.0) str = m + ":" + (s < 10 ? "0" : "") + Math.floor(s); else if (time > 0) str = time.toFixed(2); else str = "0:00"; 
+        const scoreBlueEl = document.querySelectorAll('#vSB');
+        const scoreRedEl = document.querySelectorAll('#vSR');
         
-// --- ĐOẠN XỬ LÝ HIỂN THỊ MÀU ĐỒNG HỒ ĐÃ ĐƯỢC SỬA CHUẨN ---
+        scoreBlueEl.forEach(e => e.classList.remove('leading'));
+        scoreRedEl.forEach(e => e.classList.remove('leading'));
+
+        if (!isBreak) {
+            if (sb > sr) {
+                scoreBlueEl.forEach(e => e.classList.add('leading'));
+            } else if (sr > sb) {
+                scoreRedEl.forEach(e => e.classList.add('leading'));
+            } else if (sb === sr && (sb > 0 || sr > 0)) {
+                if (bt > rt) scoreBlueEl.forEach(e => e.classList.add('leading'));
+                else if (rt > bt) scoreRedEl.forEach(e => e.classList.add('leading'));
+                else if (bh > rh) scoreBlueEl.forEach(e => e.classList.add('leading'));
+                else if (rh > bh) scoreRedEl.forEach(e => e.classList.add('leading'));
+                else if (ba > ra) scoreBlueEl.forEach(e => e.classList.add('leading'));
+                else if (ra > ba) scoreRedEl.forEach(e => e.classList.add('leading'));
+                else if (bp > rp) scoreBlueEl.forEach(e => e.classList.add('leading'));
+                else if (rp > bp) scoreRedEl.forEach(e => e.classList.add('leading'));
+            }
+        }
+    }
+
+    document.querySelectorAll('#vGB').forEach(e => e.innerText = gb);
+    document.querySelectorAll('#vGR').forEach(e => e.innerText = gr);
+    uv('vBT',bt); uv('vBH',bh); uv('vBA',ba); uv('vBP',bp); uv('vRT',rt); uv('vRH',rh); uv('vRA',ra); uv('vRP',rp); uv('vMT',document.getElementById('iMT').value||1); 
+    const nameB = document.getElementById('iB').value, nameR = document.getElementById('iR').value; 
+    document.querySelectorAll('#vNB').forEach(e => { e.innerText = nameB; adjustFontSize(e); }); 
+    document.querySelectorAll('#vNR').forEach(e => { e.innerText = nameR; adjustFontSize(e); }); 
+    document.querySelectorAll('#vRD').forEach(e=> { e.innerText = isBreak ? "BREAK TIME" : "ROUND "+(document.getElementById('iRD').value||1); }); 
+    document.querySelectorAll('#bw1').forEach(e=>e.className=wb>=1?"win-dot active":"win-dot"); 
+    document.querySelectorAll('#bw2').forEach(e=>e.className=wb>=2?"win-dot active":"win-dot"); 
+    document.querySelectorAll('#rw1').forEach(e=>e.className=wr>=1?"win-dot active":"win-dot"); 
+    document.querySelectorAll('#rw2').forEach(e=>e.className=wr>=2?"win-dot active":"win-dot"); 
+    const tournamentName = document.getElementById('iTournament').value;
+    document.querySelectorAll('#tournament-header').forEach(e => { e.innerText = tournamentName;  });
+    
+    // --- XỬ LÝ HIỂN THỊ ĐỒNG HỒ THEO CHẾ ĐỘ ĐÃ CHỌN ---
+    let mode10s = document.getElementById('last10sModeSelect') ? document.getElementById('last10sModeSelect').value : 'decimal';
+    let m = Math.floor(time / 60), s = Math.floor(time % 60); 
+    let str;
+
+    if (time === -99) str = "PTG"; 
+    else if (time === -88) str = "PUN";
+    else if (time > 10.0 || isBreak) {
+        str = m + ":" + (s < 10 ? "0" : "") + Math.floor(s); 
+    } else if (time > 0) {
+        if (mode10s === 'decimal') {
+            str = time.toFixed(2); // Hiện mili-giây (VD: 09.80)
+        } else {
+            str = "0:" + (s < 10 ? "0" : "") + Math.floor(s); // Dạng Classic (VD: 00:09)
+        }
+    } else {
+        str = "0:00"; 
+    }
+    
     document.querySelectorAll('#vTD').forEach(e => {
         e.innerText = str; 
-        
-        if (isBreak) {
-            e.className = "time-txt t-break";
-        } 
-        // 1. ƯU TIÊN SỐ 1: Nếu bấm DỪNG trận đấu -> Hiện ngay Nền vàng chữ đen (t-stop) kể cả đang ở 10s cuối
-        else if (!running) {
-            e.className = "time-txt t-stop";
-        } 
-        // 2. ƯU TIÊN SỐ 2: Nếu trận đấu ĐANG CHẠY và vào mốc 10s cuối -> Hiện Chữ vàng nền đen
-        else if (time <= 10 && time > 0 && str !== "PTG" && str !== "PUN") {
-            e.className = "time-txt t-countdown-final"; 
-        } 
-        // 3. Trạng thái bình thường khi trận đấu đang chạy (> 10s)
-        else {
-            e.className = "time-txt t-run";
-        }
+        if (isBreak) { e.className = "time-txt t-break"; } 
+        else if (!running) { e.className = "time-txt t-stop"; } 
+        else if (time <= 10 && time > 0 && str !== "PTG" && str !== "PUN") { e.className = "time-txt t-countdown-final"; } 
+        else { e.className = "time-txt t-run"; }
 
         if (str === "PTG" || str === "PUN") {
             e.style.setProperty("color", "var(--highlight-yellow)", "important"); 
@@ -935,73 +1087,76 @@ function startBreak() {
         }
     });
 
-        const btnM = document.getElementById('pk'); 
-        if (running) { btnM.innerText = "DỪNG [Space]"; btnM.classList.remove('stopped'); } else { btnM.innerText = time === 0 ? "BẮT ĐẦU [Space]" : "TIẾP TỤC [Space]"; btnM.classList.add('stopped'); } 
-        document.querySelectorAll('#vTK').forEach(e => { e.style.display = kyeshiRunning ? 'block' : 'none'; }); 
-        document.querySelectorAll('#vTK_Val').forEach(e => { e.innerText = kyeshiTime; }); 
-        if(vW && !vW.closed) { vW.document.body.innerHTML = document.getElementById('display-area').outerHTML; vW.document.querySelectorAll('#vNB, #vNR').forEach(e => adjustFontSize(e)); } 
-        
-        if(!isBreak && running && !isLock) { 
-            let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5; 
-            if(document.getElementById('pointGapActive').checked && Math.abs(sb-sr)>=12) stopAndBuzzer("CÁCH BIỆT 12 ĐIỂM!"); 
-            if(gb>=maxG || gr>=maxG) stopAndBuzzer(gb>=maxG?"XANH 5 LỖI!":"ĐỎ 5 LỖI!"); 
-        } 
-		// ĐỎ ĐI VỚI ĐỎ - XANH ĐI VỚI XANH:
-if(document.getElementById('subTimerRed')) {
-    document.getElementById('subTimerRed').innerText = subTimeR; 
-}
-if(document.getElementById('subTimerBlue')) {
-    document.getElementById('subTimerBlue').innerText = subTimeB;
-}
-let isTeamMode = document.getElementById('teamModeActive').checked;
-const showSub = (id, val) => {
-    document.querySelectorAll('#' + id).forEach(e => {
-        e.style.display = (isTeamMode && !isBreak) ? 'block' : 'none'; // Ẩn hiện theo checkbox
-        e.innerText = val > 0 ? Math.ceil(val) : "SS";   // Hiện số hoặc SS
-    });
-};
-showSub('subTimerRed', subTimeR);
-showSub('subTimerBlue', subTimeB);
-    }
-
-    function toggleKyeshi() { if (kyeshiRunning) { clearInterval(kyeshiTm); kyeshiRunning = false; } else { if (running) runT(); kyeshiRunning = true; kyeshiTime = 60; addLog("🚑 BẮT ĐẦU Y TẾ (KYE-SHI)", 'log-red'); kyeshiTm = setInterval(() => { if (kyeshiTime > 0) { kyeshiTime--; if (kyeshiTime <= 10) playSound('beep'); } else { clearInterval(kyeshiTm); kyeshiRunning = false; playSound('buzzer'); alert("HẾT GIỜ Y TẾ!"); } up(); }, 1000); } up(); }
+    const btnM = document.getElementById('pk'); 
+    if (running) { btnM.innerText = "DỪNG [Space]"; btnM.classList.remove('stopped'); } else { btnM.innerText = time === 0 ? "BẮT ĐẦU [Space]" : "TIẾP TỤC [Space]"; btnM.classList.add('stopped'); } 
+    document.querySelectorAll('#vTK').forEach(e => { e.style.display = kyeshiRunning ? 'block' : 'none'; }); 
+    document.querySelectorAll('#vTK_Val').forEach(e => { e.innerText = kyeshiTime; }); 
     
-    function stopAndBuzzer(msg){ 
-        if (isLock) return; 
-        isLock = true; 
-        clearInterval(tm); 
-        running = false; 
-        
-        let oldTime = time; // Lưu lại thời gian lúc dừng để nếu sửa thì trả lại
-        if (msg.includes("12 ĐIỂM")) time = -99; 
-        else if (msg.includes("LỖI")) time = -88;
-        
-        playSound('buzzer'); 
-        up(); 
+    if(vW && !vW.closed) { 
+        vW.document.getElementById('result-board-overlay').style.display = isMatchOver ? 'flex' : 'none';
+        vW.document.getElementById('result-board-overlay').innerHTML = document.getElementById('result-board-overlay').innerHTML;
+        vW.document.body.innerHTML = document.getElementById('display-area').outerHTML; 
+        vW.document.querySelectorAll('#vNB, #vNR').forEach(e => adjustFontSize(e)); 
+    } 
+    
+    if(!isBreak && running && !isLock) { 
+        let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5; 
+        let gapLimit = parseInt(document.getElementById('iPointGap').value) || 15;
+        if(Math.abs(sb-sr) >= gapLimit) { stopAndBuzzer("CÁCH BIỆT " + gapLimit + " ĐIỂM!"); }            
+        if(gb>=maxG || gr>=maxG) stopAndBuzzer(gb>=maxG?"XANH 5 LỖI!":"ĐỎ 5 LỖI!"); 
+    } 
+    
+    if(document.getElementById('subTimerRed')) { document.getElementById('subTimerRed').innerText = subTimeR; }
+    if(document.getElementById('subTimerBlue')) { document.getElementById('subTimerBlue').innerText = subTimeB; }
+    let isTeamMode = document.getElementById('teamModeActive').checked;
+    const showSub = (id, val) => {
+        document.querySelectorAll('#' + id).forEach(e => {
+            e.style.display = (isTeamMode && !isBreak) ? 'block' : 'none'; 
+            e.innerText = val > 0 ? Math.ceil(val) : "SS";   
+        });
+    };
+    showSub('subTimerRed', subTimeR);
+    showSub('subTimerBlue', subTimeB);
+}
 
-        setTimeout(() => {
-            if (confirm(msg + "\n\nOK = XÉT THẮNG HIỆP NGAY\nCANCEL = GIỮ NGUYÊN ĐỂ SỬA LẠI")) {
-                startBreak(); 
-            } else {
-                time = oldTime; // Trả lại đúng số giây lúc nãy
-                isLock = false; 
-                up();
-            }
-        }, 150);
-    }
+function toggleKyeshi() { if (isMatchOver) return; if (kyeshiRunning) { clearInterval(kyeshiTm); kyeshiRunning = false; } else { if (running) runT(); kyeshiRunning = true; kyeshiTime = 60; addLog("🚑 BẮT ĐẦU Y TẾ (KYE-SHI)", 'log-red'); kyeshiTm = setInterval(() => { if (kyeshiTime > 0) { kyeshiTime--; if (kyeshiTime <= 10) playSound('beep'); } else { clearInterval(kyeshiTm); kyeshiRunning = false; playSound('buzzer'); alert("HẾT GIỜ Y TẾ!"); } up(); }, 1000); } up(); }
 
-    function resetCurrentMatch() { 
-        sb=0;sr=0;gb=0;gr=0;bt=0;bh=0;ba=0;bp=0;rt=0;rh=0;ra=0;rp=0;wb=0;wr=0; isLock=false; roundHistory={}; document.getElementById('iRD').value=1; isBreak=false; running=false; clearInterval(tm); clearInterval(kyeshiTm); kyeshiRunning=false; kyeshiTime=60; time=getSetTime(); document.getElementById('point-log').innerHTML=''; 
-		subTimeR = 0; // Reset về SS
-    subTimeB = 0; // Reset về SS
+function stopAndBuzzer(msg){ 
+    if (isLock) return; 
+    isLock = true; 
+    clearInterval(tm); 
+    running = false; 
+    
+    let oldTime = time; 
+    if (msg.includes("CÁCH BIỆT")) time = -99; 
+    else if (msg.includes("LỖI")) time = -88;
+    
+    playSound('buzzer'); 
+    up(); 
+
+    setTimeout(() => {
+        if (confirm(msg + "\n\nOK = XÉT THẮNG HIỆP NGAY\nCANCEL = GIỮ NGUYÊN ĐỂ SỬA LẠI")) {
+            startBreak(); 
+        } else {
+            time = oldTime; 
+            isLock = false; 
+            up();
+        }
+    }, 150);
+}
+
+function resetCurrentMatch() { 
+    sb=0;sr=0;gb=0;gr=0;bt=0;bh=0;ba=0;bp=0;rt=0;rh=0;ra=0;rp=0;wb=0;wr=0; isLock=false; isMatchOver=false; roundHistory={}; document.getElementById('iRD').value=1; isBreak=false; running=false; clearInterval(tm); clearInterval(kyeshiTm); kyeshiRunning=false; kyeshiTime=60; time=getSetTime(); document.getElementById('point-log').innerHTML=''; 
+    subTimeR = 0; 
+    subTimeB = 0; 
+    document.getElementById('result-board-overlay').style.display = 'none'; 
     addLog("--- RESET TRẬN ĐẤU MỚI ---", 'log-success'); 
     up(); 
 }
-    
-// Thêm 1 biến toàn cục này ở ngay TRÊN hàm runT để kiểm soát số lần vẽ màn hình
-var renderCounter = 0; 
 
+var renderCounter = 0; 
 function runT(){ 
+    if (isMatchOver) return;
     if(kyeshiRunning) toggleKyeshi(); 
     if(running){ clearInterval(tm); running = false; } 
     else { 
@@ -1016,12 +1171,17 @@ function runT(){
                     if(subTimeB > 0) subTimeB = parseFloat((subTimeB - 0.01).toFixed(2));
                 }
                 
-                // --- ĐOẠN CẢI TIẾN CHÍNH Ở ĐÂY ---
+                // --- XỬ LÝ NHỊP RENDER TỰ ĐỘNG THEO CẤU HÌNH ---
                 renderCounter++;
-                // Cứ 4 chu kỳ đếm (40ms) mới cho phép gọi hàm up() để vẽ lại giao diện 1 lần.
-                // Điều này giảm số lần Render từ 100 lần/giây xuống còn 25 lần/giây (bằng tốc độ khung hình điện ảnh).
-                // Mắt người vẫn thấy mượt mà, nhưng CPU và Card đồ họa được GIẢM TẢI ĐẾN 75% công suất!
-                if (renderCounter % 4 === 0) {
+                let mode10s = document.getElementById('last10sModeSelect') ? document.getElementById('last10sModeSelect').value : 'decimal';
+                let renderModulo = 7; // Nhịp mặc định nhẹ máy (%7)
+
+                // Khi ở 10s cuối VÀ chọn dạng Mili-giây thì dùng nhịp % 5
+                if (time <= 10 && time > 0 && mode10s === 'decimal') {
+                    renderModulo = 5;
+                }
+
+                if (renderCounter % renderModulo === 0) { 
                     up(); 
                 }
             } 
@@ -1030,259 +1190,169 @@ function runT(){
                 running = false; 
                 time = 0; 
                 playSound('buzzer'); 
-                up(); // Trận đấu hết giờ thì lập tức vẽ lại để hiện số 0.00
+                up(); 
                 if(!isBreak) setTimeout(() => startBreak(true), 100); else { nextRound(); } 
             } 
-        }, 10); // GIỮ NGUYÊN 10ms để đảm bảo thời gian trận đấu chính xác từng mili-giây
+        }, 10); 
     } 
     up(); 
 }
 
-    function loadNextMatch() { let tx=document.getElementById('matchListData'); let lines=tx.value.split('\n').filter(l=>l.trim()!=""); if(lines.length>0 && lines[0].includes('|')){ let p=lines[0].split('|'); document.getElementById('iMT').value=p[0].trim(); document.getElementById('iB').value=p[1].trim(); document.getElementById('iR').value=p[2].trim(); lines.shift(); tx.value=lines.join('\n'); } else { document.getElementById('iMT').value++; } resetCurrentMatch(); }
+function loadNextMatch() { let tx=document.getElementById('matchListData'); let lines=tx.value.split('\n').filter(l=>l.trim()!=""); if(lines.length>0 && lines[0].includes('|')){ let p=lines[0].split('|'); document.getElementById('iMT').value=p[0].trim(); document.getElementById('iB').value=p[1].trim(); document.getElementById('iR').value=p[2].trim(); lines.shift(); tx.value=lines.join('\n'); } else { document.getElementById('iMT').value++; } resetCurrentMatch(); }
+
 function ch(side, p){
-    // Đã xóa playSound('beep') ở đây
-    if(side==='sb'){
-        sb += p;
-        if(sb < 0) sb = 0;
-        lastPointSide = 'blue';
-        lastPointValue = p;
-    } else {
-        sr += p;
-        if(sr < 0) sr = 0;
-        lastPointSide = 'red';
-        lastPointValue = p;
-    }
-	var logBox = document.getElementById('point-log');
-    if (logBox) {
-        logBox.innerHTML = ''; 
-    }
+    if (isMatchOver) return;
+    if(side==='sb'){ sb += p; if(sb < 0) sb = 0; } else { sr += p; if(sr < 0) sr = 0; }
+    var logBox = document.getElementById('point-log');
+    if (logBox) { logBox.innerHTML = ''; }
     up();
-}    function l(s){ if(isBreak || isLock) return; playSound('beep'); let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5; if(s == 'b'){ gb++; sr++; addLog("LỖI (GAM-JEOM) CHO XANH", 'log-blue'); if(gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH 5 LỖI!"), 50); return; } } else { gr++; sb++; addLog("LỖI (GAM-JEOM) CHO ĐỎ", 'log-red'); if(gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ 5 LỖI!"), 50); return; } } up(); }
-    function ul(s){ if(isBreak)return; playSound('beep'); if(s=='b'&&gb>0){gb--; sr--;} else if(s=='r'&&gr>0){gr--; sb--;} up(); }
-    function mo(){ vW=window.open("","_blank","width=1200,height=800"); vW.document.write('<html><head><style>'+document.getElementsByTagName('style')[0].innerHTML+' #control-area, #settings-modal, #log-container{display:none}</style></head><body>'+document.getElementById('display-area').outerHTML+'<\/body></html>'); }
-    function suaHiep(ben, giatri) { if (ben === 'b') wb = Math.max(0, Math.min(2, wb + giatri)); else wr = Math.max(0, Math.min(2, wr + giatri)); playSound('beep'); up(); }
+}    
+function l(s){ if(isBreak || isLock || isMatchOver) return; playSound('beep'); let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5; if(s == 'b'){ gb++; sr++; addLog("LỖI (GAM-JEOM) CHO XANH", 'log-blue'); if(gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH 5 LỖI!"), 50); return; } } else { gr++; sb++; addLog("LỖI (GAM-JEOM) CHO ĐỎ", 'log-red'); if(gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ 5 LỖI!"), 50); return; } } up(); }
+function ul(s){ if(isBreak || isMatchOver)return; playSound('beep'); if(s=='b'&&gb>0){gb--; sr--;} else if(s=='r'&&gr>0){gr--; sb--;} up(); }
+function mo(){ vW=window.open("","_blank","width=1200,height=800"); vW.document.write('<html><head><style>'+document.getElementsByTagName('style')[0].innerHTML+' #control-area, #settings-modal, #log-container{display:none}</style></head><body>'+document.getElementById('display-area').outerHTML+'<\/body></html>'); }
+function suaHiep(ben, giatri) { if (isMatchOver) return; if (ben === 'b') wb = Math.max(0, Math.min(2, wb + giatri)); else wr = Math.max(0, Math.min(2, wr + giatri)); playSound('beep'); up(); }
 
-    function fullSwap() {
-        [sb, sr] = [sr, sb]; [gb, gr] = [gr, gb]; [bt, rt] = [rt, bt]; [bh, rh] = [rh, bh]; [ba, ra] = [ra, ba]; [bp, rp] = [rp, bp]; [wb, wr] = [wr, wb];
-       [subTimeR, subTimeB] = [subTimeB, subTimeR];
-	   for (let rd in roundHistory) { let d = roundHistory[rd]; [d.sb, d.sr] = [d.sr, d.sb]; [d.gb, d.gr] = [d.gr, d.gb]; [d.bt, d.rt] = [d.rt, d.bt]; [d.bh, d.rh] = [d.rh, d.bh]; [d.ba, d.ra] = [d.ra, d.ba]; [d.bp, d.rp] = [d.rp, d.bp]; }
-        let iB = document.getElementById('iB'), iR = document.getElementById('iR'), tempN = iB.value; iB.value = iR.value; iR.value = tempN;
-        const redNameBar = document.querySelector('.red-side-name'), blueNameBar = document.querySelector('.blue-side-name');
-        if (!redNameBar.dataset.isSwapped) { redNameBar.style.background = "linear-gradient(to right, #000080, #0044cc)"; blueNameBar.style.background = "linear-gradient(to left, #800000, #cc0000)"; redNameBar.dataset.isSwapped = "true"; } 
-        else { redNameBar.style.background = ""; blueNameBar.style.background = ""; delete redNameBar.dataset.isSwapped; }
-        document.querySelector('.side.red').classList.toggle('swapped-to-blue'); document.querySelector('.side.blue').classList.toggle('swapped-to-red');
-        addLog("🔄 ĐÃ ĐẢO TOÀN BỘ (BAO GỒM ĐỒNG HỒ PHỤ)", "log-success"); up();
+function fullSwap() {
+    let iB = document.getElementById('iB'), iR = document.getElementById('iR'), tempN = iB.value; 
+    iB.value = iR.value; 
+    iR.value = tempN;
+    
+    const redNameBar = document.querySelector('.red-side-name'), blueNameBar = document.querySelector('.blue-side-name');
+    if (!redNameBar.dataset.isSwapped) { 
+        redNameBar.style.background = "linear-gradient(to right, #000080, #0044cc)"; 
+        blueNameBar.style.background = "linear-gradient(to left, #800000, #cc0000)"; 
+        redNameBar.dataset.isSwapped = "true"; 
+    } else { 
+        redNameBar.style.background = ""; 
+        blueNameBar.style.background = ""; 
+        delete redNameBar.dataset.isSwapped; 
     }
+    
+    document.querySelector('.side.red').classList.toggle('swapped-to-blue'); 
+    document.querySelector('.side.blue').classList.toggle('swapped-to-red');
+    
+    addLog("🔄 ĐÃ ĐẢO GIAO DIỆN HIỂN THỊ THÀNH CÔNG", "log-success"); 
+    up();
+}
+
 window.addEventListener('keydown', function(e) {
-       const key = e.key.toLowerCase();
-	   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
-		if(key === '1') tagPlayer('r'); // Phím 1: Đỏ đổi người
-if(key === '2') tagPlayer('b'); // Phím 2: Xanh đổi người 
+    const key = e.key.toLowerCase();
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') { e.stopPropagation(); return; }
+    if(key === '1') tagPlayer('r'); 
+    if(key === '2') tagPlayer('b'); 
 
-        // --- TRỌNG TÀI 1 (J1) ---
-        if(key === 'x') recordVote(1,'sb',1); 
-        if(key === 'c') recordVote(1,'sb',2); 
-        if(key === 'v') recordVote(1,'sb',3);
-        if(key === 'z') recordVote(1,'sb', 0, true); // TECH Xanh
-        if(key === 'b') recordVote(1,'sr',1); 
-        if(key === 'n') recordVote(1,'sr',2); 
-        if(key === 'm') recordVote(1,'sr',3);
-        if(key === 'r') recordVote(1,'sr', 0, true); // TECH Đỏ
-
-        // --- TRỌNG TÀI 2 (J2) ---
-        if(key === 'q') recordVote(2,'sb',1); 
-        if(key === 'w') recordVote(2,'sb',2); 
-        if(key === 'e') recordVote(2,'sb',3);
-        if(key === 't') recordVote(2,'sb', 0, true); // TECH Xanh
-        if(key === 'u') recordVote(2,'sr',1); 
-        if(key === 'i') recordVote(2,'sr',2); 
-        if(key === 'o') recordVote(2,'sr',3);
-        if(key === 'y') recordVote(2,'sr', 0, true); // TECH Đỏ
-
-        // --- TRỌNG TÀI 3 (J3) ---
-        if(key === 'a') recordVote(3,'sb',1); 
-        if(key === 's') recordVote(3,'sb',2); 
-        if(key === 'd') recordVote(3,'sb',3);
-        if(key === 'f') recordVote(3,'sb', 0, true); // TECH Xanh
-        if(key === 'j') recordVote(3,'sr',1); 
-        if(key === 'k') recordVote(3,'sr',2); 
-        if(key === 'l') recordVote(3,'sr',3);
-        if(key === 'p') recordVote(3,'sr', 0, true); // TECH Đỏ
-
-        // --- HỆ THỐNG & LỖI ---
-        if(key === 'g') l('b'); // Lỗi Xanh
-        if(key === 'h') l('r'); // Lỗi Đỏ
-        if(e.code === 'Space') { e.preventDefault(); runT(); }
+    if (isMatchOver) {
         if(e.code === 'Escape') { if(confirm('Bạn có chắc muốn Reset trận đấu?')) resetCurrentMatch(); }
-    }, true);
-    up();
-var lastPointSide = '';  // Lưu bên vừa ghi điểm ('blue' hoặc 'red')
-var lastPointValue = 0; // Lưu giá trị điểm gốc (2 hoặc 3) để nhân đôi
+        return;
+    }
+
+    const isSwapped = document.querySelector('.red-side-name')?.dataset.isSwapped === "true";
+    
+    const vote = (judgeId, side, points, isPen) => {
+        let actualSide = side;
+        if (isSwapped) {
+            actualSide = (side === 'sb') ? 'sr' : 'sb';
+        }
+        recordVote(judgeId, actualSide, points, isPen);
+    };
+
+    if(key === 'x') vote(1,'sb',1); 
+    if(key === 'c') vote(1,'sb',2); 
+    if(key === 'v') vote(1,'sb',3);
+    if(key === 'z') vote(1,'sb', 0, true); 
+    if(key === 'b') vote(1,'sr',1); 
+    if(key === 'n') vote(1,'sr',2); 
+    if(key === 'm') vote(1,'sr',3);
+    if(key === 'r') vote(1,'sr', 0, true); 
+
+    if(key === 'q') vote(2,'sb',1); 
+    if(key === 'w') vote(2,'sb',2); 
+    if(key === 'e') vote(2,'sb',3);
+    if(key === 't') vote(2,'sb', 0, true); 
+    if(key === 'u') vote(2,'sr',1); 
+    if(key === 'i') vote(2,'sr',2); 
+    if(key === 'o') vote(2,'sr',3);
+    if(key === 'y') vote(2,'sr', 0, true); 
+
+    if(key === 'a') vote(3,'sb',1); 
+    if(key === 's') vote(3,'sb',2); 
+    if(key === 'd') vote(3,'sb',3);
+    if(key === 'f') vote(3,'sb', 0, true); 
+    if(key === 'j') vote(3,'sr',1); 
+    if(key === 'k') vote(3,'sr',2); 
+    if(key === 'l') vote(3,'sr',3);
+    if(key === 'p') vote(3,'sr', 0, true); 
+
+    if(key === 'g') l(isSwapped ? 'r' : 'b'); 
+    if(key === 'h') l(isSwapped ? 'b' : 'r'); 
+    if(e.code === 'Space') { e.preventDefault(); runT(); }
+    if(e.code === 'Escape') { if(confirm('Bạn có chắc muốn Reset trận đấu?')) resetCurrentMatch(); }
+}, true);
+up();
 
 function st(side, val) {
-    if (isBreak || isLock) return;
+    if (isBreak || isLock || isMatchOver) return;
     playSound('click');
-    
     if (side === 'r') {
-        if (val === 3) {
-            // Cộng đòn 3 TECH Đỏ
-            sr += 3; rt += 6;
-            addLog("CỘNG +3 TECH ĐỎ: (ĐIỂM LỚN +3, Ô TECH +6)", 'log-red');
-        } else if (val === 2) {
-            // Cộng đòn 2 TECH Đỏ
-            sr += 2; rt += 4;
-            addLog("CỘNG +2 TECH ĐỎ: (ĐIỂM LỚN +2, Ô TECH +4)", 'log-red');
-        } else if (val === -3) {
-            // Trừ đòn 3 TECH Đỏ
-            if (sr >= 3) sr -= 3;
-            if (rt >= 6) rt -= 6; else rt = 0; // Đảm bảo ô điểm nhỏ không bị âm
-            addLog("TRỪ ĐÒN 3 TECH ĐỎ: (ĐIỂM LỚN -3, Ô TECH -6)", 'log-red');
-        } else if (val === -2) {
-            // Trừ đòn 2 TECH Đỏ
-            if (sr >= 2) sr -= 2;
-            if (rt >= 4) rt -= 4; else rt = 0;
-            addLog("TRỪ ĐÒN 2 TECH ĐỎ: (ĐIỂM LỚN -2, Ô TECH -4)", 'log-red');
-        }
-    } else { // Bên XANH (side === 'b')
-        if (val === 3) {
-            // Cộng đòn 3 TECH Xanh
-            sb += 3; bt += 6;
-            addLog("CỘNG +3 TECH XANH: (ĐIỂM LỚN +3, Ô TECH +6)", 'log-blue');
-        } else if (val === 2) {
-            // Cộng đòn 2 TECH Xanh
-            sb += 2; bt += 4;
-            addLog("CỘNG +2 TECH XANH: (ĐIỂM LỚN +2, Ô TECH +4)", 'log-blue');
-        } else if (val === -3) {
-            // Trừ đòn 3 TECH Xanh
-            if (sb >= 3) sb -= 3;
-            if (bt >= 6) bt -= 6; else bt = 0;
-            addLog("TRỪ ĐÒN 3 TECH XANH: (ĐIỂM LỚN -3, Ô TECH -6)", 'log-blue');
-        } else if (val === -2) {
-            // Trừ đòn 2 TECH Xanh
-            if (sb >= 2) sb -= 2;
-            if (bt >= 4) bt -= 4; else bt = 0;
-            addLog("TRỪ ĐÒN 2 TECH XANH: (ĐIỂM LỚN -2, Ô TECH -4)", 'log-blue');
-        }
+        if (val === 3) { sr += 3; rt += 6; addLog("CỘNG +3 TECH ĐỎ: (ĐIỂM LỚN +3, Ô TECH +6)", 'log-red'); } 
+        else if (val === 2) { sr += 2; rt += 4; addLog("CỘNG +2 TECH ĐỎ: (ĐIỂM LỚN +2, Ô TECH +4)", 'log-red'); } 
+        else if (val === -3) { if (sr >= 3) sr -= 3; if (rt >= 6) rt -= 6; else rt = 0; addLog("TRỪ ĐÒN 3 TECH ĐỎ: (ĐIỂM LỚN -3, Ô TECH -6)", 'log-red'); } 
+        else if (val === -2) { if (sr >= 2) sr -= 2; if (rt >= 4) rt -= 4; else rt = 0; addLog("TRỪ ĐÒN 2 TECH ĐỎ: (ĐIỂM LỚN -2, Ô TECH -4)", 'log-red'); }
+    } else { 
+        if (val === 3) { sb += 3; bt += 6; addLog("CỘNG +3 TECH XANH: (ĐIỂM LỚN +3, Ô TECH +6)", 'log-blue'); } 
+        else if (val === 2) { sb += 2; bt += 4; addLog("CỘNG +2 TECH XANH: (ĐIỂM LỚN +2, Ô TECH +4)", 'log-blue'); } 
+        else if (val === -3) { if (sb >= 3) sb -= 3; if (bt >= 6) bt -= 6; else bt = 0; addLog("TRỪ ĐÒN 3 TECH XANH: (ĐIỂM LỚN -3, Ô TECH -6)", 'log-blue'); } 
+        else if (val === -2) { if (sb >= 2) sb -= 2; if (bt >= 4) bt -= 4; else bt = 0; addLog("TRỪ ĐÒN 2 TECH XANH: (ĐIỂM LỚN -2, Ô TECH -4)", 'log-blue'); }
     }
-    up(); // Cập nhật hiển thị lên toàn bộ màn hình
+    up(); 
 }
+
 function tagPlayer(side) {
-    console.log("Đã nhận lệnh đổi người cho bên: " + side);
-    
-    // Kiểm tra ô checkbox chế độ đồng đội
+    if (isMatchOver) return;
     let chk = document.getElementById('teamModeActive');
-    if (chk && !chk.checked) {
-        console.log("Chế độ đồng đội chưa được bật!");
-        return; 
-    }
-
-    // Chuẩn hóa chữ thường để nhận diện chính xác nút bấm
+    if (chk && !chk.checked) return; 
     let s = String(side).toLowerCase();
-
-    // LUẬT MỚI: Thằng đổi về 15s - Thằng kia ÉP CỐ ĐỊNH về 10s chờ (Không cộng dồn nữa)
-    if (s === 'r' || s === 'red') {
-        subTimeR = 15;   // Đỏ đổi người -> Đỏ về thẳng 15s[cite: 1]
-        subTimeB = 10;   // Xanh (thằng chưa đổi) -> Bị đưa về mốc 10s chờ cố định
-        if(typeof addLog === 'function') addLog("ĐỎ ĐỔI NGƯỜI: Đỏ về 15s - Xanh về 10s chờ", "log-red");
-    } 
-    else if (s === 'b' || s === 'blue') {
-        subTimeB = 15;   // Xanh đổi người -> Xanh về thẳng 15s[cite: 1]
-        subTimeR = 10;   // Đỏ (thằng chưa đổi) -> Bị đưa về mốc 10s chờ cố định
-        if(typeof addLog === 'function') addLog("XANH ĐỔI NGƯỜI: Xanh về 15s - Đỏ về 10s chờ", "log-blue");
-    }
-    
+    if (s === 'r' || s === 'red') { subTimeR = 15; subTimeB = 10; } 
+    else if (s === 'b' || s === 'blue') { subTimeB = 15; subTimeR = 10; }
     if(typeof playSound === 'function') playSound('beep');
-    if(typeof up === 'function') up(); // Cập nhật đồng hồ hiển thị lên màn hình ngay lập tức
+    if(typeof up === 'function') up(); 
 }
-// HÀM XỬ LÝ CỘNG / TRỪ ĐIỂM TAY TỪ BẢNG ĐIỀU KHIỂN
+
 function ch(type, val) {
-    if (isBreak || isLock) return;
+    if (isBreak || isLock || isMatchOver) return;
     playSound('beep');
-
-    if (type === 'sb') { // Điều chỉnh điểm XANH
-        if (val > 0) { // Nếu bấm nút CỘNG (+1, +2, +3)
-            sb += val;
-            if (val === 1) bp++;      // +1đ -> tăng PUNCH
-            else if (val === 2) ba++; // +2đ -> tăng ARMOR
-            else if (val === 3) bh++; // +3đ -> tăng HEAD
-            addLog(`Thư ký cộng tay +${val}đ cho XANH`, 'log-blue');
-        } else { // Nếu bấm nút TRỪ (-1, -2, -3)
-            let subVal = Math.abs(val); // Lấy giá trị tuyệt đối (1, 2, 3)
-            sb = Math.max(0, sb + val); // Trừ điểm chính không để âm
-            // Tự động trừ ô ưu thế phụ tương ứng nếu ô đó đang lớn hơn 0
-            if (subVal === 1 && bp > 0) bp--;
-            else if (subVal === 2 && ba > 0) ba--;
-            else if (subVal === 3 && bh > 0) bh--;
-            addLog(`Thư ký trừ tay ${val}đ của XANH`, 'log-blue');
-        }
+    if (type === 'sb') { 
+        if (val > 0) { sb += val; if (val === 1) bp++; else if (val === 2) ba++; else if (val === 3) bh++; } 
+        else { let subVal = Math.abs(val); sb = Math.max(0, sb + val); if (subVal === 1 && bp > 0) bp--; else if (subVal === 2 && ba > 0) ba--; else if (subVal === 3 && bh > 0) bh--; }
     } 
-    else if (type === 'sr') { // Điều chỉnh điểm ĐỎ
-        if (val > 0) { // Nếu bấm nút CỘNG (+1, +2, +3)
-            sr += val;
-            if (val === 1) rp++;      // +1đ -> tăng PUNCH
-            else if (val === 2) ra++; // +2đ -> tăng ARMOR
-            else if (val === 3) rh++; // +3đ -> tăng HEAD
-            addLog(`Thư ký cộng tay +${val}đ cho ĐỎ`, 'log-red');
-        } else { // Nếu bấm nút TRỪ (-1, -2, -3)
-            let subVal = Math.abs(val);
-            sr = Math.max(0, sr + val); // Trừ điểm chính không để âm
-            // Tự động trừ ô ưu thế phụ tương ứng nếu ô đó đang lớn hơn 0
-            if (subVal === 1 && rp > 0) rp--;
-            else if (subVal === 2 && ra > 0) ra--;
-            else if (subVal === 3 && rh > 0) rh--;
-            addLog(`Thư ký trừ tay ${val}đ của ĐỎ`, 'log-red');
-        }
+    else if (type === 'sr') { 
+        if (val > 0) { sr += val; if (val === 1) rp++; else if (val === 2) ra++; else if (val === 3) rh++; } 
+        else { let subVal = Math.abs(val); sr = Math.max(0, sr + val); if (subVal === 1 && rp > 0) rp--; else if (subVal === 2 && ra > 0) ra--; else if (subVal === 3 && rh > 0) rh--; }
     }
-    up(); // Cập nhật lại giao diện hiển thị
+    up(); 
 }
+
 var originalL = window.l;
-    window.l = function(s) {
-        if (isBreak || isLock) return;
-        let maxG = parseInt(document.getElementById('iMaxGJ').value) || 5;
+window.l = function(s) { if (typeof originalL === 'function') originalL(s); };
 
-        // Nếu đang trong 10 giây cuối của hiệp đấu
-        if (time <= 10 && time > 0) {
-            playSound('beep');
-            if (s == 'b') { // Xanh phạm lỗi -> Đỏ được cộng 2 điểm
-                gb++;
-                sr += 2; // Cộng hẳn 2 điểm
-                addLog("LỖI 10S CUỐI CHO XANH -> ĐỎ +2Đ", 'log-blue');
-                if (gb >= maxG) { up(); setTimeout(() => stopAndBuzzer("XANH 5 LỖI!"), 50); return; }
-            } else { // Đỏ phạm lỗi -> Xanh được cộng 2 điểm
-                gr++;
-                sb += 2; // Cộng hẳn 2 điểm
-                addLog("LỖI 10S CUỐI CHO ĐỎ -> XANH +2Đ", 'log-red');
-                if (gr >= maxG) { up(); setTimeout(() => stopAndBuzzer("ĐỎ 5 LỖI!"), 50); return; }
-            }
-            up();
-        } else {
-            // Nếu ngoài 10s thì chạy luật gốc bình thường (cộng 1 điểm)
-            if (typeof originalL === 'function') originalL(s);
-        }
-    };
-
-    // 2. ĐÈ LUẬT TRỪ LỖI (Nút -G của bạn)
-    var originalUl = window.ul;
-    window.ul = function(s) {
-        if (!isBreak && !isLock && time <= 10 && time > 0) {
-            playSound('click');
-
-            if (s == 'b') { // Hủy lỗi cho Xanh -> Đỏ bị trừ trả lại 2 điểm
-                if (gb <= 0) return;
-                gb--;
-                sr -= 2; // Trừ hẳn 2 điểm để cân bằng
-                addLog("HỦY LỖI 10S CUỐI CHO XANH -> ĐỎ TRỪ 2Đ", 'log-blue');
-            } else { // Hủy lỗi cho Đỏ -> Xanh bị trừ trả lại 2 điểm
-                if (gr <= 0) return;
-                gr--;
-                sb -= 2; // Trừ hẳn 2 điểm để cân bằng
-                addLog("HỦY LỖI 10S CUỐI CHO ĐỎ -> XANH TRỪ 2Đ", 'log-red');
-            }
-            up();
-        } else {
-            if (typeof originalUl === 'function') originalUl(s);
-        }
-    };
+window.addPenalty = function(points, side) {
+    if (isMatchOver) return;
+    if (side === 'r') { gr++; sb += points; addLog("ĐỎ PHẠM LỖI -> XANH + " + points + "Đ", 'log-red'); } 
+    else { gb++; sr += points; addLog("XANH PHẠM LỖI -> ĐỎ + " + points + "Đ", 'log-blue'); }
+    up(); 
+};
+function subPenalty(points, side) {
+    if (isMatchOver) return;
+    if (side === 'r') { sr = Math.max(0, sr - points); addLog("TRỪ " + points + " ĐIỂM ĐỎ", 'log-red'); } 
+    else if (side === 'b') { sb = Math.max(0, sb - points); addLog("TRỪ " + points + " ĐIỂM XANH", 'log-blue'); }
+    up(); 
+}
+function undoPenalty(points, side) {
+    if (isMatchOver) return;
+    if (side === 'r') { if (gr > 0) gr--; sb = Math.max(0, sb - points); addLog("HỦY GJ X2 ĐỎ", 'log-red'); } 
+    else if (side === 'b') { if (gb > 0) gb--; sr = Math.max(0, sr - points); addLog("HỦY GJ X2 XANH", 'log-blue'); }
+    up(); 
+}
 </script>
 </body>
 </html>
